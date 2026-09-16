@@ -1,0 +1,136 @@
+# Eight exercise: Adding a 7-segment display core to the FPROv2 system
+  
+## 7-segment display core
+
+In this exercise we will add a 7-segment display core to the FPRO system. Start from the FPRO system that we have developed on the lectures. 
+
+### Register map 
+
+The 7-segment display core has the following register map:
+| Address Offset | Register Name       | Description                          |
+|----------------|---------------------|--------------------------------------|
+| 0x00           | Config_reg        | Bit 0: Enables/disables the display         |
+| 0x04          | Digit0        | Bits 0-7: Hex value of the first digit        |
+| 0x08          | Digit1        | Bits 0-7: Hex value of the second digit       |
+| 0x0C          | Digit2        | Bits 0-7: Hex value of the third digit        |
+| 0x10          | Digit3        | Bits 0-7: Hex value of the fourth digit       |
+| 0x14          | Digit4        | Bits 0-7: Hex value of the fifth digit        |
+| 0x18          | Digit5        | Bits 0-7: Hex value of the sixth digit        |
+| 0x1C          | Digit6        | Bits 0-7: Hex value of the seventh digit      |
+| 0x20          | Digit7        | Bits 0-7: Hex value of the eighth digit       |
+
+
+## Tasks
+
+### Add a wrapper for the 7-segment display core to the FPRO system
+
+1. Modify module `APB_seg7_display.sv` that implements the APB slave interface for the 7-segment display core.
+2. Instantiate the 7-segment display core inside the `APB_seg7_display.sv` module.
+```verilog
+    logic [7:0] digit0, digit1, digit2, digit3, digit4, digit5, digit6, digit7;
+    logic enable_7seg;
+
+    SevSegDisplay SevSegDisplay_inst (
+        .clock(clock),
+        .reset(reset),
+        .enable_7seg(enable_7seg),
+        .digit1(digit0),
+        .digit2(digit1),
+        .digit3(digit2),
+        .digit4(digit3),
+        .digit5(digit4),
+        .digit6(digit5),
+        .digit7(digit6),
+        .digit8(digit7),
+        .anode_select(anode_select),
+        .segs(segs)
+    );
+```
+
+
+
+3. Write interface logic to connect the APB signals to the 7-segment display core registers.
+    
+
+```verilog
+    logic [63:0] count_reg;
+ // define register for config device to enable/clear timer
+    logic wr_en;
+    // decoding logic 
+    assign wr_en = pSEL & pWRITE & pREADY & pENABLE ; 
+                               
+    // write data into config register when selected 
+    always_ff @( posedge pCLK ) begin : write_logic
+        if (!pRESETn) begin
+            config_reg <= 0;
+        end else begin
+            if (wr_en) begin
+                case (pADDR)
+                    
+                endcase
+            end
+        end
+    end
+```
+- The 7-segment display core will be always ready, so set the `pREADY` signal to 1'b1.
+- The `pSLVERR` signal should be set to 1'b1, when someone tries to read registers.
+1. Register the 7-segment display core in the FPRO system.
+   - To do this, instantiate the `APB_seg7_display.sv` module in the FPROv2 top-level module and connect the APB signals accordingly.
+```verilog
+
+APB_seg7_display #(
+    .DW(DW),   // Data width
+    .AW(AW)    // Address width
+) u_apb_timer (
+    .pCLK    (clock),
+    .pRESETn (resetn),
+    .pADDR   (SpADDR[2]),
+    .pSEL    (SpSEL[2]),
+    .pENABLE (SpENABLE[2]),
+    .pWRITE  (SpWRITE[2]),
+    .pWDATA  (SpWDATA[2]),
+    .pRDATA  (SpRDATA[2]),
+    .pREADY  (SpREADY[2]),
+    .pSLVERR (SpSLVERR[2])
+    // Connections to 7-segment display core signals
+        // external signals -> Catode and Anode
+    output logic [7:0] anode_select,
+    output logic [6:0] segs
+);
+
+// Do not forget to update the NUM_PERIPHERALS parameter to 3 in the FPROv2 top-level module.
+
+genvar i;
+for (i = 3; i < NUM_PERIPHERALS; i++) begin : gen_addr
+    assign SpSLVERR[i] = 1; // generate an error signal when addressing unknown peripherals peripheral
+    assign SpREADY[i] = 0;
+    assign SpRDATA[i] = 32'hFFFFFFFF;
+end
+    
+```
+
+5. Write a application that displays the seconds of the system clock on the 7-segment display core.
+   1. How to determine the base address of the 7-segment display core in the FPRO system.
+      - The base address can be determined by:
+      - `(0xC0 << 24) + (Peripheral Index * 0x80) `, where Peripheral Index is 2 for the 7-segment display core.
+      - To access specific registers, add the register offset to the base address.
+    2. Read the timer value from the timer peripheral, and when the value changes, update the 7-segment display core registers accordingly. 
+      - You can use the following code snippet to write to the 7-segment display core registers:
+```c
+    volatile uint32_t* seg7_base_addr = (volatile uint32_t*)(0xC0 + (2 * 0x80)); // Base address of the 7-segment display core
+    // Write to the digit registers
+    *(seg7_base_addr + 1) = digit0_value; // Digit0 register
+    *(seg7_base_addr + 2) = digit1_value; // Digit1 register
+    // ... and so on for other digits
+```
+
+## Starter files
+
+- [APB_7seg_display.sv](../code/08_lab/APB_7seg_display.sv)
+- [APB_bridge.sv](../code/08_lab/APB_bridge.sv)
+- [APB_gpio.sv](../code/08_lab/APB_gpio.sv)
+- [APB_interconnect.sv](../code/08_lab/APB_interconnect.sv)
+- [APB_master.sv](../code/08_lab/APB_master.sv)
+- [APB_timer.sv](../code/08_lab/APB_timer.sv)
+- [Nexys-A7-100T-Master.xdc](../code/08_lab/Nexys-A7-100T-Master.xdc)
+- [top.sv](../code/08_lab/top.sv)

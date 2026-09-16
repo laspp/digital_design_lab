@@ -1,0 +1,20 @@
+# Preface {.unnumbered}
+
+Every processor, controller, and screen you have ever used began as a
+handful of logic gates someone arranged on purpose. This book is about
+learning to do that arranging yourself — not by reading about it, but by
+designing, simulating, and running your own digital circuits on real
+hardware.
+
+Over nine labs, you will go from your first combinational circuit to a
+complete FPGA-based System on Chip: a HIPV, a Risc-V based processor, talking to
+peripherals you wrote, over a bus you configured, validated with a real
+oscilloscope. Along the way you will hit the same problems every digital
+designer hits — a signal that glitches, a counter that free-runs, a
+testbench that lies to you — and learn to reason your way out of them.
+
+That debugging instinct, more than any single lab, is the point.
+
+**Note to Students**: These notes are intended solely for educational
+purposes. They are not a replacement for attending lectures or consulting
+textbooks, but rather a complementary resource to support your learning.
