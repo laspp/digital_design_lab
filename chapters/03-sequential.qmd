@@ -249,7 +249,50 @@ endmodule
 
 ```
 Tip: [Binary to graycode converter](https://www.javatpoint.com/binary-to-gray-code-cconversion-in-digital-electronics)
-### Pin mapping 
+
+## Implementation guidelines
+
+Structural modeling, splitting a design into separate modules and instantiating them, is introduced in the next exercise. For now `gray_code_counter` stays a single module, so the three pieces below are not separate modules with their own ports, but three cooperating pieces of behavioral code inside `gray_code_counter`, sharing the internal signals `en` and `binary_count` already declared in the skeleton above. These three pieces of code are actually three separate `always` blocks, where first two are `always_ff` and the last one is `always_comb`. The first two blocks are sequential, the last one is combinational. The three pieces are described below.
+
+### Divider
+
+The divider turns the 100 MHz system clock into a single, once-per-second pulse on `en`. It is a free running counter, the same idea you will meet again as the standalone `prescaler` module in the next exercise.
+
+Declare an internal register wide enough to count up to 100,000,000:
+
+```verilog
+logic [26:0] div_count; // 2^27 > 100,000,000
+```
+
+Behavior:
+
+- On every rising edge of `clk`, if `rst` is high, reset `div_count` to zero.
+- Otherwise, increment `div_count` by one on every rising edge. This is step 2 from above, the first counter incrementing every system clock cycle.
+- When `div_count` reaches 100,000,000 - 1, drive `en` high for that clock cycle and let `div_count` wrap back to zero on the next edge, restarting the count.
+- The result is a single clock cycle pulse on `en` once every 100,000,000 clock cycles. At 100 MHz that is exactly once per second.
+
+### Up/down binary counter
+
+`binary_count` is the 4-bit counter whose value eventually gets Gray encoded for the LEDs. Unlike `div_count`, it does not advance on every clock edge. It only advances once per second, on a clock edge where `en` is high.
+
+Behavior:
+
+- On every rising edge of `clk`, if `rst` is high, reset `binary_count` to zero.
+- Otherwise, only change `binary_count` on a clock edge where `en` is high. When `up_down` is 0, increment `binary_count`, wrapping from 15 back to 0. When `up_down` is 1, decrement it, wrapping from 0 back to 15.
+- On a clock edge where `en` is low, hold `binary_count` at its current value.
+- Because `en` pulses only once per second, `binary_count` also only changes once per second, which is where the counter's 1 Hz update rate comes from.
+
+### Gray code converter
+
+The converter has no state of its own. It is a purely combinational function of `binary_count`, mapping each of the 16 possible values to the corresponding Gray code word from the `bin2gray` table above.
+
+Behavior:
+
+- Use `always_comb` with a `case` statement on `binary_count`, one branch per value 0 through 15, assigning the matching Gray code word to `gray_code` in each branch.
+- Always include a `default` branch, even though cases 0 through 15 already cover every possible 4-bit value. The Common mistakes section earlier in this chapter explains why an incomplete `case` without a `default` infers a latch instead of the combinational logic you intended.
+- Because the conversion is combinational, `gray_code` updates immediately whenever `binary_count` changes. No separate clocking is needed here. `binary_count` already only changes once per second, so `gray_code` will too.
+
+### Pin mapping
 
 Connect the `clk` signal to the system clock (100 MHz), the `rst` signal to the middle button, the `up_down` signal to the switch, and the `gray_code` signal to the LEDs.
 

@@ -133,6 +133,7 @@ Let us write the DUT for our 4:1 MUX. Lets fix length to 4-bit.
 module tb_mux4to1;
 
     // Testbench signals
+    logic [3:0] d;
     logic [1:0] sel;
     logic y;
 
@@ -173,6 +174,8 @@ module tb_mux4to1;
     end
 endmodule
 ```
+
+A testbench has no ports of its own. It sits at the top of the simulation hierarchy, so everything it needs (`d`, `sel`, `y`) is declared as a plain `logic` signal inside the module and then wired to the DUT by name, exactly as you would wire a module instance in any other design. `mux4to1` is purely combinational, so the testbench doesn't need to worry about clocking it at all. The `initial` block simply drives a new value onto `d`/`sel`, waits `#10` time units for the change to propagate through the DUT's `assign` statements, and then `$display`s the result. The `#10` delay here isn't required by the circuit, since a combinational output settles essentially instantly. It just gives each test case a clean slice of simulation time so the four `$display` lines don't collide, and makes the resulting waveform easier to read if you open it in GTKWave. Each of the four test cases holds `sel` at all four possible values while `d` stays fixed, letting you check by eye that `y` always equals the bit of `d` selected by `sel`. `$finish` at the end tells the simulator to stop. Without it, a testbench with no more statements to execute would simply hang.
 
 For testing sequential design, we need to account the clock signal. In testbenches we need to create a separate always block that will generate clock signal. Bellow code shows the testbench for our parametrized counter (case for 4-bit).
 
@@ -215,17 +218,41 @@ module tb_counter;
 endmodule
 ```
 
-#### How to add simulation files in Vivado 
+Unlike the MUX testbench, `counter` is a registered design (`always_ff`), so its output only changes on a rising `clk` edge. The testbench has to actually supply that clock, since nothing else in simulation will. That's what the separate `always` block does. With no sensitivity list and no guarding `if`, it just keeps re-executing `#5 clk = ~clk;` for the entire simulation, flipping `clk` every 5 time units and producing a free-running clock with a 10-unit period. This block runs concurrently with the `initial` block below it. In SystemVerilog, every `initial`/`always` block in a module starts at time 0 and proceeds independently, which is exactly why the clock generator has to live in its own block rather than inside the stimulus sequence.
 
-1. Add testbench to folder *Simulation Sources*
+The `initial` block still drives the test, but now in terms of clock edges rather than raw delays. It sets `clk = 0` and `reset = 1` at time 0, holds `reset` high for `#10` (one full clock period) to model a real power-on reset pulse, then deasserts it and waits `#100` (ten clock periods) for the counter to free-run before sampling `count` with `$display`. That wait is the key difference from the combinational case. A combinational output is valid almost immediately after its inputs change, but a register only updates once per clock edge, so a sequential testbench must always budget enough simulated time (or, in more thorough testbenches, wait for a specific number of `@(posedge clk)` events) before checking the DUT's outputs. `$finish` matters more here than in the MUX testbench, because the clock-generation `always` block never terminates on its own. Without an explicit `$finish`, the simulation would run forever.
 
-> **Note:** the testbench is .sv file. Active TB will be highlighted with bold. 
+### Simulating with Anvil / Icarus Verilog
 
-<img src="../img/Sim_add.png" alt="MUX4to1" width="400">
+Save the testbench alongside the DUT it exercises. Inside an Anvil project, place it under `tb/` and let `anvil test` drive Icarus Verilog for you:
 
-2. Run simulation: Click *Run Simulation*
+```bash
+anvil test tb/tb_mux4to1.sv     # runs Icarus Verilog, writes tb/tb_mux4to1.vcd
+```
 
-<img src="../img/Sim_run.png" alt="MUX4to1" width="200">
+You can also invoke Icarus Verilog directly. This is handy while experimenting with standalone snippets like the ones above, outside of a full Anvil project. `iverilog` compiles every file passed on the command line into a single simulation executable, which `vvp` then runs:
+
+```bash
+iverilog -g2012 -o sim mux2to1.sv mux4to1.sv tb_mux4to1.sv
+vvp sim
+```
+
+`-g2012` selects SystemVerilog-2012 syntax, needed for constructs like `logic` and `always_ff` that plain Verilog doesn't have. The `$display` calls in the testbench print straight to the terminal.
+
+To inspect signals over time instead of just the printed values, add a dump block to the testbench:
+
+```verilog
+initial begin
+    $dumpfile("tb_counter.vcd");
+    $dumpvars(0, tb_counter);
+end
+```
+
+then open the resulting `.vcd` file in GTKWave:
+
+```bash
+gtkwave tb_counter.vcd &
+```
 
 <!--
 ## Task: Implement a 4-bit Gray counter
@@ -269,41 +296,276 @@ Duty cycle is definied as ratio of high signal to the period of the signal, e.g.
 ### PWM time diagram
 <img src="../img/Drawings-1.png" alt="PWM_timing" width="600">
 
-### Hints
+## Implementation guidelines
 
-- You can reuse the prescaler module from lectures. Make sure to set the prescaler to output a pulse every 3125 clock cycles.
+### Prescaler
 
-- The PWM module should consists of a 4-bit counter. The counter increments with the PWM_tick signal from the prescaler. To generate the PWM signals for each color, compare the counter value with the corresponding duty cycle input. If the counter value is less than the duty cycle, set the output high; otherwise, set it low.
+The prescaler turns the fast system clock into the slower `pwm_tick` the PWM module counts on. It is a free running counter that produces a single cycle pulse once every `limit` clock cycles. Its interface is already declared in the starter file:
 
-- Employ structural modeling to connect the prescaler and PWM modules. The draft SV file is provided in the repository.
+```systemverilog
+module prescaler
+    #(parameter PRESCALER_WIDTH = 8)
+    (
+        input logic clk,
+        input logic rst,
+        input logic [PRESCALER_WIDTH-1:0] limit,
+        output logic pwm_tick
+    );
+```
+
+| Port | Direction | Width | Description |
+|---|---|---|---|
+| `clk` | input | 1 bit | System clock. The counter advances on its rising edge. |
+| `rst` | input | 1 bit | Synchronous reset. Clears the internal counter while high. |
+| `limit` | input | `PRESCALER_WIDTH` bits | Number of clock cycles between output pulses. |
+| `pwm_tick` | output | 1 bit | Pulses high for one clock cycle, once every `limit` cycles. |
+
+Behavior:
+
+- Keep an internal counter register. On every rising edge of `clk`, if `rst` is high, reset that counter to zero.
+- Otherwise, increment the counter by one on every rising edge.
+- When the counter reaches `limit - 1`, drive `pwm_tick` high for that clock cycle and let the counter wrap back to zero on the next edge, restarting the count.
+- The result is a periodic, single cycle pulse with a period of exactly `limit` clock cycles. With `limit = 3125` and a 100 MHz `clk`, `pwm_tick` fires once every 31.25 microseconds, which is 32 kHz.
+
+### PWM controller
+
+The PWM controller turns a 2-bit duty cycle selection into a single PWM output for one LED color. One instance drives the red LED, one drives green, one drives blue, each fed by its own pair of switches and all three sharing the same `pwm_tick` from the prescaler. Its interface is already declared in the starter file:
+
+```systemverilog
+module PWM_controller
+(
+    input logic clk,
+    input logic rst,
+    input logic [1:0] SW,
+    input logic pwm_tick,
+    output logic PWM
+);
+```
+
+| Port | Direction | Width | Description |
+|---|---|---|---|
+| `clk` | input | 1 bit | System clock, used to advance the internal counter register. |
+| `rst` | input | 1 bit | Synchronous reset. Clears the internal counter while high. |
+| `SW` | input | 2 bits | Duty cycle selector for this color, per the duty cycle table above. |
+| `pwm_tick` | input | 1 bit | One clock cycle pulse from the prescaler. Acts as a count enable. |
+| `PWM` | output | 1 bit | The pulse width modulated signal driving one RGB LED color. |
+
+Behavior:
+
+- Keep an internal 4-bit counter register. Unlike the prescaler, this counter does not advance on every `clk` edge. It advances by one only on a `clk` edge where `pwm_tick` is high, and wraps from 15 back to 0. Sixteen `pwm_tick` pulses therefore make up one full PWM period.
+- On a `clk` edge where `rst` is high, reset that counter to zero instead of counting.
+- Translate `SW` into a threshold on the same 0 to 15 scale as the counter, so it lines up with the duty cycle table: `00` maps to a threshold of 0, `01` to 2, `10` to 4, and `11` to 8 (0, 2, 4, and 8 sixteenths are 0%, 12.5%, 25%, and 50%).
+- Drive `PWM` combinationally from the comparison: high while the counter value is less than the threshold, low otherwise. Since the counter counts through all 16 values once per period, this produces a high pulse whose width, as a fraction of the period, equals the selected duty cycle.
+
+### Top level: rgb_controller
+
+The top module has no logic of its own. It only wires the prescaler and three `PWM_controller` instances together, using structural modeling exactly as introduced at the start of this chapter. Its interface is already declared in the starter file:
+
+```systemverilog
+module rgb_controller (
+    input logic clock,
+    input logic reset,
+    input logic [5:0] SW,
+    output logic [2:0] RGB
+);
+```
+
+| Port | Direction | Width | Description |
+|---|---|---|---|
+| `clock` | input | 1 bit | System clock (100 MHz), forwarded to every instance below. |
+| `reset` | input | 1 bit | Synchronous reset, forwarded to every instance below. |
+| `SW` | input | 6 bits | Duty cycle selectors, two bits per color: `SW[1:0]` red, `SW[3:2]` green, `SW[5:4]` blue. |
+| `RGB` | output | 3 bits | One PWM signal per color: `RGB[0]` red, `RGB[1]` green, `RGB[2]` blue. |
+
+Structure:
+
+- One instance of `prescaler`, driven by `clock`/`reset` and the `limit_value` already wired up in the draft, produces a single `pwm_tick` signal shared by everything downstream.
+- Three instances of `PWM_controller`, conventionally named `PWM_red`, `PWM_green`, and `PWM_blue`. These are three separate instances of the exact same module, the same way `mux2to1` was instantiated three times to build `mux4to1` earlier in this chapter, not three different modules. Each instance shares `clock`, `reset`, and the one `pwm_tick` from the prescaler, but connects to a different 2-bit slice of `SW` and drives a different bit of `RGB`. For example, the red instance looks like:
+
+```systemverilog
+PWM_controller PWM_red (
+    .clk(clock),
+    .rst(reset),
+    .SW(SW[1:0]),
+    .pwm_tick(pwm_tick),
+    .PWM(RGB[0])
+);
+```
+
+`PWM_green` and `PWM_blue` follow the same pattern, connecting `SW[3:2]`/`RGB[1]` and `SW[5:4]`/`RGB[2]` respectively. The draft file's instantiation comments all read "for the red LED". That's a leftover from copy-pasting the first instance, and should read green and blue for the other two.
 
 - Create a testbench to verify the functionality of your PWM module. The testbench is provided in the repository.
 
-### Pin mapping 
+### Testbenches for prescaler and PWM_controller
 
-Connect the `clk` signal to the system clock (100 MHz), the `rst` signal to the middle button, the `up_down` signal to the switch, and the `gray_code` signal to the LEDs.
+Before wiring everything together, verify `prescaler` and `PWM_controller` on their own, the same way `tb_mux4to1` and `tb_counter` tested individual modules earlier in this chapter. A bug isolated to one small module is far easier to find than the same bug hiding inside the fully assembled `rgb_controller`.
 
-```tcl
+#### tb_prescaler
+
+```systemverilog
+module tb_prescaler;
+
+    // Testbench signals
+    logic clk;
+    logic rst;
+    logic [7:0] limit;
+    logic pwm_tick;
+
+    // Instantiate the DUT
+    prescaler dut (
+        .clk(clk),
+        .rst(rst),
+        .limit(limit),
+        .pwm_tick(pwm_tick)
+    );
+
+    // Clock generation
+    always begin
+        #5 clk = ~clk; // Toggle clock every 5 time units
+    end
+
+    // Test procedure
+    initial begin
+        $dumpfile("tb_prescaler.vcd");
+        $dumpvars(0, tb_prescaler);
+
+        clk = 0;
+        rst = 1;
+        limit = 5;
+        #10;
+        rst = 0;
+
+        // Let the counter run through several periods
+        #200;
+
+        $finish;
+    end
+
+    // Log every pwm_tick pulse
+    always @(posedge clk) begin
+        if (pwm_tick)
+            $display("t=%0t pwm_tick pulse", $time);
+    end
+
+endmodule
+```
+
+::: {.callout-note}
+Do not test with `limit = 3125`, the value you will eventually use on hardware. At 100 MHz that is a pulse every 31.25 microseconds, so watching even a handful of periods in simulation means sitting through thousands of clock cycles of `$display` output or a huge waveform. Drive `limit` with a small value instead, such as 5 as above, so `pwm_tick` fires every few clock cycles and you can see several full periods and the counter wraparound in a short simulation run. Once the counting and wraparound logic is confirmed correct at a small limit, the same logic is correct at `limit = 3125`, only slower.
+:::
+
+#### tb_pwm_controller
+
+`PWM_controller` takes `pwm_tick` as an input rather than generating it, so this testbench stands in for the prescaler with a small free running counter of its own, pulsing `pwm_tick` high for one clock cycle out of every 4, instead of instantiating a full `prescaler` with a large `limit`. The DUT's internal counter then advances once every 4 clock cycles, so a full 16-step PWM period takes 64 clock cycles to simulate, still far shorter than testing against the real `limit = 3125` prescaler.
+
+```systemverilog
+module tb_pwm_controller;
+
+    // Testbench signals
+    logic clk;
+    logic rst;
+    logic [1:0] SW;
+    logic pwm_tick;
+    logic PWM;
+
+    // Instantiate the DUT
+    PWM_controller dut (
+        .clk(clk),
+        .rst(rst),
+        .SW(SW),
+        .pwm_tick(pwm_tick),
+        .PWM(PWM)
+    );
+
+    // Clock generation
+    always begin
+        #5 clk = ~clk; // Toggle clock every 5 time units
+    end
+
+    // Stand in for the prescaler: pulse pwm_tick high for one cycle
+    // out of every 4 clock cycles
+    logic [1:0] tick_count;
+
+    always_ff @(posedge clk) begin
+        tick_count <= tick_count + 1;
+    end
+
+    assign pwm_tick = (tick_count == 2'd3);
+
+    // Test procedure
+    initial begin
+        $dumpfile("tb_pwm_controller.vcd");
+        $dumpvars(0, tb_pwm_controller);
+
+        clk = 0;
+        rst = 1;
+        tick_count = 0;
+        SW = 2'b00;
+        #10;
+        rst = 0;
+
+        // Run two full 64-cycle periods (1280 time units) at each duty cycle
+        SW = 2'b00; #1280;   // 0 %
+        SW = 2'b01; #1280;   // 12.5 %
+        SW = 2'b10; #1280;   // 25 %
+        SW = 2'b11; #1280;   // 50 %
+
+        $finish;
+    end
+
+    // Log every PWM transition, so you can measure how long it stays
+    // high relative to the 16-cycle period for each SW value
+    always @(PWM) begin
+        $display("t=%0t SW=%b PWM=%b", $time, SW, PWM);
+    end
+
+endmodule
+```
+
+Both testbenches call `$dumpfile`/`$dumpvars` up front, so running them through `anvil test` or `iverilog`/`vvp` produces a `.vcd` file you can open with `gtkwave tb_prescaler.vcd &` or `gtkwave tb_pwm_controller.vcd &`, as described earlier in this chapter. Watching `pwm_tick` and the internal counters directly in the waveform is often faster than reading through `$display` output.
+
+### Pin mapping
+
+Connect the `clock` signal to the system clock (100 MHz), the `reset` signal to the middle button, the six switches `SW[5:0]` to the duty-cycle inputs (two bits per color), and the three `RGB[2:0]` outputs to the RGB LED. Add these to the project's `.xdc` file, following the same `set_property PACKAGE_PIN` / `set_property IOSTANDARD` pattern used in the [tools intro](01-tools-intro.qmd):
+
+```
 ## Clock signal
-set_property -dict { PACKAGE_PIN E3    IOSTANDARD LVCMOS33 } [get_ports { clock }]; #IO_L12P_T1_MRCC_35 Sch=clk100mhz
-create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports {clock}];
+set_property PACKAGE_PIN E3 [get_ports {clock}]
+set_property IOSTANDARD LVCMOS33 [get_ports {clock}]
+create_clock -period 10.0 [get_ports {clock}]
 
+## Switches
+set_property PACKAGE_PIN J15 [get_ports {SW[0]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {SW[0]}]
 
-##Switches
-set_property -dict { PACKAGE_PIN J15   IOSTANDARD LVCMOS33 } [get_ports { SW[0] }]; #IO_L24N_T3_RS0_15 Sch=sw[0]
-set_property -dict { PACKAGE_PIN L16   IOSTANDARD LVCMOS33 } [get_ports { SW[1] }]; #IO_L3N_T0_DQS_EMCCLK_14 Sch=sw[1]
-set_property -dict { PACKAGE_PIN M13   IOSTANDARD LVCMOS33 } [get_ports { SW[2] }]; #IO_L6N_T0_D08_VREF_14 Sch=sw[2]
-set_property -dict { PACKAGE_PIN R15   IOSTANDARD LVCMOS33 } [get_ports { SW[3] }]; #IO_L13N_T2_MRCC_14 Sch=sw[3]
-set_property -dict { PACKAGE_PIN R17   IOSTANDARD LVCMOS33 } [get_ports { SW[4] }]; #IO_L12N_T1_MRCC_14 Sch=sw[4]
-set_property -dict { PACKAGE_PIN T18   IOSTANDARD LVCMOS33 } [get_ports { SW[5] }]; #IO_L7N_T1_D10_14 Sch=sw[5]
+set_property PACKAGE_PIN L16 [get_ports {SW[1]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {SW[1]}]
 
-##Buttons
-set_property -dict { PACKAGE_PIN N17   IOSTANDARD LVCMOS33 } [get_ports { reset }]; #IO_L9P_T1_DQS_14 Sch=btnc
+set_property PACKAGE_PIN M13 [get_ports {SW[2]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {SW[2]}]
+
+set_property PACKAGE_PIN R15 [get_ports {SW[3]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {SW[3]}]
+
+set_property PACKAGE_PIN R17 [get_ports {SW[4]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {SW[4]}]
+
+set_property PACKAGE_PIN T18 [get_ports {SW[5]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {SW[5]}]
+
+## Buttons
+set_property PACKAGE_PIN N17 [get_ports {reset}]
+set_property IOSTANDARD LVCMOS33 [get_ports {reset}]
 
 ## RGB LEDs
-set_property -dict { PACKAGE_PIN R12   IOSTANDARD LVCMOS33 } [get_ports { RGB[2] }]; #IO_L5P_T0_D06_14 Sch=led16_b
-set_property -dict { PACKAGE_PIN M16   IOSTANDARD LVCMOS33 } [get_ports { RGB[1] }]; #IO_L10P_T1_D14_14 Sch=led16_g
-set_property -dict { PACKAGE_PIN N15   IOSTANDARD LVCMOS33 } [get_ports { RGB[0] }]; #IO_L11P_T1_SRCC_14 Sch=led16_r
+set_property PACKAGE_PIN R12 [get_ports {RGB[2]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {RGB[2]}]
+
+set_property PACKAGE_PIN M16 [get_ports {RGB[1]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {RGB[1]}]
+
+set_property PACKAGE_PIN N15 [get_ports {RGB[0]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {RGB[0]}]
 ```
 
 ## Starter files

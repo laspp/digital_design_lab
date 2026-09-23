@@ -29,8 +29,8 @@ module rgb_controller_tb;
 
     // Test sequence
     initial begin
-        // $dumpfile("tb.vcd");
-        // $dumpvars;
+        $dumpfile("tb.vcd");
+        $dumpvars;
         // Initialize signals
         reset = 1;
 

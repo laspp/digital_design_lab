@@ -13,7 +13,7 @@ book:
         - chapters/01-tools-intro.qmd
         - chapters/02-alu.qmd
         - chapters/03-sequential.qmd
-      #  - chapters/04-structural-modeling.qmd
+        - chapters/04-structural-modeling.qmd
       #  - chapters/05-counter-sevenseg.qmd
       #  - chapters/06-uart.qmd
       #  - chapters/07-mcs.qmd
