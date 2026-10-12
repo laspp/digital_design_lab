@@ -300,6 +300,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>A successful run ends with a green <code>✓ Toolchain installed and all tests passed</code> banner. Open a <strong>new</strong> shell afterward (so your updated <code>PATH</code>/aliases take effect) and verify with:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> doctor</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>For manual, tool-by-tool installation steps, WSL2-specific USB forwarding, and troubleshooting, see the full <a href="https://logismith.github.io/Docs/installation/">LogiSmith installation docs</a> — that page is the canonical reference and is more likely to stay current than a copy pasted here.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Editor tip: SystemVerilog syntax highlighting and linting in VS Code">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Editor tip: SystemVerilog syntax highlighting and linting in VS Code
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Plain <code>.sv</code> files have no syntax highlighting in VS Code out of the box. Install <a href="https://marketplace.visualstudio.com/items?itemName=mshr-h.VerilogHDL">Verilog-HDL/SystemVerilog</a> (publisher <code>mshr-h</code>) for SystemVerilog syntax highlighting and snippets, plus linting that reports syntax and elaboration errors directly in the editor as you type, instead of only after running <code>anvil build</code> or <code>iverilog</code>.</p>
+<p>The extension needs to be pointed at a linter. Since this course already installs <strong>Icarus Verilog</strong> as part of the Anvil toolchain, set <code>verilog.linting.linter</code> to <code>iverilog</code> in the extension’s settings rather than installing a separate tool like Verilator or Verible just for this. The <code>iverilog</code> executable needs to be on your <code>PATH</code>, which the Anvil installer already takes care of.</p>
+</div>
+</div>
 </section>
 <section id="your-first-design-basic_comb" class="level2" data-number="1.4">
 <h2 data-number="1.4" class="anchored" data-anchor-id="your-first-design-basic_comb"><span class="header-section-number">1.4</span> Your first design: basic_comb</h2>
