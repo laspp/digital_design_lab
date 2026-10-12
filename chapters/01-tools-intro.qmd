@@ -32,10 +32,32 @@ In previous years this course used **Xilinx Vivado**, a proprietary, vendor-spec
 
 Anvil itself just wires these tools together behind a handful of commands (`anvil init`, `anvil build`, `anvil test`, `anvil program`) so you don't invoke each one by hand.
 
-The only FPGA board Anvil currently supports is the **Digilent Nexys A7 100T** — the same board this course already uses.
+Anvil supports two FPGA boards, the **Digilent Nexys A7 100T** and the **Nexys A7 50T**. Both boards are used across the exercises in this course.
 
-::: {.callout-warning title="TODO"}
-Anvil does not yet support the **Nexys A7 50T** (only the 100T is listed under `boards.json` today; LogiSmith's docs note other Artix-7/7-series boards will be added over time). Students with a 50T board have no Anvil flow for now — revisit this once 50T support lands upstream, and update the board-support statement and `anvil init --board` examples throughout this book accordingly.
+::: {.callout-note title="Nexys A7 50T"}
+Anvil supports both the **Nexys A7 100T** and the **Nexys A7 50T** (support for
+the 50T was added in Anvil 1.1.0).
+
+**Your own computer:** a normal installation works out of the box. If you
+installed Anvil before the 50T was added, run `anvil update` once.
+
+**Classroom computers:** these have an older Anvil and you cannot run
+`anvil update` there (it needs `sudo`). Apply the classroom patch instead; it
+needs no administrator rights and changes only files in your home directory:
+
+```bash
+wget https://gist.githubusercontent.com/RatkoFri/d12d34610a58260a58a803eec74e7185/raw/anvil-nexys50t.sh
+bash anvil-nexys50t.sh
+source ~/.bashrc
+```
+
+Run it once per account; running it again does no harm. Check the result with
+`anvil boards` (both boards should be listed) and `anvil doctor`. Then start a
+50T project with:
+
+```bash
+anvil init --board Nexys-A7-50T --example switches-leds
+```
 :::
 
 ## Installing Anvil

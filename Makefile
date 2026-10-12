@@ -1,4 +1,4 @@
-.PHONY: all html pdf preview render clean check
+.PHONY: all html pdf preview render clean check publish
 
 all: render
 
@@ -25,3 +25,8 @@ check:
 # Remove rendered output
 clean:
 	rm -rf _book .quarto index_files site_libs chapters/*_files
+
+# Publish the rendered book to the gh-pages branch
+# First run needs interactive GitHub authentication, see README/CLAUDE.md
+publish:
+	quarto publish gh-pages

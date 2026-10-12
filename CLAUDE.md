@@ -49,7 +49,7 @@ There is no single-test/single-chapter render command beyond passing a source fi
 
 ## Toolchain change: Vivado → Anvil (this year)
 
-The course switched off proprietary **Xilinx Vivado** to the open-source **[Anvil](https://logismith.github.io/Anvil/)** CLI (F4PGA = Yosys + VPR, `sv2v`, `openFPGALoader`; full user docs at [logismith.github.io/Docs](https://logismith.github.io/Docs/)) starting this academic year. The only board Anvil currently supports is the Digilent **Nexys A7 100T** — the same board the course already used, so no hardware change.
+The course switched off proprietary **Xilinx Vivado** to the open-source **[Anvil](https://logismith.github.io/Anvil/)** CLI (F4PGA = Yosys + VPR, `sv2v`, `openFPGALoader`; full user docs at [logismith.github.io/Docs](https://logismith.github.io/Docs/)) starting this academic year. Anvil supports two boards, the Digilent **Nexys A7 100T** and the **Nexys A7 50T** (50T support was added in Anvil 1.1.0), both of which the course already used, so no hardware change.
 
 Practical consequence: **`chapters/01-tools-intro.qmd` was authored fresh, not mechanically migrated** — it replaced the old `01-vivado-guide.qmd` (Vivado install walkthrough, deleted) with an Anvil install guide plus a from-scratch intro to the digital design cycle. Its content came from `https://logismith.github.io/Anvil/` and `https://logismith.github.io/Docs/` (installation, supported-boards, getting-started, tutorials/blinky pages), not from `digital_design_labwork/`.
 
