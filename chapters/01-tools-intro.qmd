@@ -87,6 +87,12 @@ anvil doctor
 
 For manual, tool-by-tool installation steps, WSL2-specific USB forwarding, and troubleshooting, see the full [LogiSmith installation docs](https://logismith.github.io/Docs/installation/) — that page is the canonical reference and is more likely to stay current than a copy pasted here.
 
+::: {.callout-tip title="Editor tip: SystemVerilog syntax highlighting and linting in VS Code"}
+Plain `.sv` files have no syntax highlighting in VS Code out of the box. Install [Verilog-HDL/SystemVerilog](https://marketplace.visualstudio.com/items?itemName=mshr-h.VerilogHDL) (publisher `mshr-h`) for SystemVerilog syntax highlighting and snippets, plus linting that reports syntax and elaboration errors directly in the editor as you type, instead of only after running `anvil build` or `iverilog`.
+
+The extension needs to be pointed at a linter. Since this course already installs **Icarus Verilog** as part of the Anvil toolchain, set `verilog.linting.linter` to `iverilog` in the extension's settings rather than installing a separate tool like Verilator or Verible just for this. The `iverilog` executable needs to be on your `PATH`, which the Anvil installer already takes care of.
+:::
+
 ## Your first design: basic_comb
 
 With `anvil doctor` passing, build a first design that exercises switches and LEDs directly, with no clock involved: a small combinational circuit.
