@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>4&nbsp; Fourth exercise: Structural modeling and Simulation – Digital Design Lab</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/03-sequential.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-d3f7f8e73c8d287b30bcf59c2b563615.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-tools-intro.html">Lab Exercises</a></li><li class="breadcrumb-item"><a href="../chapters/04-structural-modeling.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fourth exercise: Structural modeling and Simulation</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Digital Design Lab</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Lab Exercises</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-tools-intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">First exercise: Tools and the Digital Design Cycle</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-alu.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Second exercise: Introduction to (System)Verilog</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-sequential.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Third exercise: Designing sequential circuits with SystemVerilog</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-structural-modeling.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fourth exercise: Structural modeling and Simulation</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#parametrized-components" id="toc-parametrized-components" class="nav-link active" data-scroll-target="#parametrized-components"><span class="header-section-number">4.1</span> Parametrized components</a></li>
+  <li><a href="#testbenches" id="toc-testbenches" class="nav-link" data-scroll-target="#testbenches"><span class="header-section-number">4.2</span> Testbenches</a>
+  <ul class="collapse">
+  <li><a href="#simulating-with-anvil-icarus-verilog" id="toc-simulating-with-anvil-icarus-verilog" class="nav-link" data-scroll-target="#simulating-with-anvil-icarus-verilog"><span class="header-section-number">4.2.1</span> Simulating with Anvil / Icarus Verilog</a></li>
+  </ul></li>
+  <li><a href="#task-implement-a-pwm-pulse-width-modulation-module-for-rgb-led" id="toc-task-implement-a-pwm-pulse-width-modulation-module-for-rgb-led" class="nav-link" data-scroll-target="#task-implement-a-pwm-pulse-width-modulation-module-for-rgb-led"><span class="header-section-number">4.3</span> Task: Implement a PWM (Pulse-Width Modulation) module for RGB LED</a>
+  <ul class="collapse">
+  <li><a href="#pwm-time-diagram" id="toc-pwm-time-diagram" class="nav-link" data-scroll-target="#pwm-time-diagram"><span class="header-section-number">4.3.1</span> PWM time diagram</a></li>
+  </ul></li>
+  <li><a href="#implementation-guidelines" id="toc-implementation-guidelines" class="nav-link" data-scroll-target="#implementation-guidelines"><span class="header-section-number">4.4</span> Implementation guidelines</a>
+  <ul class="collapse">
+  <li><a href="#prescaler" id="toc-prescaler" class="nav-link" data-scroll-target="#prescaler"><span class="header-section-number">4.4.1</span> Prescaler</a></li>
+  <li><a href="#pwm-controller" id="toc-pwm-controller" class="nav-link" data-scroll-target="#pwm-controller"><span class="header-section-number">4.4.2</span> PWM controller</a></li>
+  <li><a href="#top-level-rgb_controller" id="toc-top-level-rgb_controller" class="nav-link" data-scroll-target="#top-level-rgb_controller"><span class="header-section-number">4.4.3</span> Top level: rgb_controller</a></li>
+  <li><a href="#testbenches-for-prescaler-and-pwm_controller" id="toc-testbenches-for-prescaler-and-pwm_controller" class="nav-link" data-scroll-target="#testbenches-for-prescaler-and-pwm_controller"><span class="header-section-number">4.4.4</span> Testbenches for prescaler and PWM_controller</a></li>
+  <li><a href="#pin-mapping" id="toc-pin-mapping" class="nav-link" data-scroll-target="#pin-mapping"><span class="header-section-number">4.4.5</span> Pin mapping</a></li>
+  </ul></li>
+  <li><a href="#starter-files" id="toc-starter-files" class="nav-link" data-scroll-target="#starter-files"><span class="header-section-number">4.5</span> Starter files</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-tools-intro.html">Lab Exercises</a></li><li class="breadcrumb-item"><a href="../chapters/04-structural-modeling.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fourth exercise: Structural modeling and Simulation</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fourth exercise: Structural modeling and Simulation</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In the previous exercise, we focused on designing counters or flip-flops by describing their functionality in SystemVerilog. This style of modeling is referred to as behavioral modeling. This exercise focuses on structural modeling, where we describe a module in terms of how it is composed of simpler modules. In the example below, we assemble a 4:1 multiplexer from three 2:1 multiplexers. Each copy of the 2:1 multiplexer is called an instance and has a unique name.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> mux2to1 <span class="op">(</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic a<span class="op">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic b<span class="op">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic sel<span class="op">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic y</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> y <span class="op">=</span> sel <span class="op">?</span> b <span class="op">:</span> a<span class="op">;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> mux4to1 <span class="op">(</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> d<span class="op">,</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic <span class="op">[</span><span class="dv">1</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> sel<span class="op">,</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic y</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    logic y0<span class="op">,</span> y1<span class="op">;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">// instance mux_low of module mux2to1</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    mux2to1 mux_low <span class="op">(</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        .a<span class="op">(</span>d<span class="op">[</span><span class="dv">0</span><span class="op">]),</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        .b<span class="op">(</span>d<span class="op">[</span><span class="dv">1</span><span class="op">]),</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>        .sel<span class="op">(</span>sel<span class="op">[</span><span class="dv">0</span><span class="op">]),</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>        .y<span class="op">(</span>y0<span class="op">)</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="co">// instance mux_high of module mux2to1</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    mux2to1 mux_high <span class="op">(</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>        .a<span class="op">(</span>d<span class="op">[</span><span class="dv">2</span><span class="op">]),</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>        .b<span class="op">(</span>d<span class="op">[</span><span class="dv">3</span><span class="op">]),</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>        .sel<span class="op">(</span>sel<span class="op">[</span><span class="dv">0</span><span class="op">]),</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>        .y<span class="op">(</span>y1<span class="op">)</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="co">// instance mux_final of module mux2to1</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    mux2to1 mux_final <span class="op">(</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>        .a<span class="op">(</span>y0<span class="op">),</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>        .b<span class="op">(</span>y1<span class="op">),</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>        .sel<span class="op">(</span>sel<span class="op">[</span><span class="dv">1</span><span class="op">]),</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>        .y<span class="op">(</span>y<span class="op">)</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>As we can see, the instantiation of a module has following syntax: first, we specify the module name, followed by the instance name. In parentheses, we connect the module’s inputs and outputs to signals defined at the current level of hierarchy.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// module name - mux2to1</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">// instance name - mux_final</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">// parenthesis - we map ports </span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">//             - .a(y0) - port a of module is connected to signal y0</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>mux2to1 mux_final <span class="op">(</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        .a<span class="op">(</span>y0<span class="op">),</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        .b<span class="op">(</span>y1<span class="op">),</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>        .sel<span class="op">(</span>sel<span class="op">[</span><span class="dv">1</span><span class="op">]),</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        .y<span class="op">(</span>y<span class="op">)</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">// alternative, more C-like instation</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">// mux2to1 mux_final(y0,y1,sel[1],y)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The bellow image depicts the resulting design:</p>
+<p><img src="../img/Mux4to1.png" alt="MUX4to1" width="400"></p>
+<section id="parametrized-components" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="parametrized-components"><span class="header-section-number">4.1</span> Parametrized components</h2>
+<p>So far, all of our modules have had fixed-width inputs and outputs. SystemVerilog allows variable-width modules through the use of parameterized modules. The code below illustrates a parameterized counter module with a variable length output signal.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> counter #<span class="op">(</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Default value if we do ommit </span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// WIDTH parameter while instatiating module</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">parameter</span> WIDTH <span class="op">=</span> <span class="dv">8</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="op">)</span> <span class="op">(</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic clk<span class="op">,</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic reset<span class="op">,</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic <span class="op">[</span>WIDTH<span class="dv">-1</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> count</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    logic <span class="op">[</span>WIDTH<span class="dv">-1</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> count_reg<span class="op">;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    always_ff <span class="op">@(</span><span class="kw">posedge</span> clk<span class="op">)</span> <span class="kw">begin</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="op">(</span>reset<span class="op">)</span> <span class="kw">begin</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>            count_reg <span class="op">&lt;=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        <span class="kw">end</span> <span class="kw">else</span> <span class="kw">begin</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>            count_reg <span class="op">&lt;=</span> count_reg <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        <span class="kw">end</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> count <span class="op">=</span> count_reg<span class="op">;</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This module defines a counter with a parameterized width. To instatiate in a another module, we need to do following:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> top<span class="op">(</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic clk<span class="op">,</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic reset<span class="op">,</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic <span class="op">[</span><span class="dv">15</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> count<span class="op">);</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Instantiate the counter with a width of 16</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    counter #<span class="op">(</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        .WIDTH<span class="op">(</span><span class="dv">16</span><span class="op">)</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">)</span> counter_inst <span class="op">(</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        .clk<span class="op">(</span>clk<span class="op">),</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        .reset<span class="op">(</span>reset<span class="op">),</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        .count<span class="op">(</span>count<span class="op">)</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>To define parameters inside a module, we can use local parameters (<code>localparam</code>). Verilog HDL local parameters are identical to parameters except that they cannot be directly modified by <code>defparam</code> statements or module instance parameter value assignments.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>    ....</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">localparam</span> CNT_WIDTH <span class="op">=</span> <span class="dv">16</span><span class="op">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Instantiate the counter with a width of 16</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    counter #<span class="op">(</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        .WIDTH<span class="op">(</span>CNT_WIDTH<span class="op">)</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    ....</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="testbenches" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="testbenches"><span class="header-section-number">4.2</span> Testbenches</h2>
+<p>A testbench is an HDL module used to test another module, known as the device under test (DUT) or unit under test (UUT). The testbench includes statements to apply inputs to the DUT and, ideally, to verify that the correct outputs are generated. The input and expected output patterns are referred to as test vectors.</p>
+<p>Let us write the DUT for our 4:1 MUX. Lets fix length to 4-bit.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> tb_mux4to1<span class="op">;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Testbench signals</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> d<span class="op">;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    logic <span class="op">[</span><span class="dv">1</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> sel<span class="op">;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    logic y<span class="op">;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Instantiate the DUT</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    mux4to1 dut <span class="op">(</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        .d<span class="op">(</span>d<span class="op">),</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        .sel<span class="op">(</span>sel<span class="op">),</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        .y<span class="op">(</span>y<span class="op">)</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Test procedure</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">initial</span> <span class="kw">begin</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Test case 1</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Define values for inputs  </span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>        d <span class="op">=</span> <span class="bn">4'b1010</span><span class="op">;</span> sel <span class="op">=</span> <span class="bn">2'b00</span><span class="op">;</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Wait for 10 time units </span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>        <span class="bn">#10</span><span class="op">;</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>        <span class="co">// print on STD </span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>        <span class="dt">$display</span><span class="op">(</span><span class="st">"d=%b sel=%b y=%b"</span><span class="op">,</span> d<span class="op">,</span> sel<span class="op">,</span> y<span class="op">);</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Test case 2</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>        d <span class="op">=</span> <span class="bn">4'b1010</span><span class="op">;</span> sel <span class="op">=</span> <span class="bn">2'b01</span><span class="op">;</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>        <span class="bn">#10</span><span class="op">;</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>        <span class="dt">$display</span><span class="op">(</span><span class="st">"d=%b sel=%b y=%b"</span><span class="op">,</span> d<span class="op">,</span> sel<span class="op">,</span> y<span class="op">);</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Test case 3</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>        d <span class="op">=</span> <span class="bn">4'b1010</span><span class="op">;</span> sel <span class="op">=</span> <span class="bn">2'b10</span><span class="op">;</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>        <span class="bn">#10</span><span class="op">;</span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>        <span class="dt">$display</span><span class="op">(</span><span class="st">"d=%b sel=%b y=%b"</span><span class="op">,</span> d<span class="op">,</span> sel<span class="op">,</span> y<span class="op">);</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Test case 4</span></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>        d <span class="op">=</span> <span class="bn">4'b1010</span><span class="op">;</span> sel <span class="op">=</span> <span class="bn">2'b11</span><span class="op">;</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>        <span class="bn">#10</span><span class="op">;</span></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>        <span class="dt">$display</span><span class="op">(</span><span class="st">"d=%b sel=%b y=%b"</span><span class="op">,</span> d<span class="op">,</span> sel<span class="op">,</span> y<span class="op">);</span></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Finish simulation</span></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>        <span class="dt">$finish</span><span class="op">;</span></span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>A testbench has no ports of its own. It sits at the top of the simulation hierarchy, so everything it needs (<code>d</code>, <code>sel</code>, <code>y</code>) is declared as a plain <code>logic</code> signal inside the module and then wired to the DUT by name, exactly as you would wire a module instance in any other design. <code>mux4to1</code> is purely combinational, so the testbench doesn’t need to worry about clocking it at all. The <code>initial</code> block simply drives a new value onto <code>d</code>/<code>sel</code>, waits <code>#10</code> time units for the change to propagate through the DUT’s <code>assign</code> statements, and then <code>$display</code>s the result. The <code>#10</code> delay here isn’t required by the circuit, since a combinational output settles essentially instantly. It just gives each test case a clean slice of simulation time so the four <code>$display</code> lines don’t collide, and makes the resulting waveform easier to read if you open it in GTKWave. Each of the four test cases holds <code>sel</code> at all four possible values while <code>d</code> stays fixed, letting you check by eye that <code>y</code> always equals the bit of <code>d</code> selected by <code>sel</code>. <code>$finish</code> at the end tells the simulator to stop. Without it, a testbench with no more statements to execute would simply hang.</p>
+<p>For testing sequential design, we need to account the clock signal. In testbenches we need to create a separate always block that will generate clock signal. Bellow code shows the testbench for our parametrized counter (case for 4-bit).</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> tb_counter<span class="op">;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Testbench signals</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    logic clk<span class="op">;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    logic reset<span class="op">;</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> count<span class="op">;</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Instantiate the DUT</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    counter #<span class="op">(</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        .WIDTH<span class="op">(</span><span class="dv">4</span><span class="op">)</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">)</span> dut <span class="op">(</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>        .clk<span class="op">(</span>clk<span class="op">),</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        .reset<span class="op">(</span>reset<span class="op">),</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        .count<span class="op">(</span>count<span class="op">)</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Clock generation</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">always</span> <span class="kw">begin</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>        <span class="bn">#5</span> clk <span class="op">=</span> <span class="op">~</span>clk<span class="op">;</span> <span class="co">// Toggle clock every 5 time units</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Test procedure</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">initial</span> <span class="kw">begin</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Initialize signals</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>        clk <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>        reset <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Apply reset</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>        <span class="bn">#10</span><span class="op">;</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>        reset <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Wait for some time and observe the count</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>        <span class="bn">#100</span><span class="op">;</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>        <span class="dt">$display</span><span class="op">(</span><span class="st">"count=%b"</span><span class="op">,</span> count<span class="op">);</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Finish simulation</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>        <span class="dt">$finish</span><span class="op">;</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Unlike the MUX testbench, <code>counter</code> is a registered design (<code>always_ff</code>), so its output only changes on a rising <code>clk</code> edge. The testbench has to actually supply that clock, since nothing else in simulation will. That’s what the separate <code>always</code> block does. With no sensitivity list and no guarding <code>if</code>, it just keeps re-executing <code>#5 clk = ~clk;</code> for the entire simulation, flipping <code>clk</code> every 5 time units and producing a free-running clock with a 10-unit period. This block runs concurrently with the <code>initial</code> block below it. In SystemVerilog, every <code>initial</code>/<code>always</code> block in a module starts at time 0 and proceeds independently, which is exactly why the clock generator has to live in its own block rather than inside the stimulus sequence.</p>
+<p>The <code>initial</code> block still drives the test, but now in terms of clock edges rather than raw delays. It sets <code>clk = 0</code> and <code>reset = 1</code> at time 0, holds <code>reset</code> high for <code>#10</code> (one full clock period) to model a real power-on reset pulse, then deasserts it and waits <code>#100</code> (ten clock periods) for the counter to free-run before sampling <code>count</code> with <code>$display</code>. That wait is the key difference from the combinational case. A combinational output is valid almost immediately after its inputs change, but a register only updates once per clock edge, so a sequential testbench must always budget enough simulated time (or, in more thorough testbenches, wait for a specific number of <code>@(posedge clk)</code> events) before checking the DUT’s outputs. <code>$finish</code> matters more here than in the MUX testbench, because the clock-generation <code>always</code> block never terminates on its own. Without an explicit <code>$finish</code>, the simulation would run forever.</p>
+<section id="simulating-with-anvil-icarus-verilog" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="simulating-with-anvil-icarus-verilog"><span class="header-section-number">4.2.1</span> Simulating with Anvil / Icarus Verilog</h3>
+<p>Save the testbench alongside the DUT it exercises. Inside an Anvil project, place it under <code>tb/</code> and let <code>anvil test</code> drive Icarus Verilog for you:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> test tb/tb_mux4to1.sv     <span class="co"># runs Icarus Verilog, writes tb/tb_mux4to1.vcd</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>You can also invoke Icarus Verilog directly. This is handy while experimenting with standalone snippets like the ones above, outside of a full Anvil project. <code>iverilog</code> compiles every file passed on the command line into a single simulation executable, which <code>vvp</code> then runs:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">iverilog</span> <span class="at">-g2012</span> <span class="at">-o</span> sim mux2to1.sv mux4to1.sv tb_mux4to1.sv</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vvp</span> sim</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>-g2012</code> selects SystemVerilog-2012 syntax, needed for constructs like <code>logic</code> and <code>always_ff</code> that plain Verilog doesn’t have. The <code>$display</code> calls in the testbench print straight to the terminal.</p>
+<p>To inspect signals over time instead of just the printed values, add a dump block to the testbench:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">initial</span> <span class="kw">begin</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">$dumpfile</span><span class="op">(</span><span class="st">"tb_counter.vcd"</span><span class="op">);</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">$dumpvars</span><span class="op">(</span><span class="dv">0</span><span class="op">,</span> tb_counter<span class="op">);</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>then open the resulting <code>.vcd</code> file in GTKWave:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gtkwave</span> tb_counter.vcd <span class="kw">&amp;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<!--
+## Task: Implement a 4-bit Gray counter
+
+Modify the code from previous exercise, in such a way that design relies on following modules:
+
+| Name       | Generic Parameters | Additional Functionality                  |
+|------------|--------------------|-------------------------------------------|
+| prescaler  | WIDTH (the width of the counter)           | None           |
+| binary_counter | WIDTH  (the width counter)           | Counting frequency: 0.5 Hz and 10 Hz               |
+| code_output | WIDTH  (the width output)           |    Selecting if the output is in Gray Code or Binary code     |
+
+--->
+</section>
+</section>
+<section id="task-implement-a-pwm-pulse-width-modulation-module-for-rgb-led" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="task-implement-a-pwm-pulse-width-modulation-module-for-rgb-led"><span class="header-section-number">4.3</span> Task: Implement a PWM (Pulse-Width Modulation) module for RGB LED</h2>
+<p>In this task, you will implement a PWM module for an RGB LED. The module will have three 6-bit inputs, each controlling the duty cycle of the red, green, and blue LEDs. The module will have three 1-bit outputs, each representing the PWM signal for the red, green, and blue LEDs.</p>
+<p>The PWM signal will be generated by comparing the duty cycle with a 4-bit counter that increments with the PWM_tick signal. The PWM_tick signal is generated by a prescaler that outputs a pulse every 3125 clock cycles, corresponding to a frequency of 32 kHz. You will connect the PWM module to the prescaler and the RGB LED module according to the diagram below.</p>
+<p><img src="../img/ARGB_PWM.png" alt="RGB_PWM" width="600"></p>
+<blockquote class="blockquote">
+<p>Note: The N16, R11, and G14 pins on the FPGA board are connected to the red, green, and blue LEDs of the RGB LED, respectively.</p>
+</blockquote>
+<p>Switch values denote duty cycle for each color. The duty cycle is calculated as follows:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>SW[1:0]</th>
+<th>Duty_cycle</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>00</td>
+<td>0 %</td>
+</tr>
+<tr class="even">
+<td>01</td>
+<td>12.5 %</td>
+</tr>
+<tr class="odd">
+<td>10</td>
+<td>25 %</td>
+</tr>
+<tr class="even">
+<td>11</td>
+<td>50 %</td>
+</tr>
+</tbody>
+</table>
+<p>Duty cycle is definied as ratio of high signal to the period of the signal, e.g.&nbsp;25% duty cycle means that the signal is high for 25% of the period.</p>
+<section id="pwm-time-diagram" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="pwm-time-diagram"><span class="header-section-number">4.3.1</span> PWM time diagram</h3>
+<p><img src="../img/Drawings-1.png" alt="PWM_timing" width="600"></p>
+</section>
+</section>
+<section id="implementation-guidelines" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="implementation-guidelines"><span class="header-section-number">4.4</span> Implementation guidelines</h2>
+<section id="prescaler" class="level3" data-number="4.4.1">
+<h3 data-number="4.4.1" class="anchored" data-anchor-id="prescaler"><span class="header-section-number">4.4.1</span> Prescaler</h3>
+<p>The prescaler turns the fast system clock into the slower <code>pwm_tick</code> the PWM module counts on. It is a free running counter that produces a single cycle pulse once every <code>limit</code> clock cycles. Its interface is already declared in the starter file:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> prescaler</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    #(<span class="kw">parameter</span> PRESCALER_WIDTH = <span class="dv">8</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    (</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">input</span> <span class="kw">logic</span> clk,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">input</span> <span class="kw">logic</span> rst,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">input</span> <span class="kw">logic</span> [PRESCALER_WIDTH<span class="dv">-1</span>:<span class="dv">0</span>] limit,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">output</span> <span class="kw">logic</span> pwm_tick</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    );</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Port</th>
+<th>Direction</th>
+<th>Width</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>clk</code></td>
+<td>input</td>
+<td>1 bit</td>
+<td>System clock. The counter advances on its rising edge.</td>
+</tr>
+<tr class="even">
+<td><code>rst</code></td>
+<td>input</td>
+<td>1 bit</td>
+<td>Synchronous reset. Clears the internal counter while high.</td>
+</tr>
+<tr class="odd">
+<td><code>limit</code></td>
+<td>input</td>
+<td><code>PRESCALER_WIDTH</code> bits</td>
+<td>Number of clock cycles between output pulses.</td>
+</tr>
+<tr class="even">
+<td><code>pwm_tick</code></td>
+<td>output</td>
+<td>1 bit</td>
+<td>Pulses high for one clock cycle, once every <code>limit</code> cycles.</td>
+</tr>
+</tbody>
+</table>
+<p>Behavior:</p>
+<ul>
+<li>Keep an internal counter register. On every rising edge of <code>clk</code>, if <code>rst</code> is high, reset that counter to zero.</li>
+<li>Otherwise, increment the counter by one on every rising edge.</li>
+<li>When the counter reaches <code>limit - 1</code>, drive <code>pwm_tick</code> high for that clock cycle and let the counter wrap back to zero on the next edge, restarting the count.</li>
+<li>The result is a periodic, single cycle pulse with a period of exactly <code>limit</code> clock cycles. With <code>limit = 3125</code> and a 100 MHz <code>clk</code>, <code>pwm_tick</code> fires once every 31.25 microseconds, which is 32 kHz.</li>
+</ul>
+</section>
+<section id="pwm-controller" class="level3" data-number="4.4.2">
+<h3 data-number="4.4.2" class="anchored" data-anchor-id="pwm-controller"><span class="header-section-number">4.4.2</span> PWM controller</h3>
+<p>The PWM controller turns a 2-bit duty cycle selection into a single PWM output for one LED color. One instance drives the red LED, one drives green, one drives blue, each fed by its own pair of switches and all three sharing the same <code>pwm_tick</code> from the prescaler. Its interface is already declared in the starter file:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> PWM_controller</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>(</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">input</span> <span class="kw">logic</span> clk,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">input</span> <span class="kw">logic</span> rst,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">input</span> <span class="kw">logic</span> [<span class="dv">1</span>:<span class="dv">0</span>] SW,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">input</span> <span class="kw">logic</span> pwm_tick,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">output</span> <span class="kw">logic</span> PWM</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Port</th>
+<th>Direction</th>
+<th>Width</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>clk</code></td>
+<td>input</td>
+<td>1 bit</td>
+<td>System clock, used to advance the internal counter register.</td>
+</tr>
+<tr class="even">
+<td><code>rst</code></td>
+<td>input</td>
+<td>1 bit</td>
+<td>Synchronous reset. Clears the internal counter while high.</td>
+</tr>
+<tr class="odd">
+<td><code>SW</code></td>
+<td>input</td>
+<td>2 bits</td>
+<td>Duty cycle selector for this color, per the duty cycle table above.</td>
+</tr>
+<tr class="even">
+<td><code>pwm_tick</code></td>
+<td>input</td>
+<td>1 bit</td>
+<td>One clock cycle pulse from the prescaler. Acts as a count enable.</td>
+</tr>
+<tr class="odd">
+<td><code>PWM</code></td>
+<td>output</td>
+<td>1 bit</td>
+<td>The pulse width modulated signal driving one RGB LED color.</td>
+</tr>
+</tbody>
+</table>
+<p>Behavior:</p>
+<ul>
+<li>Keep an internal 4-bit counter register. Unlike the prescaler, this counter does not advance on every <code>clk</code> edge. It advances by one only on a <code>clk</code> edge where <code>pwm_tick</code> is high, and wraps from 15 back to 0. Sixteen <code>pwm_tick</code> pulses therefore make up one full PWM period.</li>
+<li>On a <code>clk</code> edge where <code>rst</code> is high, reset that counter to zero instead of counting.</li>
+<li>Translate <code>SW</code> into a threshold on the same 0 to 15 scale as the counter, so it lines up with the duty cycle table: <code>00</code> maps to a threshold of 0, <code>01</code> to 2, <code>10</code> to 4, and <code>11</code> to 8 (0, 2, 4, and 8 sixteenths are 0%, 12.5%, 25%, and 50%).</li>
+<li>Drive <code>PWM</code> combinationally from the comparison: high while the counter value is less than the threshold, low otherwise. Since the counter counts through all 16 values once per period, this produces a high pulse whose width, as a fraction of the period, equals the selected duty cycle.</li>
+</ul>
+</section>
+<section id="top-level-rgb_controller" class="level3" data-number="4.4.3">
+<h3 data-number="4.4.3" class="anchored" data-anchor-id="top-level-rgb_controller"><span class="header-section-number">4.4.3</span> Top level: rgb_controller</h3>
+<p>The top module has no logic of its own. It only wires the prescaler and three <code>PWM_controller</code> instances together, using structural modeling exactly as introduced at the start of this chapter. Its interface is already declared in the starter file:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> rgb_controller (</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">input</span> <span class="kw">logic</span> clock,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">input</span> <span class="kw">logic</span> reset,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">input</span> <span class="kw">logic</span> [<span class="dv">5</span>:<span class="dv">0</span>] SW,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">output</span> <span class="kw">logic</span> [<span class="dv">2</span>:<span class="dv">0</span>] RGB</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Port</th>
+<th>Direction</th>
+<th>Width</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>clock</code></td>
+<td>input</td>
+<td>1 bit</td>
+<td>System clock (100 MHz), forwarded to every instance below.</td>
+</tr>
+<tr class="even">
+<td><code>reset</code></td>
+<td>input</td>
+<td>1 bit</td>
+<td>Synchronous reset, forwarded to every instance below.</td>
+</tr>
+<tr class="odd">
+<td><code>SW</code></td>
+<td>input</td>
+<td>6 bits</td>
+<td>Duty cycle selectors, two bits per color: <code>SW[1:0]</code> red, <code>SW[3:2]</code> green, <code>SW[5:4]</code> blue.</td>
+</tr>
+<tr class="even">
+<td><code>RGB</code></td>
+<td>output</td>
+<td>3 bits</td>
+<td>One PWM signal per color: <code>RGB[0]</code> red, <code>RGB[1]</code> green, <code>RGB[2]</code> blue.</td>
+</tr>
+</tbody>
+</table>
+<p>Structure:</p>
+<ul>
+<li>One instance of <code>prescaler</code>, driven by <code>clock</code>/<code>reset</code> and the <code>limit_value</code> already wired up in the draft, produces a single <code>pwm_tick</code> signal shared by everything downstream.</li>
+<li>Three instances of <code>PWM_controller</code>, conventionally named <code>PWM_red</code>, <code>PWM_green</code>, and <code>PWM_blue</code>. These are three separate instances of the exact same module, the same way <code>mux2to1</code> was instantiated three times to build <code>mux4to1</code> earlier in this chapter, not three different modules. Each instance shares <code>clock</code>, <code>reset</code>, and the one <code>pwm_tick</code> from the prescaler, but connects to a different 2-bit slice of <code>SW</code> and drives a different bit of <code>RGB</code>. For example, the red instance looks like:</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>PWM_controller PWM_red (</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    .clk(clock),</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    .rst(reset),</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    .SW(SW[<span class="dv">1</span>:<span class="dv">0</span>]),</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    .pwm_tick(pwm_tick),</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    .PWM(RGB[<span class="dv">0</span>])</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>PWM_green</code> and <code>PWM_blue</code> follow the same pattern, connecting <code>SW[3:2]</code>/<code>RGB[1]</code> and <code>SW[5:4]</code>/<code>RGB[2]</code> respectively. The draft file’s instantiation comments all read “for the red LED”. That’s a leftover from copy-pasting the first instance, and should read green and blue for the other two.</p>
+<ul>
+<li>Create a testbench to verify the functionality of your PWM module. The testbench is provided in the repository.</li>
+</ul>
+</section>
+<section id="testbenches-for-prescaler-and-pwm_controller" class="level3" data-number="4.4.4">
+<h3 data-number="4.4.4" class="anchored" data-anchor-id="testbenches-for-prescaler-and-pwm_controller"><span class="header-section-number">4.4.4</span> Testbenches for prescaler and PWM_controller</h3>
+<p>Before wiring everything together, verify <code>prescaler</code> and <code>PWM_controller</code> on their own, the same way <code>tb_mux4to1</code> and <code>tb_counter</code> tested individual modules earlier in this chapter. A bug isolated to one small module is far easier to find than the same bug hiding inside the fully assembled <code>rgb_controller</code>.</p>
+<section id="tb_prescaler" class="level4" data-number="4.4.4.1">
+<h4 data-number="4.4.4.1" class="anchored" data-anchor-id="tb_prescaler"><span class="header-section-number">4.4.4.1</span> tb_prescaler</h4>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> tb_prescaler;</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Testbench signals</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">logic</span> clk;</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">logic</span> rst;</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">logic</span> [<span class="dv">7</span>:<span class="dv">0</span>] limit;</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">logic</span> pwm_tick;</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Instantiate the DUT</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    prescaler dut (</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>        .clk(clk),</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>        .rst(rst),</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>        .limit(limit),</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>        .pwm_tick(pwm_tick)</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    );</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Clock generation</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">always</span> <span class="kw">begin</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>        <span class="bn">#5</span> clk = ~clk; <span class="co">// Toggle clock every 5 time units</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Test procedure</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">initial</span> <span class="kw">begin</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>        <span class="kw">$dumpfile</span>(<span class="st">"tb_prescaler.vcd"</span>);</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>        <span class="kw">$dumpvars</span>(<span class="dv">0</span>, tb_prescaler);</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>        clk = <span class="dv">0</span>;</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>        rst = <span class="dv">1</span>;</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>        limit = <span class="dv">5</span>;</span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>        <span class="bn">#10</span>;</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>        rst = <span class="dv">0</span>;</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Let the counter run through several periods</span></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>        <span class="bn">#200</span>;</span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>        <span class="kw">$finish</span>;</span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Log every pwm_tick pulse</span></span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>    <span class="kw">always</span> @(<span class="kw">posedge</span> clk) <span class="kw">begin</span></span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> (pwm_tick)</span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>            <span class="kw">$display</span>(<span class="st">"t=%0t pwm_tick pulse"</span>, <span class="kw">$time</span>);</span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Do not test with <code>limit = 3125</code>, the value you will eventually use on hardware. At 100 MHz that is a pulse every 31.25 microseconds, so watching even a handful of periods in simulation means sitting through thousands of clock cycles of <code>$display</code> output or a huge waveform. Drive <code>limit</code> with a small value instead, such as 5 as above, so <code>pwm_tick</code> fires every few clock cycles and you can see several full periods and the counter wraparound in a short simulation run. Once the counting and wraparound logic is confirmed correct at a small limit, the same logic is correct at <code>limit = 3125</code>, only slower.</p>
+</div>
+</div>
+</section>
+<section id="tb_pwm_controller" class="level4" data-number="4.4.4.2">
+<h4 data-number="4.4.4.2" class="anchored" data-anchor-id="tb_pwm_controller"><span class="header-section-number">4.4.4.2</span> tb_pwm_controller</h4>
+<p><code>PWM_controller</code> takes <code>pwm_tick</code> as an input rather than generating it, so this testbench stands in for the prescaler with a small free running counter of its own, pulsing <code>pwm_tick</code> high for one clock cycle out of every 4, instead of instantiating a full <code>prescaler</code> with a large <code>limit</code>. The DUT’s internal counter then advances once every 4 clock cycles, so a full 16-step PWM period takes 64 clock cycles to simulate, still far shorter than testing against the real <code>limit = 3125</code> prescaler.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> tb_pwm_controller;</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Testbench signals</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">logic</span> clk;</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">logic</span> rst;</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">logic</span> [<span class="dv">1</span>:<span class="dv">0</span>] SW;</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">logic</span> pwm_tick;</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">logic</span> PWM;</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Instantiate the DUT</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    PWM_controller dut (</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>        .clk(clk),</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>        .rst(rst),</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>        .SW(SW),</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>        .pwm_tick(pwm_tick),</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>        .PWM(PWM)</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>    );</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Clock generation</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">always</span> <span class="kw">begin</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>        <span class="bn">#5</span> clk = ~clk; <span class="co">// Toggle clock every 5 time units</span></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Stand in for the prescaler: pulse pwm_tick high for one cycle</span></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>    <span class="co">// out of every 4 clock cycles</span></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">logic</span> [<span class="dv">1</span>:<span class="dv">0</span>] tick_count;</span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>    <span class="kw">always_ff</span> @(<span class="kw">posedge</span> clk) <span class="kw">begin</span></span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>        tick_count &lt;= tick_count + <span class="dv">1</span>;</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> pwm_tick = (tick_count == <span class="bn">2'd3</span>);</span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Test procedure</span></span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>    <span class="kw">initial</span> <span class="kw">begin</span></span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>        <span class="kw">$dumpfile</span>(<span class="st">"tb_pwm_controller.vcd"</span>);</span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>        <span class="kw">$dumpvars</span>(<span class="dv">0</span>, tb_pwm_controller);</span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>        clk = <span class="dv">0</span>;</span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>        rst = <span class="dv">1</span>;</span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>        tick_count = <span class="dv">0</span>;</span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>        SW = <span class="bn">2'b00</span>;</span>
+<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a>        <span class="bn">#10</span>;</span>
+<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a>        rst = <span class="dv">0</span>;</span>
+<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Run two full 64-cycle periods (1280 time units) at each duty cycle</span></span>
+<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a>        SW = <span class="bn">2'b00</span>; <span class="bn">#1280</span>;   <span class="co">// 0 %</span></span>
+<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a>        SW = <span class="bn">2'b01</span>; <span class="bn">#1280</span>;   <span class="co">// 12.5 %</span></span>
+<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a>        SW = <span class="bn">2'b10</span>; <span class="bn">#1280</span>;   <span class="co">// 25 %</span></span>
+<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a>        SW = <span class="bn">2'b11</span>; <span class="bn">#1280</span>;   <span class="co">// 50 %</span></span>
+<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-52"><a href="#cb17-52" aria-hidden="true" tabindex="-1"></a>        <span class="kw">$finish</span>;</span>
+<span id="cb17-53"><a href="#cb17-53" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb17-54"><a href="#cb17-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-55"><a href="#cb17-55" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Log every PWM transition, so you can measure how long it stays</span></span>
+<span id="cb17-56"><a href="#cb17-56" aria-hidden="true" tabindex="-1"></a>    <span class="co">// high relative to the 16-cycle period for each SW value</span></span>
+<span id="cb17-57"><a href="#cb17-57" aria-hidden="true" tabindex="-1"></a>    <span class="kw">always</span> @(PWM) <span class="kw">begin</span></span>
+<span id="cb17-58"><a href="#cb17-58" aria-hidden="true" tabindex="-1"></a>        <span class="kw">$display</span>(<span class="st">"t=%0t SW=%b PWM=%b"</span>, <span class="kw">$time</span>, SW, PWM);</span>
+<span id="cb17-59"><a href="#cb17-59" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb17-60"><a href="#cb17-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-61"><a href="#cb17-61" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Both testbenches call <code>$dumpfile</code>/<code>$dumpvars</code> up front, so running them through <code>anvil test</code> or <code>iverilog</code>/<code>vvp</code> produces a <code>.vcd</code> file you can open with <code>gtkwave tb_prescaler.vcd &amp;</code> or <code>gtkwave tb_pwm_controller.vcd &amp;</code>, as described earlier in this chapter. Watching <code>pwm_tick</code> and the internal counters directly in the waveform is often faster than reading through <code>$display</code> output.</p>
+</section>
+</section>
+<section id="pin-mapping" class="level3" data-number="4.4.5">
+<h3 data-number="4.4.5" class="anchored" data-anchor-id="pin-mapping"><span class="header-section-number">4.4.5</span> Pin mapping</h3>
+<p>Connect the <code>clock</code> signal to the system clock (100 MHz), the <code>reset</code> signal to the middle button, the six switches <code>SW[5:0]</code> to the duty-cycle inputs (two bits per color), and the three <code>RGB[2:0]</code> outputs to the RGB LED. Add these to the project’s <code>.xdc</code> file, following the same <code>set_property PACKAGE_PIN</code> / <code>set_property IOSTANDARD</code> pattern used in the <a href="../chapters/01-tools-intro.html">tools intro</a>:</p>
+<pre><code>## Clock signal
+set_property PACKAGE_PIN E3 [get_ports {clock}]
+set_property IOSTANDARD LVCMOS33 [get_ports {clock}]
+create_clock -period 10.0 [get_ports {clock}]
+
+## Switches
+set_property PACKAGE_PIN J15 [get_ports {SW[0]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {SW[0]}]
+
+set_property PACKAGE_PIN L16 [get_ports {SW[1]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {SW[1]}]
+
+set_property PACKAGE_PIN M13 [get_ports {SW[2]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {SW[2]}]
+
+set_property PACKAGE_PIN R15 [get_ports {SW[3]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {SW[3]}]
+
+set_property PACKAGE_PIN R17 [get_ports {SW[4]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {SW[4]}]
+
+set_property PACKAGE_PIN T18 [get_ports {SW[5]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {SW[5]}]
+
+## Buttons
+set_property PACKAGE_PIN N17 [get_ports {reset}]
+set_property IOSTANDARD LVCMOS33 [get_ports {reset}]
+
+## RGB LEDs
+set_property PACKAGE_PIN R12 [get_ports {RGB[2]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {RGB[2]}]
+
+set_property PACKAGE_PIN M16 [get_ports {RGB[1]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {RGB[1]}]
+
+set_property PACKAGE_PIN N15 [get_ports {RGB[0]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {RGB[0]}]</code></pre>
+</section>
+</section>
+<section id="starter-files" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="starter-files"><span class="header-section-number">4.5</span> Starter files</h2>
+<ul>
+<li><a href="../code/04_lab/rgb_controller_draft.sv">rgb_controller_draft.sv</a></li>
+<li><a href="../code/04_lab/rgb_controller_tb.sv">rgb_controller_tb.sv</a></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/03-sequential.html" class="pagination-link" aria-label="Third exercise: Designing sequential circuits with SystemVerilog">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Third exercise: Designing sequential circuits with SystemVerilog</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
