@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>2&nbsp; Second exercise: Introduction to (System)Verilog – Digital Design Lab</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/01-tools-intro.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-fd0503e23dce65854c81c5baaade3bdf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-tools-intro.html">Lab Exercises</a></li><li class="breadcrumb-item"><a href="../chapters/02-alu.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Second exercise: Introduction to (System)Verilog</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Digital Design Lab</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Lab Exercises</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-tools-intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">First exercise: Tools and the Digital Design Cycle</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-alu.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Second exercise: Introduction to (System)Verilog</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#types" id="toc-types" class="nav-link active" data-scroll-target="#types"><span class="header-section-number">2.1</span> Types</a>
+  <ul class="collapse">
+  <li><a href="#logic-netlist-types" id="toc-logic-netlist-types" class="nav-link" data-scroll-target="#logic-netlist-types"><span class="header-section-number">2.1.1</span> Logic (NetList) Types</a></li>
+  <li><a href="#vector-types" id="toc-vector-types" class="nav-link" data-scroll-target="#vector-types"><span class="header-section-number">2.1.2</span> Vector Types</a></li>
+  <li><a href="#variable-types" id="toc-variable-types" class="nav-link" data-scroll-target="#variable-types"><span class="header-section-number">2.1.3</span> Variable Types</a></li>
+  <li><a href="#expressing-numbers-using-different-bases" id="toc-expressing-numbers-using-different-bases" class="nav-link" data-scroll-target="#expressing-numbers-using-different-bases"><span class="header-section-number">2.1.4</span> Expressing Numbers Using Different Bases</a></li>
+  </ul></li>
+  <li><a href="#module" id="toc-module" class="nav-link" data-scroll-target="#module"><span class="header-section-number">2.2</span> Module</a></li>
+  <li><a href="#operators" id="toc-operators" class="nav-link" data-scroll-target="#operators"><span class="header-section-number">2.3</span> Operators</a>
+  <ul class="collapse">
+  <li><a href="#numerical-operators" id="toc-numerical-operators" class="nav-link" data-scroll-target="#numerical-operators"><span class="header-section-number">2.3.1</span> Numerical Operators</a></li>
+  <li><a href="#logical-operators" id="toc-logical-operators" class="nav-link" data-scroll-target="#logical-operators"><span class="header-section-number">2.3.2</span> Logical Operators</a></li>
+  <li><a href="#relational-operators" id="toc-relational-operators" class="nav-link" data-scroll-target="#relational-operators"><span class="header-section-number">2.3.3</span> Relational Operators</a></li>
+  <li><a href="#bitwise-operators" id="toc-bitwise-operators" class="nav-link" data-scroll-target="#bitwise-operators"><span class="header-section-number">2.3.4</span> Bitwise Operators</a></li>
+  <li><a href="#reduction-operators" id="toc-reduction-operators" class="nav-link" data-scroll-target="#reduction-operators"><span class="header-section-number">2.3.5</span> Reduction Operators</a></li>
+  <li><a href="#conditional-operator" id="toc-conditional-operator" class="nav-link" data-scroll-target="#conditional-operator"><span class="header-section-number">2.3.6</span> Conditional Operator</a></li>
+  <li><a href="#concatenation-and-replication-operators" id="toc-concatenation-and-replication-operators" class="nav-link" data-scroll-target="#concatenation-and-replication-operators"><span class="header-section-number">2.3.7</span> Concatenation and Replication Operators</a></li>
+  </ul></li>
+  <li><a href="#modeling-concurent-functionality-in-systemverilog" id="toc-modeling-concurent-functionality-in-systemverilog" class="nav-link" data-scroll-target="#modeling-concurent-functionality-in-systemverilog"><span class="header-section-number">2.4</span> Modeling Concurent functionality in SystemVerilog</a>
+  <ul class="collapse">
+  <li><a href="#continuous-assignment" id="toc-continuous-assignment" class="nav-link" data-scroll-target="#continuous-assignment"><span class="header-section-number">2.4.1</span> Continuous assignment</a></li>
+  <li><a href="#bit-41-multiplexer" id="toc-bit-41-multiplexer" class="nav-link" data-scroll-target="#bit-41-multiplexer"><span class="header-section-number">2.4.2</span> 4-bit 4:1 Multiplexer</a></li>
+  <li><a href="#bit-adder" id="toc-bit-adder" class="nav-link" data-scroll-target="#bit-adder"><span class="header-section-number">2.4.3</span> 4-bit adder</a></li>
+  <li><a href="#user-constraints-files-and-pin-planning-in-vivado" id="toc-user-constraints-files-and-pin-planning-in-vivado" class="nav-link" data-scroll-target="#user-constraints-files-and-pin-planning-in-vivado"><span class="header-section-number">2.4.4</span> User Constraints Files and Pin Planning in Vivado</a></li>
+  </ul></li>
+  <li><a href="#assignment" id="toc-assignment" class="nav-link" data-scroll-target="#assignment"><span class="header-section-number">2.5</span> Assignment</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-tools-intro.html">Lab Exercises</a></li><li class="breadcrumb-item"><a href="../chapters/02-alu.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Second exercise: Introduction to (System)Verilog</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Second exercise: Introduction to (System)Verilog</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- ## SystemVerilog 
+
+SystemVerilog offers several advantages for hardware design and verification:
+
+1. **Unified Language**: Combines hardware description and verification capabilities in a single language, reducing the need for multiple tools and languages.
+2. **Advanced Data Types**: Provides a rich set of data types that enhance modeling accuracy and simulation performance.
+3. **Assertions**: Built-in support for assertions helps in early detection of design errors and improves verification quality.
+4. **Object-Oriented Programming (OOP)**: Supports OOP concepts, enabling more modular, reusable, and maintainable verification code.
+5. **Randomization**: Facilitates constrained random stimulus generation, which helps in uncovering corner-case bugs.
+6. **Functional Coverage**: Built-in functional coverage constructs allow for comprehensive verification metrics.
+7. **Concurrency**: Enhanced concurrency constructs like `fork-join` improve the modeling of parallel processes.
+8. **Interfaces**: Simplifies module connections and improves code readability and maintainability.
+9. **Tool Support**: Widely supported by major EDA tools, ensuring robust simulation and synthesis capabilities.
+
+These advantages make SystemVerilog a powerful and efficient choice for both designing and verifying complex digital systems. In this course, we will cover only a subset of SystemVerilog constructs, focusing on basic Verilog.  -->
+<section id="types" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="types"><span class="header-section-number">2.1</span> Types</h2>
+<p>Commonly used types in SystemVerilog include:</p>
+<section id="logic-netlist-types" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="logic-netlist-types"><span class="header-section-number">2.1.1</span> Logic (NetList) Types</h3>
+<ul>
+<li><code>logic</code>: A 4-state data type (0, 1, X, Z) used for modeling combinational and sequential logic.</li>
+<li><code>bit</code>: A 2-state data type (0, 1) used for modeling binary data.</li>
+</ul>
+</section>
+<section id="vector-types" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="vector-types"><span class="header-section-number">2.1.2</span> Vector Types</h3>
+<ul>
+<li><code>bit [n-1:0]</code>: An n-bit unsigned integer.</li>
+<li><code>logic [n-1:0]</code>: An n-bit unsigned integer with 4-state logic.</li>
+</ul>
+</section>
+<section id="variable-types" class="level3" data-number="2.1.3">
+<h3 data-number="2.1.3" class="anchored" data-anchor-id="variable-types"><span class="header-section-number">2.1.3</span> Variable Types</h3>
+<ul>
+<li><code>logic</code>: A 4-state data type (0, 1, X, Z) used for modeling combinational and sequential logic.</li>
+<li><code>byte</code>: An 8-bit signed integer.</li>
+<li><code>shortint</code>: A 16-bit signed integer.</li>
+<li><code>int</code>: A 32-bit signed integer.</li>
+<li><code>longint</code>: A 64-bit signed integer.</li>
+<li><code>integer</code>: A general-purpose 32-bit signed integer (legacy from Verilog).</li>
+<li><code>real</code>: A 64-bit floating point variable.</li>
+</ul>
+</section>
+<section id="expressing-numbers-using-different-bases" class="level3" data-number="2.1.4">
+<h3 data-number="2.1.4" class="anchored" data-anchor-id="expressing-numbers-using-different-bases"><span class="header-section-number">2.1.4</span> Expressing Numbers Using Different Bases</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Binary representation (base 2)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> binary_num <span class="op">=</span> <span class="bn">4'b1010</span><span class="op">;</span> <span class="co">// 4-bit binary number 1010 (decimal 10)</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Octal representation (base 8)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">5</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> octal_num <span class="op">=</span> <span class="bn">6'o12</span><span class="op">;</span> <span class="co">// 6-bit octal number 12 (decimal 10)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Decimal representation (base 10)</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">7</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> decimal_num <span class="op">=</span> <span class="bn">8'd10</span><span class="op">;</span> <span class="co">// 8-bit decimal number 10</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Hexadecimal representation (base 16)</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">7</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> hex_num <span class="op">=</span> <span class="bn">8'hA</span><span class="op">;</span> <span class="co">// 8-bit hexadecimal number A (decimal 10)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="module" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="module"><span class="header-section-number">2.2</span> Module</h2>
+<p>All system modules in Verilog are encapsulated inside a module. Modules can include instantiation of lower-level modules to support hierarchical designs. The keywords <code>module</code> and <code>endmodule</code> mark the beginning and the end of the system description.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> ModuleName<span class="op">(</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    portType signalType Port1_name<span class="op">,</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    portType signalType Port2_name<span class="op">,</span> Port3_name<span class="op">,</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    .......</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    portType signalType PortN_name</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>where the <code>portType</code> specifies the direction of the port (input, output, or inout), and <code>signalType</code> defines the type of the signal, as described in the previous section.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 45%">
+<col style="width: 54%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Port Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>input</code></td>
+<td>Specifies an input port to the module. Data flows into the module through this port.</td>
+</tr>
+<tr class="even">
+<td><code>output</code></td>
+<td>Specifies an output port from the module. Data flows out of the module through this port.</td>
+</tr>
+<tr class="odd">
+<td><code>inout</code></td>
+<td>Specifies a bidirectional port. Data can flow both into and out of the module through this port.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="operators" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="operators"><span class="header-section-number">2.3</span> Operators</h2>
+<p>SystemVerilog supports a variety of operators that are used for different purposes, including arithmetic, logical, relational, and bitwise operations. Here are some common operators with examples:</p>
+<section id="numerical-operators" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="numerical-operators"><span class="header-section-number">2.3.1</span> Numerical Operators</h3>
+<ul>
+<li><code>+</code> : Addition</li>
+<li><code>-</code> : Subtraction</li>
+<li><code>*</code> : Multiplication</li>
+<li><code>/</code> : Division</li>
+<li><code>%</code> : Modulus</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">5</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> c<span class="op">;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">// in1 and in2 inputs of module </span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> in1 <span class="op">+</span> in2<span class="op">;</span> </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="logical-operators" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="logical-operators"><span class="header-section-number">2.3.2</span> Logical Operators</h3>
+<ul>
+<li><code>&amp;&amp;</code> : Logical AND</li>
+<li><code>||</code> : Logical OR</li>
+<li><code>!</code> : Logical NOT</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>logic c<span class="op">;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">// in1 and in2 inputs of module </span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> in1 <span class="op">&amp;&amp;</span> in2<span class="op">;</span> </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="relational-operators" class="level3" data-number="2.3.3">
+<h3 data-number="2.3.3" class="anchored" data-anchor-id="relational-operators"><span class="header-section-number">2.3.3</span> Relational Operators</h3>
+<ul>
+<li><code>==</code> : Equality</li>
+<li><code>!=</code> : Inequality</li>
+<li><code>&lt;</code> : Less than</li>
+<li><code>&lt;=</code> : Less than or equal to</li>
+<li><code>&gt;</code> : Greater than</li>
+<li><code>&gt;=</code> : Greater than or equal to</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>logic c<span class="op">;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">// in1 and in2 inputs of module </span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> in1 <span class="op">&gt;=</span> in2<span class="op">;</span> </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="bitwise-operators" class="level3" data-number="2.3.4">
+<h3 data-number="2.3.4" class="anchored" data-anchor-id="bitwise-operators"><span class="header-section-number">2.3.4</span> Bitwise Operators</h3>
+<ul>
+<li><code>&amp;</code> : Bitwise AND</li>
+<li><code>|</code> : Bitwise OR</li>
+<li><code>^</code> : Bitwise XOR</li>
+<li><code>~</code> : Bitwise NOT</li>
+<li><code>&lt;&lt;</code> : Logical shift left</li>
+<li><code>&gt;&gt;</code> : Logical shift right</li>
+<li><code>&lt;&lt;&lt;</code> : Arithmetic shift left</li>
+<li><code>&gt;&gt;&gt;</code> : Arithmetic shift right</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">5</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> c<span class="op">;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">// in1 and in2 inputs of module </span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> in1 <span class="op">&amp;</span> in2<span class="op">;</span> </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="reduction-operators" class="level3" data-number="2.3.5">
+<h3 data-number="2.3.5" class="anchored" data-anchor-id="reduction-operators"><span class="header-section-number">2.3.5</span> Reduction Operators</h3>
+<ul>
+<li><code>&amp;</code> : Reduction AND</li>
+<li><code>|</code> : Reduction OR</li>
+<li><code>^</code> : Reduction XOR</li>
+<li><code>~&amp;</code> : Reduction NAND</li>
+<li><code>~|</code> : Reduction NOR</li>
+<li><code>~^</code> or <code>^~</code> : Reduction XNOR</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">5</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> a<span class="op">;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>logic c<span class="op">,</span>d<span class="op">;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> a <span class="op">=</span> <span class="bn">6'b101010</span><span class="op">;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">// in1 and in2 inputs of module </span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> <span class="op">&amp;</span>a<span class="op">;</span> <span class="co">// AND reduction result 0</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> d <span class="op">=</span> <span class="op">|</span>a<span class="op">;</span> <span class="co">// OR reduction result 1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="conditional-operator" class="level3" data-number="2.3.6">
+<h3 data-number="2.3.6" class="anchored" data-anchor-id="conditional-operator"><span class="header-section-number">2.3.6</span> Conditional Operator</h3>
+<ul>
+<li><code>? :</code> : Conditional (ternary) operator</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">5</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> a<span class="op">,</span>b<span class="op">;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>logic c<span class="op">;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> <span class="op">(</span>a <span class="op">&gt;</span> b<span class="op">)</span> <span class="op">?</span> <span class="bn">1'b1</span> <span class="op">:</span> <span class="bn">1'b0</span><span class="op">;</span> <span class="co">// cc = either one or zero</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="concatenation-and-replication-operators" class="level3" data-number="2.3.7">
+<h3 data-number="2.3.7" class="anchored" data-anchor-id="concatenation-and-replication-operators"><span class="header-section-number">2.3.7</span> Concatenation and Replication Operators</h3>
+<p>The concatenation operator <code>{}</code> in SystemVerilog is used to join multiple bits, vectors, or expressions into a single vector.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> a <span class="op">=</span> <span class="bn">4'b1010</span><span class="op">;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> b <span class="op">=</span> <span class="bn">4'b0101</span><span class="op">;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">7</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> c<span class="op">;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Concatenate a and b to form an 8-bit vector</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> <span class="op">{</span>a<span class="op">,</span> b<span class="op">};</span> <span class="co">// c = 8'b10100101</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>You can also use the replication operator <code>{n{}}</code> to replicate a bit or vector <code>n</code> times.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">1</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> d <span class="op">=</span> <span class="bn">2'b11</span><span class="op">;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">5</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> e<span class="op">;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Replicate d three times to form a 6-bit vector</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> e <span class="op">=</span> <span class="op">{</span><span class="dv">3</span><span class="op">{</span>d<span class="op">}};</span> <span class="co">// e = 6'b111111</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="modeling-concurent-functionality-in-systemverilog" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="modeling-concurent-functionality-in-systemverilog"><span class="header-section-number">2.4</span> Modeling Concurent functionality in SystemVerilog</h2>
+<section id="continuous-assignment" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="continuous-assignment"><span class="header-section-number">2.4.1</span> Continuous assignment</h3>
+<p>Continuous assignment in SystemVerilog allows for the assignment of values to nets using the <code>assign</code> keyword, ensuring that the assigned value is continuously updated whenever the right-hand side expression changes. A continuous assignment models combinational logic. For example:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> out <span class="op">=</span> a <span class="op">&amp;</span> b<span class="op">;</span> <span class="co">// 'out' is continuously assigned the result of 'a &amp; b'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>We need to differ continous assignment from assignment in programming languages.</p>
+<p>First example:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> b <span class="op">=</span> a<span class="op">;</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> b<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>In programming languages, a similar construct will first assign the value of <code>a</code> to <code>b</code>, and then pass the value of <code>b</code> to <code>c</code>. During synthesis, the tool will remove signal <code>b</code> and infer <code>assign c = a</code>.</p>
+<p>Second example:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> a<span class="op">;</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> b<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>In programming languages, a similar construct will first assign the value of <code>a</code> to <code>c</code>, and then assign the value of <code>b</code> to <code>c</code>. The final value of <code>c</code> will be determined by the last assignment. During synthesis, the tool will create a net driven by two signals. As these signals by have different values, the net <code>c</code> will have an unknown value <code>X</code>. This situation must be avoided at all costs.</p>
+</section>
+<section id="bit-41-multiplexer" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="bit-41-multiplexer"><span class="header-section-number">2.4.2</span> 4-bit 4:1 Multiplexer</h3>
+<p>The 4-bit multiplexer (MUX) selects one of the four 4-bit inputs to pass to the output based on the 2-bit selection signal.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> mux4to1 <span class="op">(</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> in0<span class="op">,</span> <span class="co">// 4-bit input 0</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> in1<span class="op">,</span> <span class="co">// 4-bit input 1</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> in2<span class="op">,</span> <span class="co">// 4-bit input 2</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> in3<span class="op">,</span> <span class="co">// 4-bit input 3</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic <span class="op">[</span><span class="dv">1</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> sel<span class="op">,</span> <span class="co">// 2-bit selection signal</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> out <span class="co">// 4-bit output</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Nested conditional operator </span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// C = (A &gt; B) ? 1 : (A &lt; B) ? 0 : 1 </span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> out <span class="op">=</span> <span class="op">(</span>sel <span class="op">==</span> <span class="bn">2'b00</span><span class="op">)</span> <span class="op">?</span> in0 <span class="op">:</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>                 <span class="op">(</span>sel <span class="op">==</span> <span class="bn">2'b01</span><span class="op">)</span> <span class="op">?</span> in1 <span class="op">:</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>                 <span class="op">(</span>sel <span class="op">==</span> <span class="bn">2'b10</span><span class="op">)</span> <span class="op">?</span> in2 <span class="op">:</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>                 <span class="op">(</span>sel <span class="op">==</span> <span class="bn">2'b11</span><span class="op">)</span> <span class="op">?</span> in3 <span class="op">:</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>                 <span class="bn">4'b0000</span><span class="op">;</span> <span class="co">// Default case </span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="explanation" class="level4" data-number="2.4.2.1">
+<h4 data-number="2.4.2.1" class="anchored" data-anchor-id="explanation"><span class="header-section-number">2.4.2.1</span> Explanation</h4>
+<ul>
+<li><strong>Module Declaration</strong>: The module <code>mux4to1</code> is declared with inputs and outputs.</li>
+<li><strong>Inputs</strong>: Four 4-bit inputs (<code>in0</code>, <code>in1</code>, <code>in2</code>, <code>in3</code>) and a 2-bit selection signal (<code>sel</code>).</li>
+<li><strong>Output</strong>: One 4-bit output (<code>out</code>).</li>
+<li><strong>Conditional Statement</strong>: The <code>assign</code> statement uses a series of conditional (ternary) operators to select one of the four inputs based on the value of the 2-bit selection signal (<code>sel</code>).</li>
+</ul>
+</section>
+</section>
+<section id="bit-adder" class="level3" data-number="2.4.3">
+<h3 data-number="2.4.3" class="anchored" data-anchor-id="bit-adder"><span class="header-section-number">2.4.3</span> 4-bit adder</h3>
+<p>The 4-bit adder adds two 4-bit binary numbers and produces a 4-bit sum and a carry-out bit.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> adder4bit <span class="op">(</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> a<span class="op">,</span> <span class="co">// 4-bit input a</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> b<span class="op">,</span> <span class="co">// 4-bit input b</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> sum<span class="op">,</span> <span class="co">// 4-bit sum output</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic carry_out <span class="co">// Carry-out bit</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    logic c1<span class="op">,</span> c2<span class="op">,</span> c3<span class="op">;</span> <span class="co">// Intermediate carry bits</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Half Adder for the least significant bit</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> sum<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> a<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">^</span> b<span class="op">[</span><span class="dv">0</span><span class="op">];</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> c1 <span class="op">=</span> a<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">&amp;</span> b<span class="op">[</span><span class="dv">0</span><span class="op">];</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Full Adder for the second bit</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> sum<span class="op">[</span><span class="dv">1</span><span class="op">]</span> <span class="op">=</span> a<span class="op">[</span><span class="dv">1</span><span class="op">]</span> <span class="op">^</span> b<span class="op">[</span><span class="dv">1</span><span class="op">]</span> <span class="op">^</span> c1<span class="op">;</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> c2 <span class="op">=</span> <span class="op">(</span>a<span class="op">[</span><span class="dv">1</span><span class="op">]</span> <span class="op">&amp;</span> b<span class="op">[</span><span class="dv">1</span><span class="op">])</span> <span class="op">|</span> <span class="op">(</span>c1 <span class="op">&amp;</span> <span class="op">(</span>a<span class="op">[</span><span class="dv">1</span><span class="op">]</span> <span class="op">^</span> b<span class="op">[</span><span class="dv">1</span><span class="op">]));</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Full Adder for the third bit</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> sum<span class="op">[</span><span class="dv">2</span><span class="op">]</span> <span class="op">=</span> a<span class="op">[</span><span class="dv">2</span><span class="op">]</span> <span class="op">^</span> b<span class="op">[</span><span class="dv">2</span><span class="op">]</span> <span class="op">^</span> c2<span class="op">;</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> c3 <span class="op">=</span> <span class="op">(</span>a<span class="op">[</span><span class="dv">2</span><span class="op">]</span> <span class="op">&amp;</span> b<span class="op">[</span><span class="dv">2</span><span class="op">])</span> <span class="op">|</span> <span class="op">(</span>c2 <span class="op">&amp;</span> <span class="op">(</span>a<span class="op">[</span><span class="dv">2</span><span class="op">]</span> <span class="op">^</span> b<span class="op">[</span><span class="dv">2</span><span class="op">]));</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Full Adder for the most significant bit</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> sum<span class="op">[</span><span class="dv">3</span><span class="op">]</span> <span class="op">=</span> a<span class="op">[</span><span class="dv">3</span><span class="op">]</span> <span class="op">^</span> b<span class="op">[</span><span class="dv">3</span><span class="op">]</span> <span class="op">^</span> c3<span class="op">;</span></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> carry_out <span class="op">=</span> <span class="op">(</span>a<span class="op">[</span><span class="dv">3</span><span class="op">]</span> <span class="op">&amp;</span> b<span class="op">[</span><span class="dv">3</span><span class="op">])</span> <span class="op">|</span> <span class="op">(</span>c3 <span class="op">&amp;</span> <span class="op">(</span>a<span class="op">[</span><span class="dv">3</span><span class="op">]</span> <span class="op">^</span> b<span class="op">[</span><span class="dv">3</span><span class="op">]));</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="explanation-1" class="level4" data-number="2.4.3.1">
+<h4 data-number="2.4.3.1" class="anchored" data-anchor-id="explanation-1"><span class="header-section-number">2.4.3.1</span> Explanation</h4>
+<ul>
+<li><strong>Module Declaration</strong>: The module <code>adder4bit</code> is declared with two 4-bit inputs (<code>a</code> and <code>b</code>), a 4-bit output (<code>sum</code>), and a carry-out bit (<code>carry_out</code>).</li>
+<li><strong>Intermediate Carry Bits</strong>: Three intermediate carry bits (<code>c1</code>, <code>c2</code>, <code>c3</code>) are used to store the carry from each adder stage.</li>
+<li><strong>Half Adder</strong>: The least significant bit is added using a half adder, which produces the sum and the first carry bit (<code>c1</code>).</li>
+<li><strong>Full Adders</strong>: The next three bits are added using full adders, which take into account the carry from the previous stage.</li>
+<li><strong>Final Carry-Out</strong>: The carry-out from the most significant bit is assigned to <code>carry_out</code>.</li>
+</ul>
+</section>
+</section>
+<section id="user-constraints-files-and-pin-planning-in-vivado" class="level3" data-number="2.4.4">
+<h3 data-number="2.4.4" class="anchored" data-anchor-id="user-constraints-files-and-pin-planning-in-vivado"><span class="header-section-number">2.4.4</span> User Constraints Files and Pin Planning in Vivado</h3>
+<p>In Vivado, User Constraints Files (UCF) or Xilinx Design Constraints (XDC) files are used to define the physical constraints of the design, such as pin assignments, timing constraints, and other implementation-specific parameters. Pin planning involves mapping the logical signals in your design to the physical pins on the FPGA. This process ensures that the design interfaces correctly with external components and meets the required performance criteria. Proper pin planning and constraint management are crucial for successful FPGA implementation, as they directly impact signal integrity, timing closure, and overall design functionality.</p>
+<p>The <a href="https://github.com/Digilent/digilent-xdc/blob/master/Nexys-A7-100T-Master.xdc">XDC file for Nexys A7</a> defines the pin placement for external signals of modules. To map the inputs of our <code>adder4bit</code> to the switches and the outputs to LEDs, we need to make the following changes:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode tcl code-with-copy"><code class="sourceCode tcl"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">##Switches</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>set_property -<span class="kw">dict</span> <span class="kw">{</span> PACKAGE_PIN J15   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> a<span class="kw">[</span><span class="dv">0</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L24N_T3_RS0_15 Sch=sw[0]</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>set_property -<span class="kw">dict</span> <span class="kw">{</span> PACKAGE_PIN L16   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> a<span class="kw">[</span><span class="dv">1</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L3N_T0_DQS_EMCCLK_14 Sch=sw[1]</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>set_property -<span class="kw">dict</span> <span class="kw">{</span> PACKAGE_PIN M13   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> a<span class="kw">[</span><span class="dv">2</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L6N_T0_D08_VREF_14 Sch=sw[2]</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>set_property -<span class="kw">dict</span> <span class="kw">{</span> PACKAGE_PIN R15   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> a<span class="kw">[</span><span class="dv">3</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L13N_T2_MRCC_14 Sch=sw[3]</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>set_property -<span class="kw">dict</span> <span class="kw">{</span> PACKAGE_PIN R17   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> b<span class="kw">[</span><span class="dv">0</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L12N_T1_MRCC_14 Sch=sw[4]</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>set_property -<span class="kw">dict</span> <span class="kw">{</span> PACKAGE_PIN T18   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> b<span class="kw">[</span><span class="dv">1</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L7N_T1_D10_14 Sch=sw[5]</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>set_property -<span class="kw">dict</span> <span class="kw">{</span> PACKAGE_PIN U18   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> b<span class="kw">[</span><span class="dv">2</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L17N_T2_A13_D29_14 Sch=sw[6]</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>set_property -<span class="kw">dict</span> <span class="kw">{</span> PACKAGE_PIN R13   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> b<span class="kw">[</span><span class="dv">3</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L5N_T0_D07_14 Sch=sw[7]</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co">##LEDS</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">## LEDs</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>set_property -<span class="kw">dict</span> <span class="kw">{</span> PACKAGE_PIN H17   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> sum<span class="kw">[</span><span class="dv">0</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L18P_T2_A24_15 Sch=led[0]</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>set_property -<span class="kw">dict</span> <span class="kw">{</span> PACKAGE_PIN K15   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> sum<span class="kw">[</span><span class="dv">1</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L24P_T3_RS1_15 Sch=led[1]</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>set_property -<span class="kw">dict</span> <span class="kw">{</span> PACKAGE_PIN J13   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> sum<span class="kw">[</span><span class="dv">2</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L17N_T2_A25_15 Sch=led[2]</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>set_property -<span class="kw">dict</span> <span class="kw">{</span> PACKAGE_PIN N14   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> sum<span class="kw">[</span><span class="dv">3</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L8P_T1_D11_14 Sch=led[3]</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>set_property -<span class="kw">dict</span> <span class="kw">{</span> PACKAGE_PIN R18   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> carry_out <span class="kw">}]</span>; <span class="co">#IO_L7P_T1_D09_14 Sch=led[4]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>It is important to assign the appropriate pin to the <code>get_ports</code> function.</p>
+</section>
+</section>
+<section id="assignment" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="assignment"><span class="header-section-number">2.5</span> Assignment</h2>
+<p>Your task is to implement a “dummy” 4-bit Arithmetic Logic Unit (ALU) with the following interface: - <strong>a, b</strong>: 4-bit inputs - <strong>alu_control</strong>: 3-bit input for selecting the operation - <strong>c</strong>: 4-bit output</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><code>alu_control</code> Value</th>
+<th>Operation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>000</td>
+<td>Addition</td>
+</tr>
+<tr class="even">
+<td>001</td>
+<td>Subtraction</td>
+</tr>
+<tr class="odd">
+<td>010</td>
+<td>Bitwise AND</td>
+</tr>
+<tr class="even">
+<td>011</td>
+<td>Bitwise OR</td>
+</tr>
+<tr class="odd">
+<td>100</td>
+<td>Bitwise XOR</td>
+</tr>
+<tr class="even">
+<td>101</td>
+<td>Compare (equal)</td>
+</tr>
+<tr class="odd">
+<td>110</td>
+<td>Pass-through <code>b</code></td>
+</tr>
+<tr class="even">
+<td>111</td>
+<td>Pass-through <code>a</code></td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The ALU is 4-bit rather than 6-bit specifically to keep addition/subtraction small. The open-source Artix-7 flow (F4PGA: Yosys + VPR) that Anvil uses has known weak spots mapping inferred carry-chain arithmetic (<code>+</code>/<code>-</code>) — the same <code>CARRY4</code> logic behind the <code>adder4bit</code> example above — and wider inferred adders can blow up synthesis time and resource usage. Staying at 4 bits, matching <code>adder4bit</code>’s width, keeps you well clear of that.</p>
+</div>
+</div>
+<p>Tips: 1. Employ operators and intermediate signals to obtain the results of each operation. 2. Connect input signals to the rightmost switches (SW0 to SW7), and selection signals to the leftmost switches (SW13 to SW15). The output signal should be connected to LEDs (LED0 to LED3). 3. Employ nested conditionals.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/01-tools-intro.html" class="pagination-link" aria-label="First exercise: Tools and the Digital Design Cycle">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">First exercise: Tools and the Digital Design Cycle</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
