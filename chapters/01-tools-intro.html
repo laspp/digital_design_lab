@@ -2,23 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.19">
+<meta name="generator" content="quarto-1.7.31">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>1&nbsp; First exercise: Tools and the Digital Design Cycle – Digital Design Lab</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
+code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: 1.5em;}
-div.column{flex: auto;}
-@media screen {
-div.columns{gap: min(4vw, 1.5em);}
-div.column{overflow-x: auto;}
-}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -79,10 +73,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-fd0503e23dce65854c81c5baaade3bdf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-467c603866d931062acf9dde62877a13.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -173,6 +167,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="../chapters/02-alu.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Second exercise: Introduction to (System)Verilog</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-sequential.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Third exercise: Designing sequential circuits with SystemVerilog</span></span></a>
   </div>
 </li>
       </ul>
@@ -279,18 +279,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Nexys A7 50T
+Nexys A7 50T
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>Anvil supports both the <strong>Nexys A7 100T</strong> and the <strong>Nexys A7 50T</strong> (support for the 50T was added in Anvil 1.1.0).</p>
 <p><strong>Your own computer:</strong> a normal installation works out of the box. If you installed Anvil before the 50T was added, run <code>anvil update</code> once.</p>
 <p><strong>Classroom computers:</strong> these have an older Anvil and you cannot run <code>anvil update</code> there (it needs <code>sudo</code>). Apply the classroom patch instead; it needs no administrator rights and changes only files in your home directory:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://gist.githubusercontent.com/RatkoFri/d12d34610a58260a58a803eec74e7185/raw/anvil-nexys50t.sh</span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://gist.githubusercontent.com/RatkoFri/d12d34610a58260a58a803eec74e7185/raw/anvil-nexys50t.sh</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> anvil-nexys50t.sh</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> ~/.bashrc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> ~/.bashrc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Run it once per account; running it again does no harm. Check the result with <code>anvil boards</code> (both boards should be listed) and <code>anvil doctor</code>. Then start a 50T project with:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> init <span class="at">--board</span> Nexys-A7-50T <span class="at">--example</span> switches-leds</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> init <span class="at">--board</span> Nexys-A7-50T <span class="at">--example</span> switches-leds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -298,14 +298,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="1.3" class="anchored" data-anchor-id="installing-anvil"><span class="header-section-number">1.3</span> Installing Anvil</h2>
 <p><strong>Prerequisites</strong>: a native <strong>Ubuntu 22.04 LTS</strong> machine, or <strong>WSL2</strong> on Windows (the docs call out the handful of WSL-only steps, mainly around forwarding the board’s USB connection, as “WSL only”). Docker support is not available yet.</p>
 <p>The recommended path is the automated setup script:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://raw.githubusercontent.com/LogiSmith/toolchain-setup/main/install.sh <span class="kw">|</span> <span class="fu">bash</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://raw.githubusercontent.com/LogiSmith/toolchain-setup/main/install.sh <span class="kw">|</span> <span class="fu">bash</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>If you’d rather review the script before running it (always a reasonable instinct when piping a script into a shell):</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/LogiSmith/toolchain-setup.git</span>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/LogiSmith/toolchain-setup.git</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> toolchain-setup</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">less</span> install.sh</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">./install.sh</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">./install.sh</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>A successful run ends with a green <code>✓ Toolchain installed and all tests passed</code> banner. Open a <strong>new</strong> shell afterward (so your updated <code>PATH</code>/aliases take effect) and verify with:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> doctor</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> doctor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>For manual, tool-by-tool installation steps, WSL2-specific USB forwarding, and troubleshooting, see the full <a href="https://logismith.github.io/Docs/installation/">LogiSmith installation docs</a> — that page is the canonical reference and is more likely to stay current than a copy pasted here.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Editor tip: SystemVerilog syntax highlighting and linting in VS Code">
 <div class="callout-header d-flex align-content-center">
@@ -313,7 +313,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Editor tip: SystemVerilog syntax highlighting and linting in VS Code
+Editor tip: SystemVerilog syntax highlighting and linting in VS Code
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -325,8 +325,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="your-first-design-basic_comb" class="level2" data-number="1.4">
 <h2 data-number="1.4" class="anchored" data-anchor-id="your-first-design-basic_comb"><span class="header-section-number">1.4</span> Your first design: basic_comb</h2>
 <p>With <code>anvil doctor</code> passing, build a first design that exercises switches and LEDs directly, with no clock involved: a small combinational circuit.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> basic_comb <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> basic_comb</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> init <span class="at">--board</span> Nexys-A7-100T</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> basic_comb <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> basic_comb</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> init <span class="at">--board</span> Nexys-A7-100T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This scaffolds a project:</p>
 <pre><code>basic_comb/
 ├── config.json    # board + module configuration
@@ -337,7 +337,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="whats-in-config.json" class="level4" data-number="1.4.0.1">
 <h4 data-number="1.4.0.1" class="anchored" data-anchor-id="whats-in-config.json"><span class="header-section-number">1.4.0.1</span> What’s in <code>config.json</code></h4>
 <p><code>config.json</code> is the per-project manifest every <code>anvil</code> command reads (<code>build</code>, <code>test</code>, <code>program</code>). <code>anvil init --board Nexys-A7-100T</code> fills it in for you, so you won’t normally hand-edit it in this lab — but it’s worth knowing what’s there:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<div class="sourceCode" id="cb8"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"project"</span><span class="fu">:</span> <span class="st">"basic_comb"</span><span class="fu">,</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"board"</span><span class="fu">:</span> <span class="st">"Nexys-A7-100T"</span><span class="fu">,</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"top"</span><span class="fu">:</span> <span class="st">"top"</span><span class="fu">,</span></span>
@@ -346,7 +346,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"device"</span><span class="fu">:</span> <span class="st">"artix7"</span><span class="fu">,</span></span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"ofl_board"</span><span class="fu">:</span> <span class="st">"nexys_a7_100"</span><span class="fu">,</span></span>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"xdc"</span><span class="fu">:</span> <span class="st">"Nexys-A7-100T-Master.xdc"</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
 <li><strong><code>project</code></strong> — the project’s name, defaulting to the directory name.</li>
 <li><strong><code>board</code></strong> — which entry of Anvil’s board registry (<code>boards.json</code>) this project targets; everything below <code>top</code> is copied in from that registry at <code>anvil init</code> time.</li>
@@ -355,7 +355,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong><code>modules</code></strong> (not shown above, since this design has none) — a list of reusable RTL module dependencies with pinned versions, e.g.&nbsp;<code>"uart@1.0.0"</code>, added automatically by <code>anvil addmodule</code>. You’ll meet this once a later lab pulls in a shared peripheral block.</li>
 </ul>
 <p>Replace the contents of <code>top.sv</code> with three switch inputs feeding four LED outputs through simple boolean logic. Anvil expects the top-level module in <code>top.sv</code> to be named <code>top</code>, so the logic below is the same as the <a href="../code/01_lab/basic_comb.sv">basic_comb.sv starter file</a>, just renamed from <code>basic_comb</code> to <code>top</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">// basic_comb — simple 3-input combinational logic</span></span>
+<div class="sourceCode" id="cb9"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">// basic_comb — simple 3-input combinational logic</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> top (</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">input</span>  <span class="kw">logic</span> a,        <span class="co">// SW0</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">input</span>  <span class="kw">logic</span> b,        <span class="co">// SW1</span></span>
@@ -366,7 +366,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> y[<span class="dv">1</span>] = a &amp; c;</span>
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> y[<span class="dv">2</span>] = a | c;</span>
 <span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> y[<span class="dv">3</span>] = a &amp; b &amp; c;</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="explanation" class="level4" data-number="1.4.0.2">
 <h4 data-number="1.4.0.2" class="anchored" data-anchor-id="explanation"><span class="header-section-number">1.4.0.2</span> Explanation</h4>
@@ -398,8 +398,8 @@ set_property PACKAGE_PIN N14 [get_ports {y[3]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {y[3]}]</code></pre>
 <p>This maps <code>a</code>, <code>b</code>, <code>c</code> to switches SW0–SW2 and <code>y[0]</code>–<code>y[3]</code> to LED0–LED3 on the Nexys A7 100T. Unlike Blinky, there’s no <code>create_clock</code> line here — a purely combinational design has no clock port for the timing analyzer to check.</p>
 <p>Then build and program the board:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> build       <span class="co"># sv2v → Yosys → VPR → bitstream, a few seconds</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> program     <span class="co"># flash the bitstream to the board via openFPGALoader</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> build       <span class="co"># sv2v → Yosys → VPR → bitstream, a few seconds</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> program     <span class="co"># flash the bitstream to the board via openFPGALoader</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>If everything worked, flipping SW0–SW2 should change the LED0–LED3 pattern according to the four equations above.</p>
 </section>
 </section>
@@ -472,14 +472,13 @@ set_property IOSTANDARD LVCMOS33 [get_ports {y[3]}]</code></pre>
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
         }
-      }
-      return codeEl.innerText;
+        return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

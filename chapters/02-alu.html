@@ -2,23 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.19">
+<meta name="generator" content="quarto-1.7.31">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>2&nbsp; Second exercise: Introduction to (System)Verilog – Digital Design Lab</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
+code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: 1.5em;}
-div.column{flex: auto;}
-@media screen {
-div.columns{gap: min(4vw, 1.5em);}
-div.column{overflow-x: auto;}
-}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -71,6 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../chapters/03-sequential.html" rel="next">
 <link href="../chapters/01-tools-intro.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -78,10 +73,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-fd0503e23dce65854c81c5baaade3bdf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-467c603866d931062acf9dde62877a13.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -172,6 +167,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="../chapters/02-alu.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Second exercise: Introduction to (System)Verilog</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-sequential.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Third exercise: Designing sequential circuits with SystemVerilog</span></span></a>
   </div>
 </li>
       </ul>
@@ -283,7 +284,7 @@ These advantages make SystemVerilog a powerful and efficient choice for both des
 </section>
 <section id="expressing-numbers-using-different-bases" class="level3" data-number="2.1.4">
 <h3 data-number="2.1.4" class="anchored" data-anchor-id="expressing-numbers-using-different-bases"><span class="header-section-number">2.1.4</span> Expressing Numbers Using Different Bases</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Binary representation (base 2)</span></span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Binary representation (base 2)</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> binary_num <span class="op">=</span> <span class="bn">4'b1010</span><span class="op">;</span> <span class="co">// 4-bit binary number 1010 (decimal 10)</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Octal representation (base 8)</span></span>
@@ -293,18 +294,18 @@ These advantages make SystemVerilog a powerful and efficient choice for both des
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">7</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> decimal_num <span class="op">=</span> <span class="bn">8'd10</span><span class="op">;</span> <span class="co">// 8-bit decimal number 10</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Hexadecimal representation (base 16)</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">7</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> hex_num <span class="op">=</span> <span class="bn">8'hA</span><span class="op">;</span> <span class="co">// 8-bit hexadecimal number A (decimal 10)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">7</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> hex_num <span class="op">=</span> <span class="bn">8'hA</span><span class="op">;</span> <span class="co">// 8-bit hexadecimal number A (decimal 10)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </section>
 <section id="module" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="module"><span class="header-section-number">2.2</span> Module</h2>
 <p>All system modules in Verilog are encapsulated inside a module. Modules can include instantiation of lower-level modules to support hierarchical designs. The keywords <code>module</code> and <code>endmodule</code> mark the beginning and the end of the system description.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> ModuleName<span class="op">(</span></span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> ModuleName<span class="op">(</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    portType signalType Port1_name<span class="op">,</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    portType signalType Port2_name<span class="op">,</span> Port3_name<span class="op">,</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    .......</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    portType signalType PortN_name</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>where the <code>portType</code> specifies the direction of the port (input, output, or inout), and <code>signalType</code> defines the type of the signal, as described in the previous section.</p>
 <table class="caption-top table">
 <colgroup>
@@ -345,10 +346,10 @@ These advantages make SystemVerilog a powerful and efficient choice for both des
 <li><code>/</code> : Division</li>
 <li><code>%</code> : Modulus</li>
 </ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">5</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> c<span class="op">;</span></span>
+<div class="sourceCode" id="cb3"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">5</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> c<span class="op">;</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">// in1 and in2 inputs of module </span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> in1 <span class="op">+</span> in2<span class="op">;</span> </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> in1 <span class="op">+</span> in2<span class="op">;</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="logical-operators" class="level3" data-number="2.3.2">
 <h3 data-number="2.3.2" class="anchored" data-anchor-id="logical-operators"><span class="header-section-number">2.3.2</span> Logical Operators</h3>
@@ -357,10 +358,10 @@ These advantages make SystemVerilog a powerful and efficient choice for both des
 <li><code>||</code> : Logical OR</li>
 <li><code>!</code> : Logical NOT</li>
 </ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>logic c<span class="op">;</span></span>
+<div class="sourceCode" id="cb4"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>logic c<span class="op">;</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">// in1 and in2 inputs of module </span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> in1 <span class="op">&amp;&amp;</span> in2<span class="op">;</span> </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> in1 <span class="op">&amp;&amp;</span> in2<span class="op">;</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="relational-operators" class="level3" data-number="2.3.3">
 <h3 data-number="2.3.3" class="anchored" data-anchor-id="relational-operators"><span class="header-section-number">2.3.3</span> Relational Operators</h3>
@@ -372,11 +373,11 @@ These advantages make SystemVerilog a powerful and efficient choice for both des
 <li><code>&gt;</code> : Greater than</li>
 <li><code>&gt;=</code> : Greater than or equal to</li>
 </ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>logic c<span class="op">;</span></span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>logic c<span class="op">;</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">// in1 and in2 inputs of module </span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> in1 <span class="op">&gt;=</span> in2<span class="op">;</span> </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> in1 <span class="op">&gt;=</span> in2<span class="op">;</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="bitwise-operators" class="level3" data-number="2.3.4">
 <h3 data-number="2.3.4" class="anchored" data-anchor-id="bitwise-operators"><span class="header-section-number">2.3.4</span> Bitwise Operators</h3>
@@ -390,10 +391,10 @@ These advantages make SystemVerilog a powerful and efficient choice for both des
 <li><code>&lt;&lt;&lt;</code> : Arithmetic shift left</li>
 <li><code>&gt;&gt;&gt;</code> : Arithmetic shift right</li>
 </ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">5</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> c<span class="op">;</span></span>
+<div class="sourceCode" id="cb6"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">5</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> c<span class="op">;</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">// in1 and in2 inputs of module </span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> in1 <span class="op">&amp;</span> in2<span class="op">;</span> </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> in1 <span class="op">&amp;</span> in2<span class="op">;</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="reduction-operators" class="level3" data-number="2.3.5">
 <h3 data-number="2.3.5" class="anchored" data-anchor-id="reduction-operators"><span class="header-section-number">2.3.5</span> Reduction Operators</h3>
@@ -405,39 +406,39 @@ These advantages make SystemVerilog a powerful and efficient choice for both des
 <li><code>~|</code> : Reduction NOR</li>
 <li><code>~^</code> or <code>^~</code> : Reduction XNOR</li>
 </ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">5</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> a<span class="op">;</span></span>
+<div class="sourceCode" id="cb7"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">5</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> a<span class="op">;</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>logic c<span class="op">,</span>d<span class="op">;</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> a <span class="op">=</span> <span class="bn">6'b101010</span><span class="op">;</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">// in1 and in2 inputs of module </span></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> <span class="op">&amp;</span>a<span class="op">;</span> <span class="co">// AND reduction result 0</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> d <span class="op">=</span> <span class="op">|</span>a<span class="op">;</span> <span class="co">// OR reduction result 1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> d <span class="op">=</span> <span class="op">|</span>a<span class="op">;</span> <span class="co">// OR reduction result 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="conditional-operator" class="level3" data-number="2.3.6">
 <h3 data-number="2.3.6" class="anchored" data-anchor-id="conditional-operator"><span class="header-section-number">2.3.6</span> Conditional Operator</h3>
 <ul>
 <li><code>? :</code> : Conditional (ternary) operator</li>
 </ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">5</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> a<span class="op">,</span>b<span class="op">;</span></span>
+<div class="sourceCode" id="cb8"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">5</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> a<span class="op">,</span>b<span class="op">;</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>logic c<span class="op">;</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> <span class="op">(</span>a <span class="op">&gt;</span> b<span class="op">)</span> <span class="op">?</span> <span class="bn">1'b1</span> <span class="op">:</span> <span class="bn">1'b0</span><span class="op">;</span> <span class="co">// cc = either one or zero</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> <span class="op">(</span>a <span class="op">&gt;</span> b<span class="op">)</span> <span class="op">?</span> <span class="bn">1'b1</span> <span class="op">:</span> <span class="bn">1'b0</span><span class="op">;</span> <span class="co">// cc = either one or zero</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="concatenation-and-replication-operators" class="level3" data-number="2.3.7">
 <h3 data-number="2.3.7" class="anchored" data-anchor-id="concatenation-and-replication-operators"><span class="header-section-number">2.3.7</span> Concatenation and Replication Operators</h3>
 <p>The concatenation operator <code>{}</code> in SystemVerilog is used to join multiple bits, vectors, or expressions into a single vector.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> a <span class="op">=</span> <span class="bn">4'b1010</span><span class="op">;</span></span>
+<div class="sourceCode" id="cb9"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> a <span class="op">=</span> <span class="bn">4'b1010</span><span class="op">;</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> b <span class="op">=</span> <span class="bn">4'b0101</span><span class="op">;</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">7</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> c<span class="op">;</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Concatenate a and b to form an 8-bit vector</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> <span class="op">{</span>a<span class="op">,</span> b<span class="op">};</span> <span class="co">// c = 8'b10100101</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> <span class="op">{</span>a<span class="op">,</span> b<span class="op">};</span> <span class="co">// c = 8'b10100101</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You can also use the replication operator <code>{n{}}</code> to replicate a bit or vector <code>n</code> times.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">1</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> d <span class="op">=</span> <span class="bn">2'b11</span><span class="op">;</span></span>
+<div class="sourceCode" id="cb10"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">1</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> d <span class="op">=</span> <span class="bn">2'b11</span><span class="op">;</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">5</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> e<span class="op">;</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Replicate d three times to form a 6-bit vector</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> e <span class="op">=</span> <span class="op">{</span><span class="dv">3</span><span class="op">{</span>d<span class="op">}};</span> <span class="co">// e = 6'b111111</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> e <span class="op">=</span> <span class="op">{</span><span class="dv">3</span><span class="op">{</span>d<span class="op">}};</span> <span class="co">// e = 6'b111111</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </section>
 <section id="modeling-concurent-functionality-in-systemverilog" class="level2" data-number="2.4">
@@ -445,21 +446,21 @@ These advantages make SystemVerilog a powerful and efficient choice for both des
 <section id="continuous-assignment" class="level3" data-number="2.4.1">
 <h3 data-number="2.4.1" class="anchored" data-anchor-id="continuous-assignment"><span class="header-section-number">2.4.1</span> Continuous assignment</h3>
 <p>Continuous assignment in SystemVerilog allows for the assignment of values to nets using the <code>assign</code> keyword, ensuring that the assigned value is continuously updated whenever the right-hand side expression changes. A continuous assignment models combinational logic. For example:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> out <span class="op">=</span> a <span class="op">&amp;</span> b<span class="op">;</span> <span class="co">// 'out' is continuously assigned the result of 'a &amp; b'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> out <span class="op">=</span> a <span class="op">&amp;</span> b<span class="op">;</span> <span class="co">// 'out' is continuously assigned the result of 'a &amp; b'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>We need to differ continous assignment from assignment in programming languages.</p>
 <p>First example:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> b <span class="op">=</span> a<span class="op">;</span> </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> b<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> b <span class="op">=</span> a<span class="op">;</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> b<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>In programming languages, a similar construct will first assign the value of <code>a</code> to <code>b</code>, and then pass the value of <code>b</code> to <code>c</code>. During synthesis, the tool will remove signal <code>b</code> and infer <code>assign c = a</code>.</p>
 <p>Second example:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> a<span class="op">;</span> </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> b<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> a<span class="op">;</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> c <span class="op">=</span> b<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>In programming languages, a similar construct will first assign the value of <code>a</code> to <code>c</code>, and then assign the value of <code>b</code> to <code>c</code>. The final value of <code>c</code> will be determined by the last assignment. During synthesis, the tool will create a net driven by two signals. As these signals by have different values, the net <code>c</code> will have an unknown value <code>X</code>. This situation must be avoided at all costs.</p>
 </section>
 <section id="bit-41-multiplexer" class="level3" data-number="2.4.2">
 <h3 data-number="2.4.2" class="anchored" data-anchor-id="bit-41-multiplexer"><span class="header-section-number">2.4.2</span> 4-bit 4:1 Multiplexer</h3>
 <p>The 4-bit multiplexer (MUX) selects one of the four 4-bit inputs to pass to the output based on the 2-bit selection signal.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> mux4to1 <span class="op">(</span></span>
+<div class="sourceCode" id="cb14"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> mux4to1 <span class="op">(</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> in0<span class="op">,</span> <span class="co">// 4-bit input 0</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> in1<span class="op">,</span> <span class="co">// 4-bit input 1</span></span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> in2<span class="op">,</span> <span class="co">// 4-bit input 2</span></span>
@@ -475,7 +476,7 @@ These advantages make SystemVerilog a powerful and efficient choice for both des
 <span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>                 <span class="op">(</span>sel <span class="op">==</span> <span class="bn">2'b11</span><span class="op">)</span> <span class="op">?</span> in3 <span class="op">:</span></span>
 <span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>                 <span class="bn">4'b0000</span><span class="op">;</span> <span class="co">// Default case </span></span>
 <span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="explanation" class="level4" data-number="2.4.2.1">
 <h4 data-number="2.4.2.1" class="anchored" data-anchor-id="explanation"><span class="header-section-number">2.4.2.1</span> Explanation</h4>
 <ul>
@@ -489,7 +490,7 @@ These advantages make SystemVerilog a powerful and efficient choice for both des
 <section id="bit-adder" class="level3" data-number="2.4.3">
 <h3 data-number="2.4.3" class="anchored" data-anchor-id="bit-adder"><span class="header-section-number">2.4.3</span> 4-bit adder</h3>
 <p>The 4-bit adder adds two 4-bit binary numbers and produces a 4-bit sum and a carry-out bit.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> adder4bit <span class="op">(</span></span>
+<div class="sourceCode" id="cb15"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> adder4bit <span class="op">(</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> a<span class="op">,</span> <span class="co">// 4-bit input a</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> b<span class="op">,</span> <span class="co">// 4-bit input b</span></span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> sum<span class="op">,</span> <span class="co">// 4-bit sum output</span></span>
@@ -514,7 +515,7 @@ These advantages make SystemVerilog a powerful and efficient choice for both des
 <span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> sum<span class="op">[</span><span class="dv">3</span><span class="op">]</span> <span class="op">=</span> a<span class="op">[</span><span class="dv">3</span><span class="op">]</span> <span class="op">^</span> b<span class="op">[</span><span class="dv">3</span><span class="op">]</span> <span class="op">^</span> c3<span class="op">;</span></span>
 <span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> carry_out <span class="op">=</span> <span class="op">(</span>a<span class="op">[</span><span class="dv">3</span><span class="op">]</span> <span class="op">&amp;</span> b<span class="op">[</span><span class="dv">3</span><span class="op">])</span> <span class="op">|</span> <span class="op">(</span>c3 <span class="op">&amp;</span> <span class="op">(</span>a<span class="op">[</span><span class="dv">3</span><span class="op">]</span> <span class="op">^</span> b<span class="op">[</span><span class="dv">3</span><span class="op">]));</span></span>
 <span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="explanation-1" class="level4" data-number="2.4.3.1">
 <h4 data-number="2.4.3.1" class="anchored" data-anchor-id="explanation-1"><span class="header-section-number">2.4.3.1</span> Explanation</h4>
 <ul>
@@ -530,23 +531,23 @@ These advantages make SystemVerilog a powerful and efficient choice for both des
 <h3 data-number="2.4.4" class="anchored" data-anchor-id="user-constraints-files-and-pin-planning-in-vivado"><span class="header-section-number">2.4.4</span> User Constraints Files and Pin Planning in Vivado</h3>
 <p>In Vivado, User Constraints Files (UCF) or Xilinx Design Constraints (XDC) files are used to define the physical constraints of the design, such as pin assignments, timing constraints, and other implementation-specific parameters. Pin planning involves mapping the logical signals in your design to the physical pins on the FPGA. This process ensures that the design interfaces correctly with external components and meets the required performance criteria. Proper pin planning and constraint management are crucial for successful FPGA implementation, as they directly impact signal integrity, timing closure, and overall design functionality.</p>
 <p>The <a href="https://github.com/Digilent/digilent-xdc/blob/master/Nexys-A7-100T-Master.xdc">XDC file for Nexys A7</a> defines the pin placement for external signals of modules. To map the inputs of our <code>adder4bit</code> to the switches and the outputs to LEDs, we need to make the following changes:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode tcl code-with-copy"><code class="sourceCode tcl"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">##Switches</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>set_property -<span class="kw">dict</span> <span class="kw">{</span> PACKAGE_PIN J15   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> a<span class="kw">[</span><span class="dv">0</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L24N_T3_RS0_15 Sch=sw[0]</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>set_property -<span class="kw">dict</span> <span class="kw">{</span> PACKAGE_PIN L16   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> a<span class="kw">[</span><span class="dv">1</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L3N_T0_DQS_EMCCLK_14 Sch=sw[1]</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>set_property -<span class="kw">dict</span> <span class="kw">{</span> PACKAGE_PIN M13   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> a<span class="kw">[</span><span class="dv">2</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L6N_T0_D08_VREF_14 Sch=sw[2]</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>set_property -<span class="kw">dict</span> <span class="kw">{</span> PACKAGE_PIN R15   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> a<span class="kw">[</span><span class="dv">3</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L13N_T2_MRCC_14 Sch=sw[3]</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>set_property -<span class="kw">dict</span> <span class="kw">{</span> PACKAGE_PIN R17   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> b<span class="kw">[</span><span class="dv">0</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L12N_T1_MRCC_14 Sch=sw[4]</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>set_property -<span class="kw">dict</span> <span class="kw">{</span> PACKAGE_PIN T18   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> b<span class="kw">[</span><span class="dv">1</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L7N_T1_D10_14 Sch=sw[5]</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>set_property -<span class="kw">dict</span> <span class="kw">{</span> PACKAGE_PIN U18   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> b<span class="kw">[</span><span class="dv">2</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L17N_T2_A13_D29_14 Sch=sw[6]</span></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>set_property -<span class="kw">dict</span> <span class="kw">{</span> PACKAGE_PIN R13   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> b<span class="kw">[</span><span class="dv">3</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L5N_T0_D07_14 Sch=sw[7]</span></span>
+<div class="sourceCode" id="cb16"><pre class="sourceCode tcl code-with-copy"><code class="sourceCode tcl"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">##Switches</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>set_property<span class="ot"> -dict</span> <span class="kw">{</span> PACKAGE_PIN J15   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> a<span class="kw">[</span><span class="dv">0</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L24N_T3_RS0_15 Sch=sw[0]</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>set_property<span class="ot"> -dict</span> <span class="kw">{</span> PACKAGE_PIN L16   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> a<span class="kw">[</span><span class="dv">1</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L3N_T0_DQS_EMCCLK_14 Sch=sw[1]</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>set_property<span class="ot"> -dict</span> <span class="kw">{</span> PACKAGE_PIN M13   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> a<span class="kw">[</span><span class="dv">2</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L6N_T0_D08_VREF_14 Sch=sw[2]</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>set_property<span class="ot"> -dict</span> <span class="kw">{</span> PACKAGE_PIN R15   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> a<span class="kw">[</span><span class="dv">3</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L13N_T2_MRCC_14 Sch=sw[3]</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>set_property<span class="ot"> -dict</span> <span class="kw">{</span> PACKAGE_PIN R17   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> b<span class="kw">[</span><span class="dv">0</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L12N_T1_MRCC_14 Sch=sw[4]</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>set_property<span class="ot"> -dict</span> <span class="kw">{</span> PACKAGE_PIN T18   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> b<span class="kw">[</span><span class="dv">1</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L7N_T1_D10_14 Sch=sw[5]</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>set_property<span class="ot"> -dict</span> <span class="kw">{</span> PACKAGE_PIN U18   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> b<span class="kw">[</span><span class="dv">2</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L17N_T2_A13_D29_14 Sch=sw[6]</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>set_property<span class="ot"> -dict</span> <span class="kw">{</span> PACKAGE_PIN R13   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> b<span class="kw">[</span><span class="dv">3</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L5N_T0_D07_14 Sch=sw[7]</span></span>
 <span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co">##LEDS</span></span>
 <span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">## LEDs</span></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>set_property -<span class="kw">dict</span> <span class="kw">{</span> PACKAGE_PIN H17   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> sum<span class="kw">[</span><span class="dv">0</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L18P_T2_A24_15 Sch=led[0]</span></span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>set_property -<span class="kw">dict</span> <span class="kw">{</span> PACKAGE_PIN K15   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> sum<span class="kw">[</span><span class="dv">1</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L24P_T3_RS1_15 Sch=led[1]</span></span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>set_property -<span class="kw">dict</span> <span class="kw">{</span> PACKAGE_PIN J13   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> sum<span class="kw">[</span><span class="dv">2</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L17N_T2_A25_15 Sch=led[2]</span></span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>set_property -<span class="kw">dict</span> <span class="kw">{</span> PACKAGE_PIN N14   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> sum<span class="kw">[</span><span class="dv">3</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L8P_T1_D11_14 Sch=led[3]</span></span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>set_property -<span class="kw">dict</span> <span class="kw">{</span> PACKAGE_PIN R18   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> carry_out <span class="kw">}]</span>; <span class="co">#IO_L7P_T1_D09_14 Sch=led[4]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>set_property<span class="ot"> -dict</span> <span class="kw">{</span> PACKAGE_PIN H17   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> sum<span class="kw">[</span><span class="dv">0</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L18P_T2_A24_15 Sch=led[0]</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>set_property<span class="ot"> -dict</span> <span class="kw">{</span> PACKAGE_PIN K15   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> sum<span class="kw">[</span><span class="dv">1</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L24P_T3_RS1_15 Sch=led[1]</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>set_property<span class="ot"> -dict</span> <span class="kw">{</span> PACKAGE_PIN J13   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> sum<span class="kw">[</span><span class="dv">2</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L17N_T2_A25_15 Sch=led[2]</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>set_property<span class="ot"> -dict</span> <span class="kw">{</span> PACKAGE_PIN N14   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> sum<span class="kw">[</span><span class="dv">3</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L8P_T1_D11_14 Sch=led[3]</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>set_property<span class="ot"> -dict</span> <span class="kw">{</span> PACKAGE_PIN R18   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> carry_out <span class="kw">}]</span>; <span class="co">#IO_L7P_T1_D09_14 Sch=led[4]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>It is important to assign the appropriate pin to the <code>get_ports</code> function.</p>
 </section>
 </section>
@@ -665,14 +666,13 @@ Note
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
         }
-      }
-      return codeEl.innerText;
+        return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1021,6 +1021,9 @@ Note
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../chapters/03-sequential.html" class="pagination-link" aria-label="Third exercise: Designing sequential circuits with SystemVerilog">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Third exercise: Designing sequential circuits with SystemVerilog</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

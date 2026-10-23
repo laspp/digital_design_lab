@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>3&nbsp; Third exercise: Designing sequential circuits with SystemVerilog – Digital Design Lab</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/02-alu.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-467c603866d931062acf9dde62877a13.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-tools-intro.html">Lab Exercises</a></li><li class="breadcrumb-item"><a href="../chapters/03-sequential.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Third exercise: Designing sequential circuits with SystemVerilog</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Digital Design Lab</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Lab Exercises</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-tools-intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">First exercise: Tools and the Digital Design Cycle</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-alu.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Second exercise: Introduction to (System)Verilog</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-sequential.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Third exercise: Designing sequential circuits with SystemVerilog</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#designing-d-flip-flop-in-systemverilog" id="toc-designing-d-flip-flop-in-systemverilog" class="nav-link active" data-scroll-target="#designing-d-flip-flop-in-systemverilog"><span class="header-section-number">3.1</span> Designing D Flip-Flop in SystemVerilog</a></li>
+  <li><a href="#combinational-logic-with-always-statement" id="toc-combinational-logic-with-always-statement" class="nav-link" data-scroll-target="#combinational-logic-with-always-statement"><span class="header-section-number">3.2</span> Combinational logic with always statement</a></li>
+  <li><a href="#common-mistakes" id="toc-common-mistakes" class="nav-link" data-scroll-target="#common-mistakes"><span class="header-section-number">3.3</span> Common mistakes</a></li>
+  <li><a href="#task-implement-a-4-bit-gray-code-counter" id="toc-task-implement-a-4-bit-gray-code-counter" class="nav-link" data-scroll-target="#task-implement-a-4-bit-gray-code-counter"><span class="header-section-number">3.4</span> Task: Implement a 4-bit Gray Code Counter</a>
+  <ul class="collapse">
+  <li><a href="#example-code-structure" id="toc-example-code-structure" class="nav-link" data-scroll-target="#example-code-structure"><span class="header-section-number">3.4.1</span> Example Code Structure:</a></li>
+  </ul></li>
+  <li><a href="#implementation-guidelines" id="toc-implementation-guidelines" class="nav-link" data-scroll-target="#implementation-guidelines"><span class="header-section-number">3.5</span> Implementation guidelines</a>
+  <ul class="collapse">
+  <li><a href="#divider" id="toc-divider" class="nav-link" data-scroll-target="#divider"><span class="header-section-number">3.5.1</span> Divider</a></li>
+  <li><a href="#updown-binary-counter" id="toc-updown-binary-counter" class="nav-link" data-scroll-target="#updown-binary-counter"><span class="header-section-number">3.5.2</span> Up/down binary counter</a></li>
+  <li><a href="#gray-code-converter" id="toc-gray-code-converter" class="nav-link" data-scroll-target="#gray-code-converter"><span class="header-section-number">3.5.3</span> Gray code converter</a></li>
+  <li><a href="#pin-mapping" id="toc-pin-mapping" class="nav-link" data-scroll-target="#pin-mapping"><span class="header-section-number">3.5.4</span> Pin mapping</a></li>
+  </ul></li>
+  <li><a href="#literature" id="toc-literature" class="nav-link" data-scroll-target="#literature"><span class="header-section-number">3.6</span> Literature</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-tools-intro.html">Lab Exercises</a></li><li class="breadcrumb-item"><a href="../chapters/03-sequential.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Third exercise: Designing sequential circuits with SystemVerilog</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Third exercise: Designing sequential circuits with SystemVerilog</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Vivado recognizes certain idioms and transforms them into specific sequential circuits. Other coding styles may simulate correctly but may synthesize into circuits with obvious or subtle errors. We will present the proper idioms to describe registers and latches.</p>
+<section id="designing-d-flip-flop-in-systemverilog" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="designing-d-flip-flop-in-systemverilog"><span class="header-section-number">3.1</span> Designing D Flip-Flop in SystemVerilog</h2>
+<p>The Verilog code for a D flip-flop (DFF) active on the positive clock edge with a synchronous reset is given below:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> DFF <span class="op">(</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic clk<span class="op">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic reset<span class="op">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic d<span class="op">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic q</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    always_ff <span class="op">@(</span><span class="kw">posedge</span> clk<span class="op">)</span> <span class="kw">begin</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="op">(</span>reset<span class="op">)</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>            q <span class="op">&lt;=</span> <span class="bn">1'b0</span><span class="op">;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">else</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>            q <span class="op">&lt;=</span> d<span class="op">;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>always_ff</code> has it roots from Verilog language. In Verilog we have <code>always</code> statement, written in form:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">always</span> <span class="op">@(</span>sensitivity_list<span class="op">)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    statement<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In the previous code, the statement is executed only when the event specified in the sensitivity list occurs. For the D-FF example, the event is <code>posedge clk</code>, meaning the statements inside <code>always_ff</code> will execute on the positive edge of the clock. Inside the <code>always_ff</code> block, we use an <code>if/else</code> statement for conditional operations. Notice that the non-blocking operator <code>&lt;=</code> is used inside the <code>always_ff</code> block. On every positive edge of the clock, the block checks if the reset is active. If the reset is active, the output will be set to zero; otherwise, the input will be copied to the output. The <code>always_ff</code> construct behaves like the <code>always</code> construct but is specifically used to imply flip-flops and allows tools to produce a warning if anything else is implied.</p>
+<p>Let us design 4-bit counter, which counts on positive edge and has active high reset</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> Counter4Bit <span class="op">(</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic clk<span class="op">,</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic reset<span class="op">,</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> out</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="op">);</span>  </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> counter<span class="op">;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    always_ff <span class="op">@(</span><span class="kw">posedge</span> clk<span class="op">)</span> <span class="kw">begin</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="op">(</span>reset<span class="op">)</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>            counter <span class="op">&lt;=</span> <span class="bn">4'b0000</span><span class="op">;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="kw">else</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>            counter <span class="op">&lt;=</span> counter <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> out <span class="op">=</span> counter<span class="op">;</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>As in the previous example, every time <code>posedge clk</code> occurs, the counter will increment the value of the internal counter <code>counter</code> if <code>reset</code> is low. Otherwise, the counter will start counting from zero. Finally, we output the state of the internal counter to the output. Note that <code>assign</code> and <code>always_ff</code> work in parallel.</p>
+</section>
+<section id="combinational-logic-with-always-statement" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="combinational-logic-with-always-statement"><span class="header-section-number">3.2</span> Combinational logic with always statement</h2>
+<p>We can design the combinational logic using <code>always</code> constructs. Let us first describe an inverter using <code>always</code> constructs.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> Inverter <span class="op">(</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic a<span class="op">,</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic y</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    always_comb <span class="kw">begin</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        y <span class="op">=</span> <span class="op">~</span>a<span class="op">;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In this example, the <code>always_comb</code> block is used to describe combinational logic. The output <code>y</code> is always the logical NOT of the input <code>a</code>. The <code>always_comb</code> construct ensures that the block is always executed whenever any of its inputs change, making it suitable for combinational logic. In the inverter code we use the blocking operator <code>=</code>.</p>
+<blockquote class="blockquote">
+<p><strong>Note:</strong></p>
+<p>In SystemVerilog, a group blocking assignments (<code>=</code>) are evaluated in order they appear. They are used for combinational logic. Non-blocking assignments (<code>&lt;=</code>) are used in sequential logic. A group of non-blocking statements is evaluated concurently.</p>
+</blockquote>
+<p>Let us construct 4-to-1 MUX using <code>always_comb</code> and <code>case</code> construct</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> Mux4to1 <span class="op">(</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic <span class="op">[</span><span class="dv">1</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> sel<span class="op">,</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> d<span class="op">,</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic y</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    always_comb <span class="kw">begin</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">case</span> <span class="op">(</span>sel<span class="op">)</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>            <span class="bn">2'b00</span><span class="op">:</span> y <span class="op">=</span> d<span class="op">[</span><span class="dv">0</span><span class="op">];</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>            <span class="bn">2'b01</span><span class="op">:</span> y <span class="op">=</span> d<span class="op">[</span><span class="dv">1</span><span class="op">];</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>            <span class="bn">2'b10</span><span class="op">:</span> y <span class="op">=</span> d<span class="op">[</span><span class="dv">2</span><span class="op">];</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>            <span class="bn">2'b11</span><span class="op">:</span> y <span class="op">=</span> d<span class="op">[</span><span class="dv">3</span><span class="op">];</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>            <span class="kw">default</span><span class="op">:</span> y <span class="op">=</span> <span class="bn">1'b0</span><span class="op">;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>        <span class="kw">endcase</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In this example, the <code>always_comb</code> block is used to describe the combinational logic for a 4-to-1 multiplexer. The <code>case</code> statement selects one of the four input bits <code>d</code> based on the 2-bit selector <code>sel</code> and assigns it to the output <code>y</code>. The <code>default</code> case ensures that <code>y</code> is set to <code>0</code> if <code>sel</code> has an unexpected value. Be sure to always give <code>default</code> option in the <code>case</code> construct, otherwise you will infer a latch in your design.</p>
+</section>
+<section id="common-mistakes" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="common-mistakes"><span class="header-section-number">3.3</span> Common mistakes</h2>
+<ol type="1">
+<li>There is no assign construct in always block:</li>
+</ol>
+<div class="sourceCode" id="cb6"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> WrongModule1 <span class="op">(</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic a<span class="op">,</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic b<span class="op">,</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic c</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    always_comb <span class="kw">begin</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">assign</span> c <span class="op">=</span> a <span class="op">&amp;</span> b<span class="op">;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="2" type="1">
+<li>Having multiple blocks driving the same net</li>
+</ol>
+<div class="sourceCode" id="cb7"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> WrongModule2</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    ....</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    always_ff<span class="op">(@</span>posedge clock<span class="op">)</span> <span class="kw">begin</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        ......</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        c <span class="op">&lt;=</span> <span class="op">{</span>x<span class="op">,</span><span class="bn">1'b0</span><span class="op">};</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    ....</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    always_comb <span class="kw">begin</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        ......</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        c <span class="op">=</span> x<span class="op">;</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    ....</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> c <span class="op">=</span> in1 <span class="op">+</span> in2<span class="op">;</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="3" type="1">
+<li>Infering latch in combinational design:</li>
+</ol>
+<div class="sourceCode" id="cb8"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>logic result<span class="op">;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>logic status<span class="op">;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>always_comb <span class="kw">begin</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="op">(</span>input_button<span class="op">)</span> <span class="kw">begin</span> </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        status <span class="op">=</span> <span class="dv">1</span>’b1<span class="op">;</span> </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        result <span class="op">=</span> <span class="dv">1</span>’b0<span class="op">;</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span>done_signal<span class="op">)</span> <span class="kw">begin</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>            status <span class="op">=</span> <span class="dv">1</span>’b0<span class="op">;</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        <span class="kw">end</span> </span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>What is the value of <code>result</code> when <code>done_signal</code> is high? What will happen when <code>input_button</code> and <code>done_signal</code> are low? The hardware synthesizer will assume the old value, thereby inferring a latch. You do not want a latch in a combinational design.</p>
+<p>Correct answer would be:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>logic result<span class="op">;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>logic status<span class="op">;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>always_comb <span class="kw">begin</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="op">(</span>input_button<span class="op">)</span> <span class="kw">begin</span> </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>        status <span class="op">=</span> <span class="dv">1</span>’b1<span class="op">;</span> </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        result <span class="op">=</span> <span class="dv">1</span>’b0<span class="op">;</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span>done_signal<span class="op">)</span> <span class="kw">begin</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>            status <span class="op">=</span> <span class="dv">1</span>’b1<span class="op">;</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>            result <span class="op">=</span> <span class="dv">1</span>’b0<span class="op">;</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>        <span class="kw">end</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>        <span class="kw">else</span> <span class="kw">begin</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>            status <span class="op">=</span> <span class="dv">1</span>’b0<span class="op">;</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>            result <span class="op">=</span> <span class="dv">1</span>’b0<span class="op">;</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>        <span class="kw">end</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Remember cover all your cases!</p>
+</section>
+<section id="task-implement-a-4-bit-gray-code-counter" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="task-implement-a-4-bit-gray-code-counter"><span class="header-section-number">3.4</span> Task: Implement a 4-bit Gray Code Counter</h2>
+<p>Your task is to implement a 4-bit Gray Code counter, that changes its state with the frequency of 1 Hz.</p>
+<p>Steps required: 1. Start with two counters: a modulo 100<em>10^6 counter and a classical binary counter that counts from 0 to 15. 2. The first counter increments its value every system clock cycle. 3. The other counter changes its value when the first counter reaches the value 100</em>10^6-1. When the input <em>up_down</em> is equal to 0, the counter increments its value; otherwise it decreases. 4. Convert the state of the binary counter to Gray Code.</p>
+<p>Python code snippet that illustrates the behaviour of gray code counter</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>binary_count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span>(<span class="dv">1</span>):</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span> (<span class="dv">0</span>, <span class="dv">100</span> <span class="op">*</span> <span class="fl">1e6</span>): <span class="co"># the module 100*1e6 counter </span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(i<span class="op">==</span><span class="dv">100</span> <span class="op">*</span> <span class="fl">1e6</span><span class="op">-</span><span class="dv">1</span>):</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span>(up_down<span class="op">==</span><span class="dv">0</span>):</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                binary_count <span class="op">=</span> binary_count <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>                binary_count <span class="op">=</span> binary_count <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    gray_code <span class="op">=</span> bin2gray(binary_count )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> bin2gray(binary):</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">match</span> binary:</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">0</span>: <span class="cf">return</span> <span class="dv">0</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">1</span>: <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">2</span>: <span class="cf">return</span> <span class="dv">3</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">3</span>: <span class="cf">return</span> <span class="dv">2</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">4</span>: <span class="cf">return</span> <span class="dv">6</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">5</span>: <span class="cf">return</span> <span class="dv">7</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">6</span>: <span class="cf">return</span> <span class="dv">5</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">7</span>: <span class="cf">return</span> <span class="dv">4</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">8</span>: <span class="cf">return</span> <span class="dv">12</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">9</span>: <span class="cf">return</span> <span class="dv">13</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">10</span>: <span class="cf">return</span> <span class="dv">15</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">11</span>: <span class="cf">return</span> <span class="dv">14</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">12</span>: <span class="cf">return</span> <span class="dv">10</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">13</span>: <span class="cf">return</span> <span class="dv">11</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">14</span>: <span class="cf">return</span> <span class="dv">9</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">15</span>: <span class="cf">return</span> <span class="dv">8</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> _: <span class="cf">return</span> <span class="dv">0</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="example-code-structure" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="example-code-structure"><span class="header-section-number">3.4.1</span> Example Code Structure:</h3>
+<div class="callout callout-style-default callout-note callout-titled" title="Name the top module `top`">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Name the top module <code>top</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Anvil looks for a top-level module called <code>top</code> in <code>top.sv</code> when it builds your design (see the <code>top</code> entry in the project configuration in the first exercise). Your design is the top-level module, so name it <code>top</code> and put it in <code>top.sv</code>. A different module name, such as <code>gray_code_counter</code>, would not be found as the top-level module.</p>
+</div>
+</div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> top <span class="op">(</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic clk<span class="op">,</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic rst<span class="op">,</span> <span class="co">// Button </span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic up_down<span class="op">,</span> <span class="co">// Switch for up/down counting </span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> gray_code <span class="co">// connect the output to LEDs </span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    logic en<span class="op">;</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> binary_count<span class="op">;</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Prescaler code &amp; binary counter </span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Gray Code Converter </span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="co">// employ always_comb and case statement </span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">// to convert from code to another </span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Tip: <a href="https://www.javatpoint.com/binary-to-gray-code-cconversion-in-digital-electronics">Binary to graycode converter</a></p>
+</section>
+</section>
+<section id="implementation-guidelines" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="implementation-guidelines"><span class="header-section-number">3.5</span> Implementation guidelines</h2>
+<p>Structural modeling, splitting a design into separate modules and instantiating them, is introduced in the next exercise. For now <code>top</code> stays a single module, so the three pieces below are not separate modules with their own ports, but three cooperating pieces of behavioral code inside <code>top</code>, sharing the internal signals <code>en</code> and <code>binary_count</code> already declared in the skeleton above. These three pieces of code are actually three separate <code>always</code> blocks, where first two are <code>always_ff</code> and the last one is <code>always_comb</code>. The first two blocks are sequential, the last one is combinational. The three pieces are described below.</p>
+<section id="divider" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="divider"><span class="header-section-number">3.5.1</span> Divider</h3>
+<p>The divider turns the 100 MHz system clock into a single, once-per-second pulse on <code>en</code>. It is a free running counter, the same idea you will meet again as the standalone <code>prescaler</code> module in the next exercise.</p>
+<p>Declare an internal register wide enough to count up to 100,000,000:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>logic <span class="op">[</span><span class="dv">26</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> div_count<span class="op">;</span> <span class="co">// 2^27 &gt; 100,000,000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Behavior:</p>
+<ul>
+<li>On every rising edge of <code>clk</code>, if <code>rst</code> is high, reset <code>div_count</code> to zero.</li>
+<li>Otherwise, increment <code>div_count</code> by one on every rising edge. This is step 2 from above, the first counter incrementing every system clock cycle.</li>
+<li>When <code>div_count</code> reaches 100,000,000 - 1, drive <code>en</code> high for that clock cycle and let <code>div_count</code> wrap back to zero on the next edge, restarting the count.</li>
+<li>The result is a single clock cycle pulse on <code>en</code> once every 100,000,000 clock cycles. At 100 MHz that is exactly once per second.</li>
+</ul>
+<p>The waveform below shows this behavior. Counting to 100,000,000 would be impossible to draw, so the diagram uses a much smaller modulus, <span class="math inline">\(N = 6\)</span>. The idea is identical, only the number of clock cycles per pulse differs.</p>
+<div id="fig-divider" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-divider-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../img/wavedrom/divider.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-divider-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.1: Divider timing for <span class="math inline">\(N = 6\)</span>. <code>div_count</code> counts <span class="math inline">\(0, 1, \dots, N-1\)</span> and wraps. <code>en</code> is high for exactly one clock cycle, the one in which <code>div_count</code> equals <span class="math inline">\(N-1\)</span>.
+</figcaption>
+</figure>
+</div>
+<p>Things to notice in <a href="#fig-divider" class="quarto-xref">Figure&nbsp;<span>3.1</span></a>:</p>
+<ul>
+<li>While <code>rst</code> is high, <code>div_count</code> is cleared on the next rising edge. Before that first edge its value is unknown (hatched area).</li>
+<li><code>div_count</code> changes only right after a rising edge of <code>clk</code>. Between edges it holds its value.</li>
+<li><code>en</code> is high during the whole clock cycle in which <code>div_count</code> is <span class="math inline">\(N-1\)</span> (5 in the diagram, 99,999,999 in the lab). On the following edge <code>div_count</code> wraps to 0 and <code>en</code> falls again.</li>
+<li>The distance between two <code>en</code> pulses is exactly <span class="math inline">\(N\)</span> clock cycles.</li>
+</ul>
+<p>The reset is synchronous, so it takes effect on a clock edge, not immediately. If <code>rst</code> is pressed in the middle of a count, <code>div_count</code> restarts from zero and the pulse is delayed accordingly:</p>
+<div id="fig-divider-reset" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-divider-reset-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../img/wavedrom/divider_reset.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-divider-reset-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.2: Synchronous reset during counting for <span class="math inline">\(N = 6\)</span>. The count restarts from 0 and the next <code>en</code> pulse appears <span class="math inline">\(N\)</span> cycles after the restart.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="updown-binary-counter" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="updown-binary-counter"><span class="header-section-number">3.5.2</span> Up/down binary counter</h3>
+<p><code>binary_count</code> is the 4-bit counter whose value eventually gets Gray encoded for the LEDs. Unlike <code>div_count</code>, it does not advance on every clock edge. It only advances once per second, on a clock edge where <code>en</code> is high.</p>
+<p>Behavior:</p>
+<ul>
+<li>On every rising edge of <code>clk</code>, if <code>rst</code> is high, reset <code>binary_count</code> to zero.</li>
+<li>Otherwise, only change <code>binary_count</code> on a clock edge where <code>en</code> is high. When <code>up_down</code> is 0, increment <code>binary_count</code>, wrapping from 15 back to 0. When <code>up_down</code> is 1, decrement it, wrapping from 0 back to 15.</li>
+<li>On a clock edge where <code>en</code> is low, hold <code>binary_count</code> at its current value.</li>
+<li>Because <code>en</code> pulses only once per second, <code>binary_count</code> also only changes once per second, which is where the counter’s 1 Hz update rate comes from.</li>
+</ul>
+<p>The waveform below shows the counter counting up. The <code>en</code> pulses are drawn only 4 clock cycles apart so that several counter steps fit on the page.</p>
+<div id="fig-updown-up" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-updown-up-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../img/wavedrom/updown_count_up.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-updown-up-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.3: Up counting (<code>up_down</code> = 0). <code>binary_count</code> is cleared by <code>rst</code>, then increments by one on the clock edge that follows each <code>en</code> pulse and holds its value in between.
+</figcaption>
+</figure>
+</div>
+<p>Things to notice in <a href="#fig-updown-up" class="quarto-xref">Figure&nbsp;<span>3.3</span></a>:</p>
+<ul>
+<li><code>binary_count</code> never changes in the same cycle in which <code>en</code> is high. It changes on the <em>next</em> rising edge, because the flip-flops sample <code>en</code> at the edge. This is the same behavior as the <code>d</code> and <code>q</code> of the D flip-flop earlier in this chapter.</li>
+<li>Between <code>en</code> pulses the counter holds its value.</li>
+</ul>
+<p>With <code>up_down</code> = 1 the counter decrements instead, and wraps from 0 to 15:</p>
+<div id="fig-updown-down" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-updown-down-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../img/wavedrom/updown_count_down.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-updown-down-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.4: Down counting (<code>up_down</code> = 1). The counter wraps from 0 to 15 because <code>binary_count</code> is only 4 bits wide.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="gray-code-converter" class="level3" data-number="3.5.3">
+<h3 data-number="3.5.3" class="anchored" data-anchor-id="gray-code-converter"><span class="header-section-number">3.5.3</span> Gray code converter</h3>
+<p>The converter has no state of its own. It is a purely combinational function of <code>binary_count</code>, mapping each of the 16 possible values to the corresponding Gray code word from the <code>bin2gray</code> table above.</p>
+<p>Behavior:</p>
+<ul>
+<li>Use <code>always_comb</code> with a <code>case</code> statement on <code>binary_count</code>, one branch per value 0 through 15, assigning the matching Gray code word to <code>gray_code</code> in each branch.</li>
+<li>Always include a <code>default</code> branch, even though cases 0 through 15 already cover every possible 4-bit value. The Common mistakes section earlier in this chapter explains why an incomplete <code>case</code> without a <code>default</code> infers a latch instead of the combinational logic you intended.</li>
+<li>Because the conversion is combinational, <code>gray_code</code> updates immediately whenever <code>binary_count</code> changes. No separate clocking is needed here. <code>binary_count</code> already only changes once per second, so <code>gray_code</code> will too.</li>
+</ul>
+<p><a href="#tbl-gray" class="quarto-xref">Table&nbsp;<span>3.1</span></a> lists the mapping that your <code>case</code> statement has to implement. It is the same mapping as the <code>bin2gray</code> function above.</p>
+<div id="tbl-gray" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-gray-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3.1: Binary to Gray code conversion.
+</figcaption>
+<div aria-describedby="tbl-gray-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Decimal</th>
+<th style="text-align: center;"><code>binary_count</code></th>
+<th style="text-align: center;"><code>gray_code</code></th>
+<th style="text-align: center;"><code>gray_code</code> (decimal)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0000</td>
+<td style="text-align: center;">0000</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0001</td>
+<td style="text-align: center;">0001</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">0010</td>
+<td style="text-align: center;">0011</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">0011</td>
+<td style="text-align: center;">0010</td>
+<td style="text-align: center;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0100</td>
+<td style="text-align: center;">0110</td>
+<td style="text-align: center;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">0101</td>
+<td style="text-align: center;">0111</td>
+<td style="text-align: center;">7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">0110</td>
+<td style="text-align: center;">0101</td>
+<td style="text-align: center;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">0111</td>
+<td style="text-align: center;">0100</td>
+<td style="text-align: center;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">1000</td>
+<td style="text-align: center;">1100</td>
+<td style="text-align: center;">12</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">1001</td>
+<td style="text-align: center;">1101</td>
+<td style="text-align: center;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">1010</td>
+<td style="text-align: center;">1111</td>
+<td style="text-align: center;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">11</td>
+<td style="text-align: center;">1011</td>
+<td style="text-align: center;">1110</td>
+<td style="text-align: center;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">12</td>
+<td style="text-align: center;">1100</td>
+<td style="text-align: center;">1010</td>
+<td style="text-align: center;">10</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">13</td>
+<td style="text-align: center;">1101</td>
+<td style="text-align: center;">1011</td>
+<td style="text-align: center;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">14</td>
+<td style="text-align: center;">1110</td>
+<td style="text-align: center;">1001</td>
+<td style="text-align: center;">9</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">15</td>
+<td style="text-align: center;">1111</td>
+<td style="text-align: center;">1000</td>
+<td style="text-align: center;">8</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Notice that between any two consecutive rows, including the wrap from 15 back to 0, exactly one bit of <code>gray_code</code> changes. This is the property that makes Gray code useful. The table follows a simple rule: the most significant bit is copied, and every other Gray bit is the XOR of the corresponding binary bit and the binary bit above it, <span class="math inline">\(g_3 = b_3\)</span> and <span class="math inline">\(g_i = b_{i+1} \oplus b_i\)</span> for <span class="math inline">\(i = 2, 1, 0\)</span>. You may use the table directly in the <code>case</code> statement. The rule is a useful way to check your entries.</p>
+</section>
+<section id="pin-mapping" class="level3" data-number="3.5.4">
+<h3 data-number="3.5.4" class="anchored" data-anchor-id="pin-mapping"><span class="header-section-number">3.5.4</span> Pin mapping</h3>
+<p>Connect the <code>clk</code> signal to the system clock (100 MHz), the <code>rst</code> signal to the middle button, the <code>up_down</code> signal to the switch, and the <code>gray_code</code> signal to the LEDs.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode tcl code-with-copy"><code class="sourceCode tcl"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Clock signal</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>set_property<span class="ot"> -dict</span> <span class="kw">{</span> PACKAGE_PIN E3    IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> clk <span class="kw">}]</span>; <span class="co">#IO_L12P_T1_MRCC_35 Sch=clk100mhz</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>create_clock<span class="ot"> -add -name</span> sys_clk_pin<span class="ot"> -period</span> <span class="fl">10.00</span><span class="ot"> -waveform</span> <span class="kw">{</span><span class="dv">0</span> <span class="dv">5</span><span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span>clk<span class="kw">}]</span>;</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co">##Switches</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>set_property<span class="ot"> -dict</span> <span class="kw">{</span> PACKAGE_PIN J15   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> up_down <span class="kw">}]</span>; <span class="co">#IO_L24N_T3_RS0_15 Sch=sw[0]</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co">## LEDs</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>set_property<span class="ot"> -dict</span> <span class="kw">{</span> PACKAGE_PIN H17   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> gray_code<span class="kw">[</span><span class="dv">0</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L18P_T2_A24_15 Sch=led[0]</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>set_property<span class="ot"> -dict</span> <span class="kw">{</span> PACKAGE_PIN K15   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> gray_code<span class="kw">[</span><span class="dv">1</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L24P_T3_RS1_15 Sch=led[1]</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>set_property<span class="ot"> -dict</span> <span class="kw">{</span> PACKAGE_PIN J13   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> gray_code<span class="kw">[</span><span class="dv">2</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L17N_T2_A25_15 Sch=led[2]</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>set_property<span class="ot"> -dict</span> <span class="kw">{</span> PACKAGE_PIN N14   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> gray_code<span class="kw">[</span><span class="dv">3</span><span class="kw">]</span> <span class="kw">}]</span>; <span class="co">#IO_L8P_T1_D11_14 Sch=led[3]</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="co">##Buttons</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>set_property<span class="ot"> -dict</span> <span class="kw">{</span> PACKAGE_PIN N17   IOSTANDARD LVCMOS33 <span class="kw">}</span> <span class="kw">[</span>get_ports <span class="kw">{</span> rst <span class="kw">}]</span>; <span class="co">#IO_L9P_T1_DQS_14 Sch=btnc</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<!-- 
+## Blocking vs Non-blocking Assignment in Verilog
+
+In Verilog, assignments within procedural blocks ([`always`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FUsers%2Fratko.pilipovic%2FLibrary%2FCloudStorage%2FOneDrive-UniverzavLjubljani%2FPredmeti%2FDN%2F2024_25%2FExercises%2F02-Sequential.md%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22pos%22%3A%7B%22line%22%3A56%2C%22character%22%3A28%7D%7D%5D%2C%22aede7559-ac13-4446-b47c-27c9fc564fb7%22%5D "Go to definition") blocks) can be either blocking or non-blocking. Understanding the difference between these two types of assignments is crucial for designing correct and efficient digital circuits.
+
+### Blocking Assignment (`=`)
+
+Blocking assignments use the `=` operator. They are executed sequentially, meaning that each statement must complete before the next one begins. This is similar to how statements in a typical programming language like C or Python are executed.
+
+Example:
+```verilog
+always @ (posedge clk) begin
+    a = b;
+    c = a;
+end
+```
+In this example, `c` will be assigned the value of [`a`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FUsers%2Fratko.pilipovic%2FLibrary%2FCloudStorage%2FOneDrive-UniverzavLjubljani%2FPredmeti%2FDN%2F2024_25%2FExercises%2F02-Sequential.md%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22pos%22%3A%7B%22line%22%3A63%2C%22character%22%3A16%7D%7D%5D%2C%22aede7559-ac13-4446-b47c-27c9fc564fb7%22%5D "Go to definition") after [`a`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FUsers%2Fratko.pilipovic%2FLibrary%2FCloudStorage%2FOneDrive-UniverzavLjubljani%2FPredmeti%2FDN%2F2024_25%2FExercises%2F02-Sequential.md%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22pos%22%3A%7B%22line%22%3A63%2C%22character%22%3A16%7D%7D%5D%2C%22aede7559-ac13-4446-b47c-27c9fc564fb7%22%5D "Go to definition") has been assigned the value of `b`.
+
+### Non-blocking Assignment (`<=`)
+
+Non-blocking assignments use the `<=` operator. They allow for concurrent execution, meaning that all the right-hand side expressions are evaluated at the beginning of the block, and the assignments are made at the end. This is particularly useful in sequential logic where you want to model flip-flop behavior.
+
+Example:
+```verilog
+always @ (posedge clk) begin
+    a <= b;
+    c <= a;
+end
+```
+In this example, both [`a`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FUsers%2Fratko.pilipovic%2FLibrary%2FCloudStorage%2FOneDrive-UniverzavLjubljani%2FPredmeti%2FDN%2F2024_25%2FExercises%2F02-Sequential.md%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22pos%22%3A%7B%22line%22%3A63%2C%22character%22%3A16%7D%7D%5D%2C%22aede7559-ac13-4446-b47c-27c9fc564fb7%22%5D "Go to definition") and `c` are updated concurrently. `c` will be assigned the old value of [`a`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FUsers%2Fratko.pilipovic%2FLibrary%2FCloudStorage%2FOneDrive-UniverzavLjubljani%2FPredmeti%2FDN%2F2024_25%2FExercises%2F02-Sequential.md%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22pos%22%3A%7B%22line%22%3A63%2C%22character%22%3A16%7D%7D%5D%2C%22aede7559-ac13-4446-b47c-27c9fc564fb7%22%5D "Go to definition"), not the value assigned to [`a`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FUsers%2Fratko.pilipovic%2FLibrary%2FCloudStorage%2FOneDrive-UniverzavLjubljani%2FPredmeti%2FDN%2F2024_25%2FExercises%2F02-Sequential.md%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22pos%22%3A%7B%22line%22%3A63%2C%22character%22%3A16%7D%7D%5D%2C%22aede7559-ac13-4446-b47c-27c9fc564fb7%22%5D "Go to definition") in the same block.
+
+### Key Differences
+
+- **Execution Order**: Blocking assignments execute sequentially, while non-blocking assignments execute concurrently.
+- **Usage**: Blocking assignments are typically used in combinational logic, whereas non-blocking assignments are used in sequential logic (e.g., flip-flops).
+- **Simulation Behavior**: Incorrect use of blocking assignments in sequential logic can lead to simulation mismatches and unintended behavior.
+
+
+--->
+</section>
+</section>
+<section id="literature" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="literature"><span class="header-section-number">3.6</span> Literature</h2>
+<ol type="1">
+<li>UC Davis Notes, <a href="https://www.ece.ucdavis.edu/~bbaas/281/notes/Handout14.verilog4.pdf">Verilog: Common mistakes</a></li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/02-alu.html" class="pagination-link" aria-label="Second exercise: Introduction to (System)Verilog">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Second exercise: Introduction to (System)Verilog</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
