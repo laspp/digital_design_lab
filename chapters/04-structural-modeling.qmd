@@ -296,6 +296,17 @@ Duty cycle is definied as ratio of high signal to the period of the signal, e.g.
 ### PWM time diagram
 <img src="../img/Drawings-1.png" alt="PWM_timing" width="600">
 
+### Extension: oscilloscope probe
+
+An LED only tells you the PWM signal's average brightness. To actually see the waveform, duty cycle, and period on an oscilloscope, add two more switches, `SW[7:6]`, that select which of the three RGB PWM signals gets mirrored onto a new single-bit output port, `pwm_out`. Wire `pwm_out` to a Pmod header pin so you can clip a scope probe onto it. For connecting the probe and reading the signal once it's wired up, see the [oscilloscope appendix](appendix-oscilloscope.qmd).
+
+| `SW[7:6]` | `pwm_out` drives |
+|---|---|
+| 00 | `RGB[0]` (red) |
+| 01 | `RGB[1]` (green) |
+| 10 | `RGB[2]` (blue) |
+| 11 | `1'b0` |
+
 ## Implementation guidelines
 
 ### Prescaler
@@ -359,14 +370,15 @@ Behavior:
 
 ### Top level: rgb_controller
 
-The top module has no logic of its own. It only wires the prescaler and three `PWM_controller` instances together, using structural modeling exactly as introduced at the start of this chapter. Its interface is already declared in the starter file:
+The top module has no logic of its own beyond the oscilloscope channel selector described below. It otherwise only wires the prescaler and three `PWM_controller` instances together, using structural modeling exactly as introduced at the start of this chapter. Its interface, extended with the oscilloscope probe from the task above, is already declared in the starter file:
 
 ```systemverilog
 module rgb_controller (
     input logic clock,
     input logic reset,
-    input logic [5:0] SW,
-    output logic [2:0] RGB
+    input logic [7:0] SW,
+    output logic [2:0] RGB,
+    output logic pwm_out
 );
 ```
 
@@ -374,8 +386,9 @@ module rgb_controller (
 |---|---|---|---|
 | `clock` | input | 1 bit | System clock (100 MHz), forwarded to every instance below. |
 | `reset` | input | 1 bit | Synchronous reset, forwarded to every instance below. |
-| `SW` | input | 6 bits | Duty cycle selectors, two bits per color: `SW[1:0]` red, `SW[3:2]` green, `SW[5:4]` blue. |
+| `SW` | input | 8 bits | `SW[5:0]`: duty cycle selectors, two bits per color (`SW[1:0]` red, `SW[3:2]` green, `SW[5:4]` blue). `SW[7:6]`: oscilloscope channel select. |
 | `RGB` | output | 3 bits | One PWM signal per color: `RGB[0]` red, `RGB[1]` green, `RGB[2]` blue. |
+| `pwm_out` | output | 1 bit | Mirrors whichever `RGB` bit `SW[7:6]` selects, for probing with an oscilloscope. |
 
 Structure:
 
@@ -393,6 +406,21 @@ PWM_controller PWM_red (
 ```
 
 `PWM_green` and `PWM_blue` follow the same pattern, connecting `SW[3:2]`/`RGB[1]` and `SW[5:4]`/`RGB[2]` respectively. The draft file's instantiation comments all read "for the red LED". That's a leftover from copy-pasting the first instance, and should read green and blue for the other two.
+
+- On top of the three instances above, drive `pwm_out` from `RGB` with a combinational multiplexer on `SW[7:6]`, using `always_comb` and `case` exactly as introduced for `Mux4to1` in the previous exercise:
+
+```systemverilog
+always_comb begin
+    case (SW[7:6])
+        2'b00: pwm_out = RGB[0];
+        2'b01: pwm_out = RGB[1];
+        2'b10: pwm_out = RGB[2];
+        default: pwm_out = 1'b0;
+    endcase
+end
+```
+
+`SW[7:6] = 2'b11` has no explicit case, so it falls through to `default`, holding `pwm_out` at `1'b0` rather than leaving it undriven. Always keep that `default` branch, even on cases that look fully covered. Leaving it out, as the "Infering latch" mistake earlier in the previous chapter explains, would infer a latch instead of the combinational multiplexer you want.
 
 - Create a testbench to verify the functionality of your PWM module. The testbench is provided in the repository.
 
@@ -526,7 +554,7 @@ Both testbenches call `$dumpfile`/`$dumpvars` up front, so running them through 
 
 ### Pin mapping
 
-Connect the `clock` signal to the system clock (100 MHz), the `reset` signal to the middle button, the six switches `SW[5:0]` to the duty-cycle inputs (two bits per color), and the three `RGB[2:0]` outputs to the RGB LED. Add these to the project's `.xdc` file, following the same `set_property PACKAGE_PIN` / `set_property IOSTANDARD` pattern used in the [tools intro](01-tools-intro.qmd):
+Connect the `clock` signal to the system clock (100 MHz), the `reset` signal to the middle button, switches `SW[5:0]` to the duty-cycle inputs (two bits per color), switches `SW[7:6]` to the oscilloscope channel select, the three `RGB[2:0]` outputs to the RGB LED, and `pwm_out` to a Pmod header pin for the scope probe. Add these to the project's `.xdc` file, following the same `set_property PACKAGE_PIN` / `set_property IOSTANDARD` pattern used in the [tools intro](01-tools-intro.qmd):
 
 ```
 ## Clock signal
@@ -553,6 +581,12 @@ set_property IOSTANDARD LVCMOS33 [get_ports {SW[4]}]
 set_property PACKAGE_PIN T18 [get_ports {SW[5]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {SW[5]}]
 
+set_property PACKAGE_PIN U18 [get_ports {SW[6]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {SW[6]}]
+
+set_property PACKAGE_PIN R13 [get_ports {SW[7]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {SW[7]}]
+
 ## Buttons
 set_property PACKAGE_PIN N17 [get_ports {reset}]
 set_property IOSTANDARD LVCMOS33 [get_ports {reset}]
@@ -566,6 +600,10 @@ set_property IOSTANDARD LVCMOS33 [get_ports {RGB[1]}]
 
 set_property PACKAGE_PIN N15 [get_ports {RGB[0]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {RGB[0]}]
+
+## Pmod Header JA, oscilloscope probe
+set_property PACKAGE_PIN C17 [get_ports {pwm_out}]
+set_property IOSTANDARD LVCMOS33 [get_ports {pwm_out}]
 ```
 
 ## Starter files
