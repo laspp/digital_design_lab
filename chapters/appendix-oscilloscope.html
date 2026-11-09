@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>5&nbsp; Appendix: Using the Oscilloscope and Signal Generator – Digital Design Lab</title>
+<title>6&nbsp; Appendix: Using the Oscilloscope and Signal Generator – Digital Design Lab</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -36,7 +36,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../chapters/04-structural-modeling.html" rel="prev">
+<link href="../chapters/05-counter-sevenseg.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -87,7 +87,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/appendix-oscilloscope.html">Appendix</a></li><li class="breadcrumb-item"><a href="../chapters/appendix-oscilloscope.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Appendix: Using the Oscilloscope and Signal Generator</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/appendix-oscilloscope.html">Appendix</a></li><li class="breadcrumb-item"><a href="../chapters/appendix-oscilloscope.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Appendix: Using the Oscilloscope and Signal Generator</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -151,6 +151,12 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fourth exercise: Structural modeling and Simulation</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-counter-sevenseg.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Fifth exercise: Counter and seven segment display</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -165,7 +171,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/appendix-oscilloscope.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Appendix: Using the Oscilloscope and Signal Generator</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Appendix: Using the Oscilloscope and Signal Generator</span></span></a>
   </div>
 </li>
       </ul>
@@ -180,23 +186,23 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#equipment" id="toc-equipment" class="nav-link active" data-scroll-target="#equipment"><span class="header-section-number">5.1</span> Equipment</a></li>
-  <li><a href="#connecting-probes-to-the-fpga-board" id="toc-connecting-probes-to-the-fpga-board" class="nav-link" data-scroll-target="#connecting-probes-to-the-fpga-board"><span class="header-section-number">5.2</span> Connecting probes to the FPGA board</a></li>
-  <li><a href="#using-the-rigol-dho914-oscilloscope" id="toc-using-the-rigol-dho914-oscilloscope" class="nav-link" data-scroll-target="#using-the-rigol-dho914-oscilloscope"><span class="header-section-number">5.3</span> Using the Rigol DHO914 oscilloscope</a>
+  <li><a href="#equipment" id="toc-equipment" class="nav-link active" data-scroll-target="#equipment"><span class="header-section-number">6.1</span> Equipment</a></li>
+  <li><a href="#connecting-probes-to-the-fpga-board" id="toc-connecting-probes-to-the-fpga-board" class="nav-link" data-scroll-target="#connecting-probes-to-the-fpga-board"><span class="header-section-number">6.2</span> Connecting probes to the FPGA board</a></li>
+  <li><a href="#using-the-rigol-dho914-oscilloscope" id="toc-using-the-rigol-dho914-oscilloscope" class="nav-link" data-scroll-target="#using-the-rigol-dho914-oscilloscope"><span class="header-section-number">6.3</span> Using the Rigol DHO914 oscilloscope</a>
   <ul class="collapse">
-  <li><a href="#adjusting-the-display" id="toc-adjusting-the-display" class="nav-link" data-scroll-target="#adjusting-the-display"><span class="header-section-number">5.3.1</span> Adjusting the display</a></li>
-  <li><a href="#measuring-signal-parameters" id="toc-measuring-signal-parameters" class="nav-link" data-scroll-target="#measuring-signal-parameters"><span class="header-section-number">5.3.2</span> Measuring signal parameters</a></li>
+  <li><a href="#adjusting-the-display" id="toc-adjusting-the-display" class="nav-link" data-scroll-target="#adjusting-the-display"><span class="header-section-number">6.3.1</span> Adjusting the display</a></li>
+  <li><a href="#measuring-signal-parameters" id="toc-measuring-signal-parameters" class="nav-link" data-scroll-target="#measuring-signal-parameters"><span class="header-section-number">6.3.2</span> Measuring signal parameters</a></li>
   </ul></li>
-  <li><a href="#using-the-dg912-pro-signal-generator" id="toc-using-the-dg912-pro-signal-generator" class="nav-link" data-scroll-target="#using-the-dg912-pro-signal-generator"><span class="header-section-number">5.4</span> Using the DG912 Pro signal generator</a></li>
+  <li><a href="#using-the-dg912-pro-signal-generator" id="toc-using-the-dg912-pro-signal-generator" class="nav-link" data-scroll-target="#using-the-dg912-pro-signal-generator"><span class="header-section-number">6.4</span> Using the DG912 Pro signal generator</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/appendix-oscilloscope.html">Appendix</a></li><li class="breadcrumb-item"><a href="../chapters/appendix-oscilloscope.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Appendix: Using the Oscilloscope and Signal Generator</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/appendix-oscilloscope.html">Appendix</a></li><li class="breadcrumb-item"><a href="../chapters/appendix-oscilloscope.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Appendix: Using the Oscilloscope and Signal Generator</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Appendix: Using the Oscilloscope and Signal Generator</span></h1>
+<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Appendix: Using the Oscilloscope and Signal Generator</span></h1>
 </div>
 
 
@@ -214,8 +220,8 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>This appendix covers the two pieces of lab equipment you will connect to the FPGA board whenever an exercise asks you to probe a signal directly, starting with the oscilloscope extension in the <a href="../chapters/04-structural-modeling.html">PWM RGB exercise</a>. The same equipment and the same Pmod probing convention come back again in the SoC verification lab later in the course.</p>
-<section id="equipment" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="equipment"><span class="header-section-number">5.1</span> Equipment</h2>
+<section id="equipment" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="equipment"><span class="header-section-number">6.1</span> Equipment</h2>
 <ul>
 <li><strong>Oscilloscope</strong>: Rigol DHO914, a digital oscilloscope used to capture and analyze electrical signals in real time.</li>
 <li><strong>Signal generator</strong>: Rigol DG912 Pro, used wherever an exercise asks you to compare a signal from the board against a known reference waveform.</li>
@@ -235,8 +241,8 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </section>
-<section id="connecting-probes-to-the-fpga-board" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="connecting-probes-to-the-fpga-board"><span class="header-section-number">5.2</span> Connecting probes to the FPGA board</h2>
+<section id="connecting-probes-to-the-fpga-board" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="connecting-probes-to-the-fpga-board"><span class="header-section-number">6.2</span> Connecting probes to the FPGA board</h2>
 <p>Several exercises route the signal to observe out through the JA Pmod header, using pin 1 as the signal and pin 5 as ground. The pinout is:</p>
 <p><img src="../img/rigol_exe/n4v.png" alt="JA Pmod header pinout" width="400"></p>
 <ul>
@@ -249,13 +255,13 @@ ul.task-list li input[type="checkbox"] {
 <p><img src="../img/rigol_exe/osciloscope_8.jpg" alt="Probe attenuation switch set to 1X" width="400"></p>
 <p>If an exercise also asks you to compare against a reference signal from the signal generator, connect the generator’s output (CH1) to the oscilloscope’s second channel (CH2) with a BNC cable.</p>
 </section>
-<section id="using-the-rigol-dho914-oscilloscope" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="using-the-rigol-dho914-oscilloscope"><span class="header-section-number">5.3</span> Using the Rigol DHO914 oscilloscope</h2>
+<section id="using-the-rigol-dho914-oscilloscope" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="using-the-rigol-dho914-oscilloscope"><span class="header-section-number">6.3</span> Using the Rigol DHO914 oscilloscope</h2>
 <p>When you power on the oscilloscope, the main screen displays the waveforms captured on each channel.</p>
 <p><img src="../img/rigol_exe/osciloscope_1.png" alt="Rigol DHO914 main screen" width="600"></p>
 <p>The yellow box next to the RIGOL logo in the lower left corner shows which channel is currently selected, CH1 in the image above. Press a channel’s button on the front panel to select it. Each channel has its own vertical scale, coupling, and position settings.</p>
-<section id="adjusting-the-display" class="level3" data-number="5.3.1">
-<h3 data-number="5.3.1" class="anchored" data-anchor-id="adjusting-the-display"><span class="header-section-number">5.3.1</span> Adjusting the display</h3>
+<section id="adjusting-the-display" class="level3" data-number="6.3.1">
+<h3 data-number="6.3.1" class="anchored" data-anchor-id="adjusting-the-display"><span class="header-section-number">6.3.1</span> Adjusting the display</h3>
 <p>The waveform grid’s horizontal axis is time, the vertical axis is voltage.</p>
 <p><img src="../img/rigol_exe/osciloscope_6.png" alt="Oscilloscope front panel controls" width="400"></p>
 <ul>
@@ -266,8 +272,8 @@ ul.task-list li input[type="checkbox"] {
 <li>The <strong>Run/Stop</strong> button freezes the current acquisition. Press it again to resume capturing.</li>
 </ul>
 </section>
-<section id="measuring-signal-parameters" class="level3" data-number="5.3.2">
-<h3 data-number="5.3.2" class="anchored" data-anchor-id="measuring-signal-parameters"><span class="header-section-number">5.3.2</span> Measuring signal parameters</h3>
+<section id="measuring-signal-parameters" class="level3" data-number="6.3.2">
+<h3 data-number="6.3.2" class="anchored" data-anchor-id="measuring-signal-parameters"><span class="header-section-number">6.3.2</span> Measuring signal parameters</h3>
 <p>Press the <strong>Measure</strong> button (or the Measure knob, to the left of the Auto button) to open the measurement menu.</p>
 <p><img src="../img/rigol_exe/osciloscope_2.png" alt="Oscilloscope measurement menu" width="400"></p>
 <p>Measurements are grouped into three categories:</p>
@@ -282,8 +288,8 @@ ul.task-list li input[type="checkbox"] {
 <p><img src="../img/rigol_exe/osciloscope_5.png" alt="Live measurement readout" width="200"></p>
 </section>
 </section>
-<section id="using-the-dg912-pro-signal-generator" class="level2" data-number="5.4">
-<h2 data-number="5.4" class="anchored" data-anchor-id="using-the-dg912-pro-signal-generator"><span class="header-section-number">5.4</span> Using the DG912 Pro signal generator</h2>
+<section id="using-the-dg912-pro-signal-generator" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="using-the-dg912-pro-signal-generator"><span class="header-section-number">6.4</span> Using the DG912 Pro signal generator</h2>
 <p>The DG912 Pro outputs sine, square, triangle, pulse, noise, DC, and arbitrary waveforms through two channels, CH1 and CH2. Most exercises only need CH1.</p>
 <p><img src="../img/rigol_exe/signal_gen1.png" alt="DG912 Pro main screen" width="400"></p>
 <p>For each channel you can set:</p>
@@ -706,8 +712,8 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../chapters/04-structural-modeling.html" class="pagination-link" aria-label="Fourth exercise: Structural modeling and Simulation">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fourth exercise: Structural modeling and Simulation</span></span>
+      <a href="../chapters/05-counter-sevenseg.html" class="pagination-link" aria-label="Fifth exercise: Counter and seven segment display">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Fifth exercise: Counter and seven segment display</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
