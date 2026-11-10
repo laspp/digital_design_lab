@@ -29,8 +29,9 @@ endmodule
 module rgb_controller (
     input logic clock,
     input logic reset,
-    input logic [5:0] SW,
-    output logic [2:0] RGB 
+    input logic [7:0] SW,
+    output logic [2:0] RGB,
+    output logic pwm_out
 );
 
 // define parameters
@@ -41,17 +42,21 @@ localparam LIMIT = 3125;
 logic [PRESCALER_WIDTH-1:0] limit_value;
 assign limit_value = LIMIT;
 
-// instantiate the prescaler 
+// instantiate the prescaler
 // produces a 32 kHz clock
 
 
 // instantiate the PWM controller for the red LED
 
 
-// instantiate the PWM controller for the red LED
+// instantiate the PWM controller for the green LED
 
 
-// instantiate the PWM controller for the red LED
+// instantiate the PWM controller for the blue LED
+
+
+// oscilloscope probe: mirror the RGB channel selected by SW[7:6] onto pwm_out
+// employ always_comb and case statement, do not forget the default branch
 
 
 endmodule

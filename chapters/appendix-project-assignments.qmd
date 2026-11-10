@@ -1,0 +1,145 @@
+# Project Assignments: HIPV SoC {#sec-project-assignments}
+
+This appendix lists the project assignments for the semester.
+
+::: {.callout-important}
+Project assignments substitute oral exams. If you do not complete a project assignment, you will need to take an oral exam to pass the course.
+:::
+
+Every assignment has the same shape. You design a custom peripheral from scratch, attach it to the HIPV SoC crossbar as a new OBI slave, write a driver for it, and demonstrate it on the FPGA. The peripheral is yours to design. The SoC, the core, the crossbar and the build flow are given.
+
+Common requirements for all assignments:
+
+- The target board is the Digilent Nexys A7-100T.
+- The RTL is written in SystemVerilog and follows `NamingConvention.md`.
+- Verification uses cocotb and Verilator.
+- The peripheral must be your own RTL. Xilinx IP cores and third-party HDL are not allowed.
+- Groups have up to 2 students.
+
+## Assignment 1: SPI master controller
+
+Implement an SPI master peripheral and integrate it into the HIPV SoC. The peripheral should have the following functionality:
+
+- A configurable clock divider, so the SCLK frequency is set from software.
+- All four SPI modes (CPOL/CPHA), selectable via MMIO.
+- A configurable transfer width (8 and 16 bits at minimum).
+- At least two independent chip-select lines.
+- Transmit and receive shift registers exposed as MMIO, with a busy/done status bit.
+- A unit testbench that includes a behavioural SPI slave model and verifies all four modes against it.
+- A driver for the core and an application that reads the onboard ADXL362 accelerometer. The application reads the device ID, then streams X/Y/Z acceleration over the UART.
+
+## Assignment 2: I²C master controller
+
+Implement an I²C master peripheral and integrate it into the HIPV SoC. The peripheral should have the following functionality:
+
+- Standard mode (100 kHz) and fast mode (400 kHz), selected by a clock divider.
+- Correct generation of START, repeated START and STOP conditions.
+- 7-bit addressing, read and write transfers, and ACK/NACK handling in both directions.
+- Open-drain behaviour on SCL and SDA. The master drives low, releases high, and never drives high. Internal modules use separate `in`/`out`/`oe` signals. The tri-state buffers belong in `top.sv`.
+- Clock stretching. The master must tolerate a slave holding SCL low.
+- A unit testbench that includes a behavioural I²C slave model and covers a NACK case and a clock-stretch case.
+- A driver for the core and an application that reads the onboard ADT7420 temperature sensor and prints degrees Celsius over the UART.
+
+## Assignment 3: Keyboard controller
+
+Implement a keyboard controller and integrate it into the HIPV SoC. The peripheral should have the following functionality:
+
+- A PS/2 protocol receiver for 11-bit frames, with data sampled on the falling edge of the keyboard clock, and parity and framing checks.
+- Glitch filtering on both PS/2 lines. The signals come off a connector and are not clean.
+- Scan-code to ASCII translation in hardware, including shift and caps-lock handling.
+- A receive FIFO at least 8 entries deep, so keystrokes are not lost while the CPU is busy, with full/empty/overflow status.
+- Both the translated character and the raw scan code readable via MMIO.
+- A driver for the core and an interactive application. The application echoes keystrokes over the UART and implements a small command interpreter (`led on`, `temp`, `help`).
+
+## Assignment 4: Audio subsystem
+
+Implement an audio subsystem and integrate it into the HIPV SoC. The subsystem should have the following functionality:
+
+- An audio buffer in block RAM, large enough to hold one short recording, loaded by the CPU through a memory-mapped window.
+- A playback engine that walks the buffer in hardware at a programmable sample rate. The CPU loads the buffer and starts playback. It does not feed samples one by one.
+- A PWM (or sigma-delta) output stage driving the mono audio jack, with a programmable output level.
+- Start/stop/loop control and a sample-position counter readable via MMIO.
+- A smoothing filter, implemented as a simple FIR low-pass on the output stream, with coefficients settable via MMIO and a bypass bit.
+- A unit testbench that plays a known waveform out of the buffer and checks the output stream against a golden model computed in the testbench.
+- A driver for the core and an application that loads a waveform generated in C and plays it back. The slide switches select the sample rate and the filter bypass.
+
+## Assignment 5: SD card controller
+
+Implement an SD card controller and integrate it into the HIPV SoC. The peripheral should have the following functionality:
+
+- The SPI-mode SD protocol, with the full initialisation sequence (CMD0, CMD8, ACMD41, CMD58), including the switch from 400 kHz to the fast clock.
+- Single-block read (CMD17) and single-block write (CMD24) of 512-byte blocks.
+- CRC7 for commands and CRC16 for data blocks, computed in hardware.
+- A 512-byte block buffer inside the peripheral, readable and writable by the CPU as MMIO words. A block transfer then costs one command rather than 512 register pokes.
+- Timeout detection with a reported error code, so a missing or faulty card cannot hang the CPU.
+- A unit testbench that includes a behavioural SD card model. The model responds to the initialisation sequence and serves block reads. The testbench covers a CRC error and a timeout.
+- A driver for the core and an application that reads the master boot record, prints the partition table over the UART, and reads a named file from a FAT16/32 filesystem. A read-only FAT parser in C is part of the assignment.
+
+## Assignment 6: Quad-SPI flash controller
+
+Implement a Quad-SPI flash controller and integrate it into the HIPV SoC. The peripheral should have the following functionality:
+
+- Single-SPI command mode for the housekeeping commands: read JEDEC ID (0x9F), read status, write enable, sector erase and page program.
+- Quad read mode (0xEB or 0x6B) with the correct number of dummy cycles. This is the heart of the assignment.
+- Page programming with the busy-polling loop in hardware, so software issues one write command rather than babysitting the flash.
+- Sector erase with progress status.
+- A unit testbench that includes a behavioural flash model with a programmable dummy cycle count, and proves the controller reads correctly at two different settings.
+- A driver for the core and an application that writes a data block, survives a power cycle, and reads the block back intact.
+
+::: {.callout-warning}
+The FPGA configuration bitstream lives in the same flash. Erase only sectors well above the bitstream.
+:::
+
+## Assignment 7: DMA engine
+
+Implement a DMA engine and integrate it into the HIPV SoC. The engine should have the following functionality:
+
+- An OBI slave port for its registers and an OBI master port for moving data. This makes it the third master on the crossbar, so `NUM_MASTERS` and the arbiter instantiation change as well.
+- Memory-to-memory block copy with programmable source, destination and length.
+- Programmable transfer width (byte, half-word, word) and address increment, including a fixed-destination mode so a block can be pushed to a peripheral register.
+- A completion status bit and a transferred-byte count, so software can poll progress.
+- Graceful handling of lost arbitration. The engine must stall, not drop transactions.
+- A unit testbench that verifies master-port protocol compliance (no address change before grant, exactly one response consumed per request). The testbench also runs the engine against the crossbar with the CPU ports kept busy, so arbitration conflicts actually occur.
+- A driver for the core and an application that copies a block with the DMA and with a C loop, verifies that the two agree, and times both with the SoC timer.
+
+::: {.callout-note}
+This is the only assignment that modifies the interconnect. Read `docs/INTERCONNECT.md` carefully, in particular the section on pending-slave response routing.
+:::
+
+## Assignment 8: CRC and hash accelerator
+
+Implement a data-integrity accelerator and integrate it into the HIPV SoC. The peripheral should have the following functionality:
+
+- CRC-32 (the Ethernet/zlib polynomial) and CRC-16-CCITT, selectable via MMIO.
+- A configurable polynomial, initial value, input and output bit reflection, and final XOR, so the core can be made to match any standard CRC variant.
+- Byte, half-word and word feed modes, giving the same result regardless of how a given byte stream is fed.
+- A multi-bit-per-cycle implementation that processes at least 8 bits per clock. Compare its area and timing against a 1-bit-per-clock version.
+- A unit testbench that checks against Python's `zlib.crc32` over random data of every length from 0 to 64 bytes, and against published check values (`"123456789"` → `0xCBF43926` for CRC-32).
+- A driver for the core and an application that computes the CRC of a block of memory in hardware and in software, checks that they agree, and times both. Report the cost in LUTs from the synthesis log.
+
+## Assignment 9: Trace buffer
+
+Implement an on-chip trace buffer, a miniature logic analyser, and integrate it into the HIPV SoC. The peripheral should have the following functionality:
+
+- A capture buffer in block RAM that records a configurable set of signals once per clock cycle, readable by the CPU through a memory-mapped window.
+- A trigger unit. Capture starts when the observed signals match a programmable value/mask pair. A programmable number of pre-trigger samples is kept, so you can see what happened before the event.
+- A sample-rate divider, for capturing slow activity over a long window.
+- Run/stop/armed status and a sample counter.
+- Probe inputs wired at the SoC top level to something worth watching, such as the IFU's `ObiReqF`/`ObiGntF`/`ObiRvalidF`/`ValidF`/`PCSrcE` or the crossbar's arbitration grants.
+- A unit testbench that verifies the trigger logic, including the pre-trigger window, and checks that the buffer wraps correctly.
+- A driver for the core and an application that captures the fetch handshake around a taken branch and dumps the buffer over the UART. A host script that converts the dump into a VCD file for GTKWave is part of the deliverable. The captured waveform must match the Verilator simulation of the same program.
+
+## Assignment 10: Your project idea
+
+Propose your own peripheral or extension for the HIPV SoC. The instructor must approve the proposal before you start. The proposal must state what the peripheral does, its register map, how you will verify it, and what the hardware demo will be.
+
+Ideas that would be accepted:
+
+- An upgraded UART with transmit and receive FIFOs, a configurable frame format (data bits, parity, stop bits), RTS/CTS flow control, and a break/error detector. This is a good choice if you want to work with existing code rather than a blank file.
+- An Ethernet MAC for the onboard PHY, with a loopback demo.
+- A stepper-motor or BLDC commutation controller on a Pmod.
+- A quadrature-encoder interface with velocity estimation.
+- An XADC interface that reads the internal temperature and voltage sensors.
+- A true random number generator based on ring-oscillator jitter, with a statistical test suite as the verification.
+- A fixed-point vector/dot-product accelerator, with a benchmark against C.
+- An interrupt controller. This is a natural fit, but the core has no trap support yet, so it becomes a core assignment as well as a peripheral one. Discuss it with the instructor first.
