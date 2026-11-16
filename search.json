@@ -399,7 +399,7 @@
     "href": "chapters/06-uart.html#starter-files",
     "title": "6  Sixth exercise: UART transmitter",
     "section": "6.5 Starter files",
-    "text": "6.5 Starter files\n\nflopenr.sv\nmux2.sv\nbaudgen.sv\nshiftreg.sv\nuarttxctrl.sv\nuarttx.sv\nmsgrom.sv\nhellotxctrl.sv\nbtnpulse.sv\ntop.sv\nuarttx_tb.sv\ntop_tb.sv",
+    "text": "6.5 Starter files\n\nflopenr.sv\nmux2.sv\nbaudgen.sv\nshiftreg.sv\nuarttxctrl.sv\nuarttx.sv\nmsgrom.sv\nhellotxctrl.sv\ntop.sv\nuarttx_tb.sv\ntop_tb.sv",
     "crumbs": [
       "Lab Exercises",
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>Sixth exercise: UART transmitter</span>"
