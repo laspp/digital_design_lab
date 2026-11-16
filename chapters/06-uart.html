@@ -839,9 +839,8 @@ set_property IOSTANDARD LVCMOS33 [get_ports {led[1]}]</code></pre>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> program</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>To see the message you need a <strong>serial terminal</strong> on your computer, set to 115200 baud, 8N1. The FT2232 chip shows up as two serial ports. The first one is the JTAG programmer, and the UART is the second one.</p>
 <ul>
-<li><strong>Linux.</strong> The UART is usually <code>/dev/ttyUSB1</code>. Open it with <code>screen /dev/ttyUSB1 115200</code> or <code>picocom -b 115200 /dev/ttyUSB1</code>. If you get a permission error, add yourself to the <code>dialout</code> group (or <code>uucp</code> on Arch) and log in again.</li>
+<li><strong>Linux &amp; WSL.</strong> The UART is usually <code>/dev/ttyUSB1</code>. Open it with <code>screen /dev/ttyUSB1 115200</code> or <code>picocom -b 115200 /dev/ttyUSB1</code>. If you get a permission error, add yourself to the <code>dialout</code> group (or <code>uucp</code> on Arch) and log in again.</li>
 <li><strong>macOS.</strong> Run <code>ls /dev/tty.usbserial-*</code>. You will see two names that differ only in the last character. Pick the second one (ending in <code>1</code> or <code>B</code>) and open it with <code>screen /dev/tty.usbserial-XXXXXXXX1 115200</code>.</li>
-<li><strong>Windows.</strong> Look in Device Manager under <em>Ports (COM &amp; LPT)</em> for the higher-numbered of the two USB Serial Ports. Open it in PuTTY with connection type <em>Serial</em> and speed 115200.</li>
 </ul>
 <p>To quit <code>screen</code>, press <code>Ctrl-A</code>, then <code>K</code>, then <code>Y</code>.</p>
 <p>Press BTNC. The terminal should print <code>Hello World!</code>, and every further press prints it again on a new line. The whole message takes only 1.2 ms, so LED0 and LED1 flash too briefly to see. They are still useful: an LED that stays lit means an FSM is stuck. If something is wrong, use these hints:</p>
