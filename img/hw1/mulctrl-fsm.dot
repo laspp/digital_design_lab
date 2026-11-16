@@ -1,0 +1,16 @@
+digraph mulctrl {
+  rankdir=LR; bgcolor="transparent";
+  node [shape=circle, fontname="Helvetica", fontsize=11, width=1.15, style=filled, fillcolor="#e8f0fe", color="#1f2933"];
+  edge [fontname="Helvetica", fontsize=10, color="#1f2933"];
+  reset [shape=point, width=0.12, fillcolor="#1f2933"];
+  IDLE [label="IDLE\nBusy=0\nDone=0"];
+  BUSY [label="BUSY\nBusy=1\nDone=0\naccumulate"];
+  DONE [label="DONE\nBusy=1\nDone=1"];
+  reset -> IDLE [label="reset"];
+  IDLE -> IDLE [label="~Start"];
+  IDLE -> BUSY [label="Start\n(capture A, B, Funct3;\nStep ← 0)"];
+  BUSY -> BUSY [label="Step ≠ 3\nStep ← Step + 1"];
+  BUSY -> DONE [label="Step = 3"];
+  DONE -> DONE [label="~Ack"];
+  DONE:s -> IDLE:s [label="Ack", constraint=false];
+}

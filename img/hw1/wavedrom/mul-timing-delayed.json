@@ -1,0 +1,9 @@
+{ "head": {"tock": 0},
+  "signal": [
+  {"name": "clk",    "wave": "p........"},
+  {"name": "Start",  "wave": "100000000"},
+  {"name": "Busy",   "wave": "011111110"},
+  {"name": "Done",   "wave": "000001110"},
+  {"name": "Result", "wave": "xxxxx=..x", "data": ["A·B"]},
+  {"name": "Ack",    "wave": "000000010"}
+]}

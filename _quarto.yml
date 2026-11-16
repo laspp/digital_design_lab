@@ -19,6 +19,9 @@ book:
       #  - chapters/07-mcs.qmd
       #  - chapters/08-fpro-7seg.qmd
       #  - chapters/09-soc-verification.qmd
+    - part: "Homework"
+      chapters:
+        - chapters/hw1.qmd
     - part: "Appendix"
       chapters:
         - chapters/appendix-oscilloscope.qmd

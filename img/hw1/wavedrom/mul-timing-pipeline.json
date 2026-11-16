@@ -1,0 +1,14 @@
+{ "head": {"tock": -1},
+  "signal": [
+  {"name": "clk",        "wave": "p........"},
+  {"name": "Decode",     "wave": "==.....==", "data": ["mul","addi","sw","–"]},
+  {"name": "Execute",    "wave": "==.....==", "data": ["–","mul","addi","sw"]},
+  {"name": "Memory",     "wave": "=......==", "data": ["–","mul","addi"]},
+  {"name": "ReadyM",     "wave": "1........"},
+  {"name": "Start",      "wave": "010000000"},
+  {"name": "Busy",       "wave": "001111100"},
+  {"name": "Step",       "wave": "xx====xxx", "data": ["0","1","2","3"]},
+  {"name": "Done = Ack", "wave": "000000100"},
+  {"name": "ValidE",     "wave": "000000111"},
+  {"name": "ReadyE",     "wave": "100000111"}
+]}

@@ -1,0 +1,38 @@
+digraph mul {
+  rankdir=LR; bgcolor="transparent"; nodesep=0.35; ranksep=0.5;
+  node [shape=box, fontname="Helvetica", fontsize=11, style="filled,rounded", fillcolor="#e8f0fe", color="#1f2933"];
+  edge [fontname="Helvetica", fontsize=9, color="#1f2933"];
+  A [label="A\n(32)", shape=plaintext, style=""];
+  B [label="B\n(32)", shape=plaintext, style=""];
+  F3 [label="Funct3", shape=plaintext, style=""];
+  Res [label="Result\n(32)", shape=plaintext, style=""];
+
+  subgraph cluster_cap { label="captured in the Start cycle"; fontname="Helvetica"; fontsize=10; style=dashed; color="#9aa5b1";
+    AReg [label="AReg\n32-bit reg"];
+    BReg [label="BReg\n32-bit reg"];
+    HiReg [label="HighWord\n1-bit reg\n(Funct3 ≠ 000)"];
+  }
+  corr [label="AccInit\n(sign correction for\nmulh, mulhsu)", fillcolor="#fff4d6"];
+  amux [label="A half\nStep[1] ? AH : AL", shape=trapezium, fillcolor="#f0f4f8"];
+  bmux [label="B half\nStep[0] ? BH : BL", shape=trapezium, fillcolor="#f0f4f8"];
+  mult [label="16 × 16\nunsigned multiplier\n(the only  * operator)", fillcolor="#d9ead3", penwidth=2];
+  shift [label="shift left\n0 / 16 / 32\n(by Step)"];
+  add [label="64-bit adder\nAcc + PP", shape=circle, width=0.9];
+  accmux [label="Start ?\nAccInit : Acc + PP", shape=trapezium, fillcolor="#f0f4f8"];
+  acc [label="Acc\n64-bit accumulator\n(enabled by Start | AccEn)"];
+  resmux [label="HighWord ?\nAcc[63:32] : Acc[31:0]", shape=trapezium, fillcolor="#f0f4f8"];
+  ctrl [label="mulctrl\nStart, Ack → Busy, Done,\nAccEn, Step", fillcolor="#fde2e2"];
+
+  A -> AReg; B -> BReg; F3 -> HiReg;
+  A -> corr; B -> corr; F3 -> corr;
+  AReg -> amux; BReg -> bmux;
+  amux -> mult [label="16"]; bmux -> mult [label="16"];
+  mult -> shift [label="32"]; shift -> add [label="64"];
+  acc -> add [label="64"]; add -> accmux; corr -> accmux [label="64"];
+  accmux -> acc [label="64"];
+  acc -> resmux; HiReg -> resmux;
+  resmux -> Res;
+  ctrl -> amux [style=dashed, label="Step"]; ctrl -> bmux [style=dashed];
+  ctrl -> shift [style=dashed];
+  ctrl -> acc [style=dashed, label="enable"];
+}
