@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>6&nbsp; Sixth exercise: UART transmitter – Digital Design Lab</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/appendix-oscilloscope.html" rel="next">
+<link href="../chapters/05-counter-sevenseg.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-d3f7f8e73c8d287b30bcf59c2b563615.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-tools-intro.html">Lab Exercises</a></li><li class="breadcrumb-item"><a href="../chapters/06-uart.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sixth exercise: UART transmitter</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Digital Design Lab</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Lab Exercises</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-tools-intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">First exercise: Tools and the Digital Design Cycle</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-alu.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Second exercise: Introduction to (System)Verilog</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-sequential.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Third exercise: Designing sequential circuits with SystemVerilog</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-structural-modeling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fourth exercise: Structural modeling and Simulation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-counter-sevenseg.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Fifth exercise: Counter and seven segment display</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-uart.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sixth exercise: UART transmitter</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendix</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/appendix-oscilloscope.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Appendix: Using the Oscilloscope and Signal Generator</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#uart-basics" id="toc-uart-basics" class="nav-link active" data-scroll-target="#uart-basics"><span class="header-section-number">6.1</span> UART basics</a>
+  <ul class="collapse">
+  <li><a href="#the-uart-frame" id="toc-the-uart-frame" class="nav-link" data-scroll-target="#the-uart-frame"><span class="header-section-number">6.1.1</span> The UART frame</a></li>
+  <li><a href="#baud-rate-and-clock-cycles" id="toc-baud-rate-and-clock-cycles" class="nav-link" data-scroll-target="#baud-rate-and-clock-cycles"><span class="header-section-number">6.1.2</span> Baud rate and clock cycles</a></li>
+  <li><a href="#how-a-receiver-reads-the-frame" id="toc-how-a-receiver-reads-the-frame" class="nav-link" data-scroll-target="#how-a-receiver-reads-the-frame"><span class="header-section-number">6.1.3</span> How a receiver reads the frame</a></li>
+  </ul></li>
+  <li><a href="#uart-on-the-nexys-a7" id="toc-uart-on-the-nexys-a7" class="nav-link" data-scroll-target="#uart-on-the-nexys-a7"><span class="header-section-number">6.2</span> UART on the Nexys A7</a></li>
+  <li><a href="#assignment" id="toc-assignment" class="nav-link" data-scroll-target="#assignment"><span class="header-section-number">6.3</span> Assignment</a>
+  <ul class="collapse">
+  <li><a href="#step-1-create-the-project" id="toc-step-1-create-the-project" class="nav-link" data-scroll-target="#step-1-create-the-project"><span class="header-section-number">6.3.1</span> Step 1: Create the project</a></li>
+  <li><a href="#step-2-baudgen" id="toc-step-2-baudgen" class="nav-link" data-scroll-target="#step-2-baudgen"><span class="header-section-number">6.3.2</span> Step 2: <code>baudgen</code></a></li>
+  <li><a href="#step-3-shiftreg" id="toc-step-3-shiftreg" class="nav-link" data-scroll-target="#step-3-shiftreg"><span class="header-section-number">6.3.3</span> Step 3: <code>shiftreg</code></a></li>
+  <li><a href="#step-4-uarttxctrl" id="toc-step-4-uarttxctrl" class="nav-link" data-scroll-target="#step-4-uarttxctrl"><span class="header-section-number">6.3.4</span> Step 4: <code>uarttxctrl</code></a></li>
+  <li><a href="#step-5-uarttx" id="toc-step-5-uarttx" class="nav-link" data-scroll-target="#step-5-uarttx"><span class="header-section-number">6.3.5</span> Step 5: <code>uarttx</code></a></li>
+  <li><a href="#step-6-simulate-the-transmitter" id="toc-step-6-simulate-the-transmitter" class="nav-link" data-scroll-target="#step-6-simulate-the-transmitter"><span class="header-section-number">6.3.6</span> Step 6: Simulate the transmitter</a></li>
+  <li><a href="#step-7-msgrom" id="toc-step-7-msgrom" class="nav-link" data-scroll-target="#step-7-msgrom"><span class="header-section-number">6.3.7</span> Step 7: <code>msgrom</code></a></li>
+  <li><a href="#step-8-hellotxctrl" id="toc-step-8-hellotxctrl" class="nav-link" data-scroll-target="#step-8-hellotxctrl"><span class="header-section-number">6.3.8</span> Step 8: <code>hellotxctrl</code></a></li>
+  <li><a href="#step-9-top" id="toc-step-9-top" class="nav-link" data-scroll-target="#step-9-top"><span class="header-section-number">6.3.9</span> Step 9: <code>top</code></a></li>
+  <li><a href="#step-10-simulate-the-system" id="toc-step-10-simulate-the-system" class="nav-link" data-scroll-target="#step-10-simulate-the-system"><span class="header-section-number">6.3.10</span> Step 10: Simulate the system</a></li>
+  <li><a href="#step-11-pin-constraints" id="toc-step-11-pin-constraints" class="nav-link" data-scroll-target="#step-11-pin-constraints"><span class="header-section-number">6.3.11</span> Step 11: Pin constraints</a></li>
+  <li><a href="#step-12-build-program-and-open-a-terminal" id="toc-step-12-build-program-and-open-a-terminal" class="nav-link" data-scroll-target="#step-12-build-program-and-open-a-terminal"><span class="header-section-number">6.3.12</span> Step 12: Build, program and open a terminal</a></li>
+  <li><a href="#step-13-look-at-the-frame-on-the-oscilloscope" id="toc-step-13-look-at-the-frame-on-the-oscilloscope" class="nav-link" data-scroll-target="#step-13-look-at-the-frame-on-the-oscilloscope"><span class="header-section-number">6.3.13</span> Step 13: Look at the frame on the oscilloscope</a></li>
+  </ul></li>
+  <li><a href="#looking-ahead" id="toc-looking-ahead" class="nav-link" data-scroll-target="#looking-ahead"><span class="header-section-number">6.4</span> Looking ahead</a></li>
+  <li><a href="#starter-files" id="toc-starter-files" class="nav-link" data-scroll-target="#starter-files"><span class="header-section-number">6.5</span> Starter files</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-tools-intro.html">Lab Exercises</a></li><li class="breadcrumb-item"><a href="../chapters/06-uart.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sixth exercise: UART transmitter</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sixth exercise: UART transmitter</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>So far the board could only talk to you through LEDs and the seven-segment display. In this exercise you will give it a voice. You will build a UART transmitter and use it to send the text <code>Hello World!</code> from the FPGA to a terminal on your computer, over the same USB cable you use to program the board.</p>
+<p>UART is the simplest serial interface there is, and it is everywhere: microcontroller debug consoles, GPS modules, Bluetooth modules, and the console of the HIPV SoC you will meet later in the course. The HIPV SoC prints its messages through a UART peripheral that contains the same building blocks you write here. This exercise is also the first one written to the HIPV coding convention, which the project assignments also require.</p>
+<section id="uart-basics" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="uart-basics"><span class="header-section-number">6.1</span> UART basics</h2>
+<p>UART stands for <em>Universal Asynchronous Receiver-Transmitter</em>. “Asynchronous” means there is no clock wire between the two devices. The transmitter sends bits on a single wire, called TX, and the receiver has to work out on its own when each bit starts and ends. This only works because both sides agree in advance on two things:</p>
+<ul>
+<li><strong>The baud rate</strong>, the number of bits per second. Common values are 9600, 19200 and 115200 baud. Every bit lasts exactly one bit period, 1 / baud rate.</li>
+<li><strong>The frame format</strong>, which describes how each byte is wrapped on the wire.</li>
+</ul>
+<section id="the-uart-frame" class="level3" data-number="6.1.1">
+<h3 data-number="6.1.1" class="anchored" data-anchor-id="the-uart-frame"><span class="header-section-number">6.1.1</span> The UART frame</h3>
+<p>When nothing is being sent, the line sits at logic 1. This is called the <strong>idle</strong> state. Each byte is then sent as one frame:</p>
+<ol type="1">
+<li><strong>Start bit.</strong> The transmitter pulls the line to 0 for one bit period. The falling edge from idle to 0 tells the receiver that a frame is starting.</li>
+<li><strong>Data bits.</strong> Usually 8 bits, sometimes 5 to 9. The <strong>least significant bit goes first</strong>.</li>
+<li><strong>Parity bit (optional).</strong> An extra bit for simple error detection. With even parity it makes the number of 1s in the data and parity bits even.</li>
+<li><strong>Stop bit.</strong> The line returns to 1 for at least one bit period (sometimes 1.5 or 2). This guarantees that the next start bit has a falling edge.</li>
+</ol>
+<p>The frame format is written as a short code: data bits, parity (N for none, E for even, O for odd) and stop bits. The most common format, and the one used in this exercise, is <strong>8N1</strong>: 8 data bits, no parity, 1 stop bit. An 8N1 frame is 10 bits long, so a byte takes 10 bit periods.</p>
+<div id="fig-uart-frame" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-uart-frame-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../img/uart_frame_waveform.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-uart-frame-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.1: One 8N1 frame carrying the letter H (0x48 = 0100 1000) at 115200 baud. The data bits are sent LSB first, so they appear on the wire in the order 0, 0, 0, 1, 0, 0, 1, 0.
+</figcaption>
+</figure>
+</div>
+<p><a href="#fig-uart-frame" class="quarto-xref">Figure&nbsp;<span>6.1</span></a> shows the frame for the letter <code>H</code>. Its ASCII code is 0x48, or <code>0100 1000</code> in binary. Because the LSB goes first, bit D0 on the wire is the rightmost bit of the binary number. Reading the wire from left to right gives the binary number backwards.</p>
+</section>
+<section id="baud-rate-and-clock-cycles" class="level3" data-number="6.1.2">
+<h3 data-number="6.1.2" class="anchored" data-anchor-id="baud-rate-and-clock-cycles"><span class="header-section-number">6.1.2</span> Baud rate and clock cycles</h3>
+<p>Inside the FPGA, everything is measured in clock cycles. The Nexys A7 clock runs at 100 MHz, so the number of clock cycles in one bit period is</p>
+<pre><code>LIMIT = CLK_FREQ / BAUD_RATE = 100 000 000 / 115 200 = 868.06  -&gt;  868</code></pre>
+<p>The division does not come out even, so the transmitter really runs at 100 000 000 / 868 = 115 207 baud. That is only 0.006 % fast. A UART receiver samples each bit in its middle (see the next section), so the two sides can differ by a few percent before a bit is read wrongly. With a slow baud rate and a fast clock, rounding errors like this one never matter.</p>
+</section>
+<section id="how-a-receiver-reads-the-frame" class="level3" data-number="6.1.3">
+<h3 data-number="6.1.3" class="anchored" data-anchor-id="how-a-receiver-reads-the-frame"><span class="header-section-number">6.1.3</span> How a receiver reads the frame</h3>
+<p>The receiver waits for the falling edge of the start bit. It then waits half a bit period, which brings it to the middle of the start bit, and checks that the line is still 0. After that it waits one full bit period at a time and samples the line in the middle of each data bit, and finally checks that the stop bit is 1. The testbenches in this exercise decode the TX line in exactly this way.</p>
+<p>Sampling in the middle of the bit is what makes the scheme robust. Small differences between the transmitter and receiver clocks shift the sampling point a little on every bit, but it stays inside the bit as long as the total drift over a frame is less than half a bit.</p>
+</section>
+</section>
+<section id="uart-on-the-nexys-a7" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="uart-on-the-nexys-a7"><span class="header-section-number">6.2</span> UART on the Nexys A7</h2>
+<p>You do not need a separate cable for the UART. The Nexys A7 has an FTDI FT2232 chip behind its micro-USB port. One half of the chip is the JTAG programmer that <code>anvil program</code> uses. The other half is a USB-UART bridge, which your computer sees as a serial port.</p>
+<div id="fig-uart-nexys" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-uart-nexys-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../img/uart_nexysA7.png" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-uart-nexys-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.2: USB-UART bridge on the Nexys A7. Signal names are from the FT2232’s point of view.
+</figcaption>
+</figure>
+</div>
+<p>Be careful with the signal names in <a href="#fig-uart-nexys" class="quarto-xref">Figure&nbsp;<span>6.2</span></a> and in the board’s master <code>.xdc</code> file. They are named from the bridge’s point of view, not the FPGA’s:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Pin</th>
+<th>Name in the <code>.xdc</code></th>
+<th>Direction</th>
+<th>Use in this exercise</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>D4</td>
+<td><code>UART_RXD_OUT</code></td>
+<td>FPGA → computer</td>
+<td>our <code>uart_tx</code></td>
+</tr>
+<tr class="even">
+<td>C4</td>
+<td><code>UART_TXD_IN</code></td>
+<td>computer → FPGA</td>
+<td>not used (receiving)</td>
+</tr>
+<tr class="odd">
+<td>D3, E5</td>
+<td><code>UART_CTS</code>, <code>UART_RTS</code></td>
+<td>flow control</td>
+<td>not used</td>
+</tr>
+</tbody>
+</table>
+<p>So the FPGA’s transmit pin is the one Digilent calls <em>RXD</em>, because it is the bridge’s receive input. This is easy to get backwards, so double-check it when you write the constraints.</p>
+</section>
+<section id="assignment" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="assignment"><span class="header-section-number">6.3</span> Assignment</h2>
+<p>You will build the design in two parts:</p>
+<ul>
+<li><strong>Part A</strong>, the UART transmitter <code>uarttx</code>. It takes one byte and a start pulse, and sends the byte as an 8N1 frame at 115200 baud.</li>
+<li><strong>Part B</strong>, a message sender. Pressing the centre button BTNC sends <code>Hello World!</code> followed by a new line to the terminal.</li>
+</ul>
+<div id="fig-hello-top" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-hello-top-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../img/hello_top_block.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-hello-top-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.3: Top-level design. A press of BTNC starts hellotxctrl, which feeds the message from msgrom into uarttx one character at a time.
+</figcaption>
+</figure>
+</div>
+<p><a href="#fig-hello-top" class="quarto-xref">Figure&nbsp;<span>6.3</span></a> shows the complete design. <code>btnpulse</code> turns a press of BTNC into a single clock-cycle pulse. <code>hellotxctrl</code> then steps an address through the message stored in <code>msgrom</code>. For each character it starts <code>uarttx</code> and waits until the frame is finished before moving on. The serial line goes to the USB-UART bridge and is also copied to Pmod pin JA1, so you can look at it with the oscilloscope. Two LEDs show when a message and when a single character are being sent.</p>
+<p>The starter files are listed below. Files marked <em>given</em> are complete. Do not change them. The others contain the module interface and <code>TODO</code> comments that describe what to write.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>File</th>
+<th>Status</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../code/06_lab/flopenr.sv">flopenr.sv</a></td>
+<td>given</td>
+<td>HIPV generic flip-flop with reset and enable</td>
+</tr>
+<tr class="even">
+<td><a href="../code/06_lab/mux2.sv">mux2.sv</a></td>
+<td>given</td>
+<td>HIPV generic 2-to-1 multiplexer</td>
+</tr>
+<tr class="odd">
+<td><a href="../code/06_lab/baudgen.sv">baudgen.sv</a></td>
+<td>complete it</td>
+<td>baud rate generator (Step 2)</td>
+</tr>
+<tr class="even">
+<td><a href="../code/06_lab/shiftreg.sv">shiftreg.sv</a></td>
+<td>complete it</td>
+<td>parallel-in, serial-out shift register (Step 3)</td>
+</tr>
+<tr class="odd">
+<td><a href="../code/06_lab/uarttxctrl.sv">uarttxctrl.sv</a></td>
+<td>complete it</td>
+<td>transmitter control FSM (Step 4)</td>
+</tr>
+<tr class="even">
+<td><a href="../code/06_lab/uarttx.sv">uarttx.sv</a></td>
+<td>complete it</td>
+<td>transmitter, connects the three blocks above (Step 5)</td>
+</tr>
+<tr class="odd">
+<td><a href="../code/06_lab/msgrom.sv">msgrom.sv</a></td>
+<td>complete it</td>
+<td>the message text (Step 7)</td>
+</tr>
+<tr class="even">
+<td><a href="../code/06_lab/hellotxctrl.sv">hellotxctrl.sv</a></td>
+<td>complete it</td>
+<td>message sender FSM (Step 8)</td>
+</tr>
+<tr class="odd">
+<td><a href="../code/06_lab/btnpulse.sv">btnpulse.sv</a></td>
+<td>given</td>
+<td>turns a button press into a one-cycle pulse</td>
+</tr>
+<tr class="even">
+<td><a href="../code/06_lab/top.sv">top.sv</a></td>
+<td>complete it</td>
+<td>board wrapper (Step 9)</td>
+</tr>
+<tr class="odd">
+<td><a href="../code/06_lab/uarttx_tb.sv">uarttx_tb.sv</a></td>
+<td>given</td>
+<td>self-checking testbench for <code>uarttx</code></td>
+</tr>
+<tr class="even">
+<td><a href="../code/06_lab/top_tb.sv">top_tb.sv</a></td>
+<td>given</td>
+<td>system testbench, decodes the message</td>
+</tr>
+</tbody>
+</table>
+<section id="step-1-create-the-project" class="level3" data-number="6.3.1">
+<h3 data-number="6.3.1" class="anchored" data-anchor-id="step-1-create-the-project"><span class="header-section-number">6.3.1</span> Step 1: Create the project</h3>
+<p>Create a new Anvil project for the Nexys A7 100T, as in the <a href="../chapters/01-tools-intro.html">tools intro</a>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> uart_hello <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> uart_hello</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> init <span class="at">--board</span> Nexys-A7-100T</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Copy all ten <code>.sv</code> design files into the project root, replacing the generated <code>top.sv</code>. Copy the two testbenches into <code>tb/</code>. You can download them all at once by running this command inside the <code>uart_hello</code> folder:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-f</span> top.sv<span class="kw">;</span> <span class="va">B</span><span class="op">=</span>https://raw.githubusercontent.com/laspp/digital_design_lab/main/code/06_lab<span class="kw">;</span> <span class="fu">wget</span> <span class="at">-q</span> <span class="va">$B</span>/<span class="dt">{top</span><span class="op">,</span><span class="dt">uarttx</span><span class="op">,</span><span class="dt">uarttxctrl</span><span class="op">,</span><span class="dt">baudgen</span><span class="op">,</span><span class="dt">shiftreg</span><span class="op">,</span><span class="dt">hellotxctrl</span><span class="op">,</span><span class="dt">msgrom</span><span class="op">,</span><span class="dt">btnpulse</span><span class="op">,</span><span class="dt">flopenr</span><span class="op">,</span><span class="dt">mux2}</span>.sv <span class="kw">&amp;&amp;</span> <span class="fu">wget</span> <span class="at">-q</span> <span class="at">-P</span> tb <span class="va">$B</span>/<span class="dt">{uarttx_tb</span><span class="op">,</span><span class="dt">top_tb}</span>.sv</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>It first removes the <code>top.sv</code> generated by <code>anvil init</code>. Otherwise <code>wget</code> would save the starter file as <code>top.sv.1</code> next to it. The <code>{...}</code> part expands into one URL per file, and <code>-P tb</code> puts the testbenches into <code>tb/</code>. On macOS, install <code>wget</code> first with <code>brew install wget</code>.</p>
+<p>The project should then look like this:</p>
+<pre><code>uart_hello/
+  config.json
+  Nexys-A7-100T-Master.xdc
+  top.sv  uarttx.sv  uarttxctrl.sv  baudgen.sv  shiftreg.sv
+  hellotxctrl.sv  msgrom.sv  btnpulse.sv  flopenr.sv  mux2.sv
+  tb/
+    uarttx_tb.sv
+    top_tb.sv</code></pre>
+<p>Anvil compiles every <code>.sv</code> file in the project root, for both <code>anvil build</code> and <code>anvil test</code>. One module per file therefore needs no extra configuration. Just keep the design files in the root and the testbenches in <code>tb/</code>.</p>
+</section>
+<section id="step-2-baudgen" class="level3" data-number="6.3.2">
+<h3 data-number="6.3.2" class="anchored" data-anchor-id="step-2-baudgen"><span class="header-section-number">6.3.2</span> Step 2: <code>baudgen</code></h3>
+<p>The baud rate generator is a counter that produces a one-cycle <code>Tick</code> once every bit period. It is the same idea as the prescaler from the <a href="../chapters/04-structural-modeling.html">fourth exercise</a> and the 2 ms timer from the <a href="../chapters/05-counter-sevenseg.html">fifth</a>, with one addition: a <code>Clear</code> input.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> baudgen #(<span class="kw">parameter</span> LIMIT = <span class="dv">868</span>) (</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">input</span>  <span class="kw">logic</span> clk, reset,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">input</span>  <span class="kw">logic</span> Clear,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">output</span> <span class="kw">logic</span> Tick);</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">localparam</span> WIDTH = <span class="kw">$clog2</span>(LIMIT);</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">localparam</span> <span class="kw">logic</span> [WIDTH<span class="dv">-1</span>:<span class="dv">0</span>] LAST_COUNT = WIDTH'(LIMIT - <span class="dv">1</span>);</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">logic</span> [WIDTH<span class="dv">-1</span>:<span class="dv">0</span>] Count;</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ol type="1">
+<li><code>WIDTH</code> and <code>LAST_COUNT</code> are already worked out from <code>LIMIT</code>. <code>$clog2(868)</code> is 10, because 2^10 = 1024 is the smallest power of two above 868. The cast <code>WIDTH'(...)</code> resizes the 32-bit result of <code>LIMIT - 1</code> to <code>WIDTH</code> bits, so the comparison below has matching widths.</li>
+<li>Write an <code>always_ff</code> block. When <code>reset</code>, <code>Clear</code> or <code>Tick</code> is high, set <code>Count</code> to 0. Otherwise increment it.</li>
+<li>Drive <code>Tick</code> high while <code>Count</code> equals <code>LAST_COUNT</code>. Because the counter goes back to 0 on the cycle after <code>Tick</code>, one period is exactly <code>LIMIT</code> cycles.</li>
+</ol>
+<p>Why <code>Clear</code>? A frame can start at any moment. Without <code>Clear</code>, the counter would be somewhere in the middle of its period when the start bit begins, and the start bit would be shorter than one bit period. The control FSM holds <code>Clear</code> high while it is idle. The counter therefore starts from 0 together with the start bit, and every bit of the frame is exactly <code>LIMIT</code> cycles long.</p>
+</section>
+<section id="step-3-shiftreg" class="level3" data-number="6.3.3">
+<h3 data-number="6.3.3" class="anchored" data-anchor-id="step-3-shiftreg"><span class="header-section-number">6.3.3</span> Step 3: <code>shiftreg</code></h3>
+<p>The shift register holds the byte being sent and presents it one bit at a time, LSB first, on <code>SerialOut</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> shiftreg #(<span class="kw">parameter</span> WIDTH = <span class="dv">8</span>) (</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">input</span>  <span class="kw">logic</span>             clk, reset,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">input</span>  <span class="kw">logic</span>             Load, Shift,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">input</span>  <span class="kw">logic</span> [WIDTH<span class="dv">-1</span>:<span class="dv">0</span>] D,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">output</span> <span class="kw">logic</span>             SerialOut);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><code>Load</code></th>
+<th><code>Shift</code></th>
+<th>Next value of <code>Q</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>x</td>
+<td><code>D</code>, the new byte</td>
+</tr>
+<tr class="even">
+<td>0</td>
+<td>1</td>
+<td><code>{1'b0, Q[WIDTH-1:1]}</code>, shifted right by one</td>
+</tr>
+<tr class="odd">
+<td>0</td>
+<td>0</td>
+<td><code>Q</code>, unchanged</td>
+</tr>
+</tbody>
+</table>
+<p>This module is a datapath, so the convention asks for a structural description. Build it from the two generic cells, as the HIPV instruction fetch unit does for its PC register. <a href="#fig-shiftreg-block" class="quarto-xref">Figure&nbsp;<span>6.4</span></a> shows the structure.</p>
+<div id="fig-shiftreg-block" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-shiftreg-block-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../img/shiftreg_block.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-shiftreg-block-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.4: Inside shiftreg. The register feeds its own value back through a shift by one place. loadmux picks either the shifted value or the new byte, and datareg stores it only when Load or Shift is high. Because Load drives the multiplexer select, it has priority over Shift.
+</figcaption>
+</figure>
+</div>
+<p>Follow these steps:</p>
+<ol type="1">
+<li>Assign <code>ShiftedQ = {1'b0, Q[WIDTH-1:1]}</code>. Every bit moves one place down and a 0 enters at the top.</li>
+<li>Instantiate <code>mux2 #(WIDTH) loadmux</code>. It selects <code>D</code> when <code>Load</code> is 1 and <code>ShiftedQ</code> otherwise. Its output is <code>NextQ</code>.</li>
+<li>Assign <code>En = Load | Shift</code>.</li>
+<li>Instantiate <code>flopenr #(WIDTH) datareg</code>. It stores <code>NextQ</code> into <code>Q</code> when <code>En</code> is high.</li>
+<li>Assign <code>SerialOut = Q[0]</code>. After a load, <code>Q[0]</code> is D0. Each shift brings the next bit into position 0.</li>
+</ol>
+<p>The port names of the generic cells are <code>D0</code>, <code>D1</code>, <code>S</code>, <code>Y</code> for <code>mux2</code> and <code>clk</code>, <code>reset</code>, <code>en</code>, <code>D</code>, <code>Q</code> for <code>flopenr</code>.</p>
+</section>
+<section id="step-4-uarttxctrl" class="level3" data-number="6.3.4">
+<h3 data-number="6.3.4" class="anchored" data-anchor-id="step-4-uarttxctrl"><span class="header-section-number">6.3.4</span> Step 4: <code>uarttxctrl</code></h3>
+<p>The control FSM sequences the frame. It has four states, one for each part of the frame, as shown in <a href="#fig-uarttx-fsm" class="quarto-xref">Figure&nbsp;<span>6.5</span></a>.</p>
+<div id="fig-uarttx-fsm" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-uarttx-fsm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../img/uarttx_fsm.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-uarttx-fsm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.5: State diagram of uarttxctrl. Each state shows the level it puts on the serial line. A transition label reads condition / output pulse.
+</figcaption>
+</figure>
+</div>
+<ul>
+<li><strong>IDLE.</strong> The line is 1. When <code>Start</code> arrives, the FSM pulses <code>Load</code> so the shift register captures <code>Data</code>, and moves to START.</li>
+<li><strong>START.</strong> The line is 0 for one bit period. On <code>Tick</code>, move to DATA.</li>
+<li><strong>DATA.</strong> The line carries <code>SerialBit</code>. On every <code>Tick</code>, one bit is finished. If it was not the last bit, pulse <code>Shift</code> to bring up the next bit and stay in DATA. After the last bit, move to STOP.</li>
+<li><strong>STOP.</strong> The line is 1 for one bit period. On <code>Tick</code>, pulse <code>Done</code> and return to IDLE.</li>
+</ul>
+<p>A 3-bit counter <code>BitCount</code> keeps track of which data bit is on the line. It is cleared in START and incremented on every <code>Tick</code> in DATA. <code>LastBit</code> is high while it equals <code>DATA_BITS - 1</code>, which is 7.</p>
+<p>The skeleton gives you the state type and the state register, written in the same style as the HIPV core’s FSMs:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  <span class="kw">typedef</span> <span class="kw">enum</span> <span class="kw">logic</span> [<span class="dv">1</span>:<span class="dv">0</span>] {IDLE, START, DATA, STOP} statetype;</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  statetype             State, NextState;</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">logic</span> [CNT_WIDTH<span class="dv">-1</span>:<span class="dv">0</span>] BitCount;</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">logic</span>                 LastBit, TxNext;</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">// state register</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">always_ff</span> @(<span class="kw">posedge</span> clk)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> (reset) State &lt;= IDLE;</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">else</span>       State &lt;= NextState;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ol type="1">
+<li>Write the bit counter as described above.</li>
+<li>Write the next state logic as an <code>always_comb</code> block with a <code>case</code> on <code>State</code>. Start with <code>NextState = State</code>, so that every state holds unless a transition applies, and add a <code>default</code> branch.</li>
+<li>Write a second <code>always_comb</code> block that sets <code>TxNext</code>: 0 in START, <code>SerialBit</code> in DATA, and 1 in IDLE and STOP.</li>
+<li>Register the line: <code>Tx &lt;= TxNext</code> on every clock edge, with <strong>reset value 1</strong>.</li>
+<li>Drive the remaining outputs with <code>assign</code>:</li>
+</ol>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Output</th>
+<th>High when</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Load</code></td>
+<td>in IDLE and <code>Start</code> is high</td>
+</tr>
+<tr class="even">
+<td><code>Shift</code></td>
+<td>in DATA, <code>Tick</code> is high and it is not the last bit</td>
+</tr>
+<tr class="odd">
+<td><code>BaudClear</code></td>
+<td>in IDLE</td>
+</tr>
+<tr class="even">
+<td><code>Busy</code></td>
+<td>in any state other than IDLE</td>
+</tr>
+<tr class="odd">
+<td><code>Done</code></td>
+<td>in STOP and <code>Tick</code> is high</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Do not infer latches in the next state logic
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>An <code>always_comb</code> block describes combinational logic only if it assigns every signal on every path through the block. If some path leaves <code>NextState</code> unassigned, the signal has to keep its old value on that path. Combinational logic cannot remember anything, so synthesis adds a <strong>latch</strong>, a level-sensitive storage element, to hold the value. A latch is not what you meant. It makes the timing unpredictable, and the design can behave differently on the board than in simulation.</p>
+<p>This happens easily in an FSM. The following next state logic infers a latch:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">always_comb</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">case</span> (State)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    IDLE:  <span class="kw">if</span> (Start) NextState = START;  <span class="co">// no else: NextState is not assigned</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    START: <span class="kw">if</span> (Tick)  NextState = DATA;</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    ...</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">endcase</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>In IDLE without <code>Start</code>, nothing assigns <code>NextState</code>. Two habits prevent this:</p>
+<ul>
+<li>Give every signal a default value at the top of the block, before the <code>case</code>. <code>NextState = State;</code> means “stay in the current state” on every path that does not assign a transition.</li>
+<li>Always add a <code>default</code> branch to the <code>case</code>, even when the listed states seem to cover every value.</li>
+</ul>
+<p>The same applies to <code>TxNext</code> here and to the next state logic of <code>hellotxctrl</code> in Step 8. Check the output of <code>anvil build</code>. When Yosys finds a latch, it prints <code>Latch inferred for signal ...</code> with the signal’s name. If you see this message, look for the path that does not assign that signal.</p>
+</div>
+</div>
+<p>Why register <code>Tx</code> instead of assigning <code>TxNext</code> to it directly? <code>TxNext</code> is combinational logic driven by the state register and the shift register. When both change on the same clock edge, the output of that logic can glitch for a few nanoseconds before it settles. On an internal signal that would not matter, because the next clock edge only samples the settled value. The TX line, however, goes off the chip to a receiver that does not share our clock. A short glitch to 0 on an idle line looks exactly like the start of a frame. A flip-flop output changes only once per clock edge, so registering <code>Tx</code> makes the line clean. The reset value of 1 matters for the same reason: the line must be idle, not 0, from the moment the FPGA starts.</p>
+<p>The register delays the line by one clock cycle. It delays every bit by the same cycle, so the bit lengths are unchanged.</p>
+</section>
+<section id="step-5-uarttx" class="level3" data-number="6.3.5">
+<h3 data-number="6.3.5" class="anchored" data-anchor-id="step-5-uarttx"><span class="header-section-number">6.3.5</span> Step 5: <code>uarttx</code></h3>
+<p>Now connect the three blocks as shown in <a href="#fig-uarttx-block" class="quarto-xref">Figure&nbsp;<span>6.6</span></a>.</p>
+<div id="fig-uarttx-block" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-uarttx-block-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../img/uarttx_block.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-uarttx-block-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.6: Inside uarttx. The FSM controls the baud rate generator and the shift register, and puts the right level on Tx for each part of the frame.
+</figcaption>
+</figure>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> uarttx #(<span class="kw">parameter</span> CLK_FREQ = <span class="dv">100</span>_000_000, BAUD_RATE = <span class="dv">115</span>_200) (</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">input</span>  <span class="kw">logic</span>       clk, reset,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">input</span>  <span class="kw">logic</span>       Start,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">input</span>  <span class="kw">logic</span> [<span class="dv">7</span>:<span class="dv">0</span>] Data,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">output</span> <span class="kw">logic</span>       Tx,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">output</span> <span class="kw">logic</span>       Busy, Done);</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">localparam</span> LIMIT = CLK_FREQ / BAUD_RATE;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ol type="1">
+<li>Instantiate <code>baudgen #(LIMIT) baud</code>.</li>
+<li>Instantiate <code>shiftreg #(8) datareg</code> with <code>.D(Data)</code> and <code>.SerialOut(SerialBit)</code>.</li>
+<li>Instantiate <code>uarttxctrl #(8) ctrl</code>.</li>
+</ol>
+<p>All internal signals are already declared. Connect every port by name, as the convention requires.</p>
+</section>
+<section id="step-6-simulate-the-transmitter" class="level3" data-number="6.3.6">
+<h3 data-number="6.3.6" class="anchored" data-anchor-id="step-6-simulate-the-transmitter"><span class="header-section-number">6.3.6</span> Step 6: Simulate the transmitter</h3>
+<p>Simulate the transmitter before going further. At 115200 baud a frame is 8680 clock cycles long, which is a lot to scroll through in a waveform viewer. The testbench avoids this by instantiating <code>uarttx</code> with <code>BAUD_RATE = 10_000_000</code>, so <code>LIMIT</code> is only 10 cycles. Because the baud rate is a parameter, you do not have to edit the design to make simulation faster, unlike the timers in the previous exercise.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> test tb/uarttx_tb.sv</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">gtkwave</span> tb/uarttx_tb.vcd <span class="kw">&amp;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The testbench sends five bytes and decodes the <code>Tx</code> line with the mid-bit sampling described earlier. A working transmitter prints:</p>
+<pre><code>OK:    sent 0x55, received 0x55
+OK:    sent 0xa3, received 0xa3
+OK:    sent 0x48, received 0x48
+OK:    sent 0x00, received 0x00
+OK:    sent 0xff, received 0xff
+PASS: all frames correct</code></pre>
+<p>If the design never produces a frame, the testbench stops after 200 µs with a <code>FAIL: timeout</code> message instead of running forever. In the waveform, check that:</p>
+<ul>
+<li><code>Tx</code> is 1 after reset and between frames.</li>
+<li>The start bit, every data bit and the stop bit are each exactly 10 clock cycles long.</li>
+<li>For 0x55 (<code>0101 0101</code>), the line alternates 0, 1, 0, 1, … after the start bit, since D0 is 1.</li>
+<li><code>Busy</code> is high for the whole frame, and <code>Done</code> is a single-cycle pulse at the end of the stop bit.</li>
+</ul>
+</section>
+<section id="step-7-msgrom" class="level3" data-number="6.3.7">
+<h3 data-number="6.3.7" class="anchored" data-anchor-id="step-7-msgrom"><span class="header-section-number">6.3.7</span> Step 7: <code>msgrom</code></h3>
+<p>The message is stored in a small read-only memory, written as a <code>case</code> statement that maps an address to a character.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> msgrom (<span class="kw">input</span>  <span class="kw">logic</span> [<span class="dv">3</span>:<span class="dv">0</span>] Addr,</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>               <span class="kw">output</span> <span class="kw">logic</span> [<span class="dv">7</span>:<span class="dv">0</span>] Char);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The message is <code>Hello World!</code> followed by two control characters. <strong>Carriage return</strong> (CR, 0x0D) moves the terminal cursor to the start of the line, and <strong>line feed</strong> (LF, 0x0A) moves it down one line. Together they start a new line, so each press of the button prints the message on its own line. That makes 14 characters, at addresses 0 to 13.</p>
+<p>The skeleton already has <code>H</code>, <code>e</code>, CR, LF and the <code>default</code> branch. Fill in addresses 2 to 11 using an ASCII table. These are the codes you need:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Character</th>
+<th>ASCII</th>
+<th></th>
+<th>Character</th>
+<th>ASCII</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>space</td>
+<td>0x20</td>
+<td></td>
+<td><code>l</code></td>
+<td>0x6C</td>
+</tr>
+<tr class="even">
+<td><code>!</code></td>
+<td>0x21</td>
+<td></td>
+<td><code>o</code></td>
+<td>0x6F</td>
+</tr>
+<tr class="odd">
+<td><code>W</code></td>
+<td>0x57</td>
+<td></td>
+<td><code>r</code></td>
+<td>0x72</td>
+</tr>
+<tr class="even">
+<td><code>d</code></td>
+<td>0x64</td>
+<td></td>
+<td><code>e</code></td>
+<td>0x65</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="step-8-hellotxctrl" class="level3" data-number="6.3.8">
+<h3 data-number="6.3.8" class="anchored" data-anchor-id="step-8-hellotxctrl"><span class="header-section-number">6.3.8</span> Step 8: <code>hellotxctrl</code></h3>
+<p>The message sender is a second FSM. It walks the address through the 14 characters and hands each one to <code>uarttx</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> hellotxctrl #(<span class="kw">parameter</span> MSG_LEN = <span class="dv">14</span>) (</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">input</span>  <span class="kw">logic</span>       clk, reset,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">input</span>  <span class="kw">logic</span>       Send, TxDone,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">output</span> <span class="kw">logic</span> [<span class="dv">3</span>:<span class="dv">0</span>] Addr,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">output</span> <span class="kw">logic</span>       TxStart, Busy);</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">typedef</span> <span class="kw">enum</span> <span class="kw">logic</span> [<span class="dv">1</span>:<span class="dv">0</span>] {IDLE, START, WAIT} statetype;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><a href="#fig-hellotx-fsm" class="quarto-xref">Figure&nbsp;<span>6.7</span></a> shows the state transitions.</p>
+<div id="fig-hellotx-fsm" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-hellotx-fsm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../img/hellotx_fsm.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-hellotx-fsm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.7: State diagram of hellotxctrl. START lasts exactly one cycle and starts a frame. WAIT holds until uarttx reports TxDone, then either fetches the next character or ends the message.
+</figcaption>
+</figure>
+</div>
+<ul>
+<li><strong>IDLE.</strong> Wait for <code>Send</code>. When it arrives, clear <code>Addr</code> to 0 and move to START.</li>
+<li><strong>START.</strong> Pulse <code>TxStart</code> for exactly one cycle and move to WAIT. At this moment <code>msgrom</code> is already showing the character at <code>Addr</code> on <code>Data</code>, so <code>uarttx</code> loads the right byte.</li>
+<li><strong>WAIT.</strong> Wait for <code>TxDone</code>. If the character just sent was the last one (<code>Addr</code> equals <code>MSG_LEN - 1</code>), go back to IDLE. Otherwise increment <code>Addr</code> and go to START for the next character.</li>
+</ul>
+<ol type="1">
+<li>Write the <code>Addr</code> register. It is cleared on reset and when <code>Send</code> arrives in IDLE, and incremented when <code>TxDone</code> arrives in WAIT.</li>
+<li>Write <code>LastChar</code> and the next state logic in the same style as in Step 4. Keep the default assignment and the <code>default</code> branch, so you do not infer a latch (see the warning in Step 4).</li>
+<li>Assign <code>TxStart</code> (high in START) and <code>Busy</code> (high in any state other than IDLE).</li>
+</ol>
+<p>This is a <strong>handshake</strong> between two FSMs. <code>hellotxctrl</code> does not need to know how long a frame takes. It just waits for <code>uarttx</code> to report that it is done. If you change the baud rate, the sender keeps working without any change.</p>
+<p>Note that <code>Send</code> is only acted on in IDLE. Pressing the button again while the message is being sent does nothing.</p>
+</section>
+<section id="step-9-top" class="level3" data-number="6.3.9">
+<h3 data-number="6.3.9" class="anchored" data-anchor-id="step-9-top"><span class="header-section-number">6.3.9</span> Step 9: <code>top</code></h3>
+<p>The board wrapper connects everything to the pins. Two parts of it are already written.</p>
+<p><strong>Reset.</strong> The red CPU_RESET button is active low: it reads 0 while pressed. The modules expect an active-high <code>reset</code>, so <code>top</code> simply inverts it with <code>assign Reset = ~cpu_resetn;</code>. You do not need to press reset after programming. The FPGA starts with every flip-flop at 0, which is already the IDLE state of both FSMs.</p>
+<p><strong><code>btnpulse</code>.</strong> This module turns a press of BTNC into a single-cycle pulse. A flip-flop remembers the button’s level on the previous cycle, and <code>Pulse = BtnSync &amp; ~BtnPrev</code> is high for exactly one cycle when the button goes from released to pressed. No matter how long you hold the button, the sender gets one <code>Send</code> pulse. Before the edge detection, the button passes through two more flip-flops (<code>BtnMeta</code>, <code>BtnSync</code>). You will learn why signals from outside the clock domain need them later in the course.</p>
+<p>Complete <code>top.sv</code>:</p>
+<ol type="1">
+<li>Instantiate <code>hellotxctrl #(14) sender</code>, with <code>.reset(Reset)</code> and <code>.Busy(MsgBusy)</code>.</li>
+<li>Instantiate <code>msgrom rom</code>.</li>
+<li>Instantiate <code>uarttx #(100_000_000, 115_200) tx</code>, with <code>.Start(TxStart)</code>, <code>.Data(Char)</code>, <code>.Tx(uart_tx)</code>, <code>.Busy(TxBusy)</code> and <code>.Done(TxDone)</code>.</li>
+<li>Assign <code>ja1 = uart_tx</code>, <code>led[0] = MsgBusy</code> and <code>led[1] = TxBusy</code>.</li>
+</ol>
+<p>Use <a href="#fig-hello-top" class="quarto-xref">Figure&nbsp;<span>6.3</span></a> to check the connections.</p>
+</section>
+<section id="step-10-simulate-the-system" class="level3" data-number="6.3.10">
+<h3 data-number="6.3.10" class="anchored" data-anchor-id="step-10-simulate-the-system"><span class="header-section-number">6.3.10</span> Step 10: Simulate the system</h3>
+<p>The system testbench resets the design, presses BTNC once, and decodes the <code>uart_tx</code> pin at the real 115200 baud:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> test tb/top_tb.sv</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The whole message takes about 1.2 ms of simulated time, which is around 120 000 clock cycles. That takes only a few seconds to simulate. A working design prints:</p>
+<pre><code>Received: "Hello World!\r\n"
+PASS: message received correctly</code></pre>
+<p>If a character is wrong, the testbench prints it as it was received, so you can see which entry of <code>msgrom</code> or which bit of the transmitter is off. To keep the waveform file small, the testbench records only the top-level pins in <code>tb/top_tb.vcd</code>. Use <code>uarttx_tb</code> from Step 6 to look inside the transmitter.</p>
+</section>
+<section id="step-11-pin-constraints" class="level3" data-number="6.3.11">
+<h3 data-number="6.3.11" class="anchored" data-anchor-id="step-11-pin-constraints"><span class="header-section-number">6.3.11</span> Step 11: Pin constraints</h3>
+<p>Map the top-level ports to the board pins in the project’s <code>.xdc</code> file:</p>
+<pre><code>## Clock signal, 100 MHz
+set_property PACKAGE_PIN E3 [get_ports {clk}]
+set_property IOSTANDARD LVCMOS33 [get_ports {clk}]
+create_clock -period 10.0 [get_ports {clk}]
+
+## CPU_RESET button (red, active low)
+set_property PACKAGE_PIN C12 [get_ports {cpu_resetn}]
+set_property IOSTANDARD LVCMOS33 [get_ports {cpu_resetn}]
+
+## Button BTNC
+set_property PACKAGE_PIN N17 [get_ports {btnc}]
+set_property IOSTANDARD LVCMOS33 [get_ports {btnc}]
+
+## USB-UART bridge: UART_RXD_OUT is driven by the FPGA
+set_property PACKAGE_PIN D4 [get_ports {uart_tx}]
+set_property IOSTANDARD LVCMOS33 [get_ports {uart_tx}]
+
+## Pmod JA pin 1, copy of uart_tx for the oscilloscope
+set_property PACKAGE_PIN C17 [get_ports {ja1}]
+set_property IOSTANDARD LVCMOS33 [get_ports {ja1}]
+
+## LEDs
+set_property PACKAGE_PIN H17 [get_ports {led[0]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {led[0]}]
+set_property PACKAGE_PIN K15 [get_ports {led[1]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {led[1]}]</code></pre>
+</section>
+<section id="step-12-build-program-and-open-a-terminal" class="level3" data-number="6.3.12">
+<h3 data-number="6.3.12" class="anchored" data-anchor-id="step-12-build-program-and-open-a-terminal"><span class="header-section-number">6.3.12</span> Step 12: Build, program and open a terminal</h3>
+<p>Build the design and program the board:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> build</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> program</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>To see the message you need a <strong>serial terminal</strong> on your computer, set to 115200 baud, 8N1. The FT2232 chip shows up as two serial ports. The first one is the JTAG programmer, and the UART is the second one.</p>
+<ul>
+<li><strong>Linux.</strong> The UART is usually <code>/dev/ttyUSB1</code>. Open it with <code>screen /dev/ttyUSB1 115200</code> or <code>picocom -b 115200 /dev/ttyUSB1</code>. If you get a permission error, add yourself to the <code>dialout</code> group (or <code>uucp</code> on Arch) and log in again.</li>
+<li><strong>macOS.</strong> Run <code>ls /dev/tty.usbserial-*</code>. You will see two names that differ only in the last character. Pick the second one (ending in <code>1</code> or <code>B</code>) and open it with <code>screen /dev/tty.usbserial-XXXXXXXX1 115200</code>.</li>
+<li><strong>Windows.</strong> Look in Device Manager under <em>Ports (COM &amp; LPT)</em> for the higher-numbered of the two USB Serial Ports. Open it in PuTTY with connection type <em>Serial</em> and speed 115200.</li>
+</ul>
+<p>To quit <code>screen</code>, press <code>Ctrl-A</code>, then <code>K</code>, then <code>Y</code>.</p>
+<p>Press BTNC. The terminal should print <code>Hello World!</code>, and every further press prints it again on a new line. The whole message takes only 1.2 ms, so LED0 and LED1 flash too briefly to see. They are still useful: an LED that stays lit means an FSM is stuck. If something is wrong, use these hints:</p>
+<ul>
+<li><strong>Nothing appears.</strong> Check that you opened the second serial port and that <code>uart_tx</code> is on D4, not C4. Make sure the red CPU_RESET button is not stuck and that the design was built with your latest code.</li>
+<li><strong>Garbage characters appear.</strong> The baud rate does not match. Check the terminal setting and the <code>uarttx</code> parameters in <code>top.sv</code>.</li>
+<li><strong>The characters are right but come out in the wrong order, or one is missing.</strong> Run <code>top_tb</code> again and check <code>hellotxctrl</code>. The address is probably updated on the wrong condition.</li>
+<li><strong>LED0 stays lit after a press.</strong> <code>hellotxctrl</code> is stuck in WAIT because it never sees <code>TxDone</code>. Check the <code>Done</code> output of <code>uarttxctrl</code> and its connection in <code>top.sv</code>.</li>
+<li><strong>Sometimes the message appears twice for one press.</strong> Keep reading, this is the first question below.</li>
+</ul>
+</section>
+<section id="step-13-look-at-the-frame-on-the-oscilloscope" class="level3" data-number="6.3.13">
+<h3 data-number="6.3.13" class="anchored" data-anchor-id="step-13-look-at-the-frame-on-the-oscilloscope"><span class="header-section-number">6.3.13</span> Step 13: Look at the frame on the oscilloscope</h3>
+<p>The serial line is also on pin 1 of the Pmod JA header. Connect the oscilloscope probe to JA pin 1 and its ground clip to JA pin 5, as described in the <a href="../chapters/appendix-oscilloscope.html">oscilloscope appendix</a>.</p>
+<ol type="1">
+<li>Set the timebase to 10 µs per division and the vertical scale to 1 V per division.</li>
+<li>Set the trigger to a <strong>falling edge</strong> at about 1.5 V, and use <strong>single</strong> trigger mode. The first falling edge of a message is the start bit of <code>H</code>.</li>
+<li>Press BTNC and compare the captured frame with <a href="#fig-uart-frame" class="quarto-xref">Figure&nbsp;<span>6.1</span></a>.</li>
+<li>Use the cursors to measure the width of one bit. It should be 8.68 µs.</li>
+</ol>
+<p>If your oscilloscope has a serial decode function, it can also read the frame for you. Choose the RS232 (UART) decoder on CH1 and set it to 115200 baud, 8 data bits and no parity. The oscilloscope then prints each character under the waveform.</p>
+</section>
+</section>
+<section id="looking-ahead" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="looking-ahead"><span class="header-section-number">6.4</span> Looking ahead</h2>
+<p>The HIPV SoC contains a UART peripheral, <code>obi_uart</code>, that is built from the same pieces as your transmitter: a baud rate generator, a transmitter FSM and a register that holds the byte. It adds a receiver and a set of registers, so the processor can write a byte with a single store instruction instead of using a button. When you run C code on the SoC later in the course, every <code>printf</code>-style message travels to your terminal through that peripheral, in frames just like the ones you built here.</p>
+</section>
+<section id="starter-files" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="starter-files"><span class="header-section-number">6.5</span> Starter files</h2>
+<ul>
+<li><a href="../code/06_lab/flopenr.sv">flopenr.sv</a></li>
+<li><a href="../code/06_lab/mux2.sv">mux2.sv</a></li>
+<li><a href="../code/06_lab/baudgen.sv">baudgen.sv</a></li>
+<li><a href="../code/06_lab/shiftreg.sv">shiftreg.sv</a></li>
+<li><a href="../code/06_lab/uarttxctrl.sv">uarttxctrl.sv</a></li>
+<li><a href="../code/06_lab/uarttx.sv">uarttx.sv</a></li>
+<li><a href="../code/06_lab/msgrom.sv">msgrom.sv</a></li>
+<li><a href="../code/06_lab/hellotxctrl.sv">hellotxctrl.sv</a></li>
+<li><a href="../code/06_lab/btnpulse.sv">btnpulse.sv</a></li>
+<li><a href="../code/06_lab/top.sv">top.sv</a></li>
+<li><a href="../code/06_lab/uarttx_tb.sv">uarttx_tb.sv</a></li>
+<li><a href="../code/06_lab/top_tb.sv">top_tb.sv</a></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/05-counter-sevenseg.html" class="pagination-link" aria-label="Fifth exercise: Counter and seven segment display">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Fifth exercise: Counter and seven segment display</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/appendix-oscilloscope.html" class="pagination-link" aria-label="Appendix: Using the Oscilloscope and Signal Generator">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Appendix: Using the Oscilloscope and Signal Generator</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
