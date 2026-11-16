@@ -27,3 +27,7 @@ chapters/*.html
 digital_design-main.zip
 digital_design_labwork/
 **/*.quarto_ipynb
+
+# Lab solutions: kept local, the GitHub repo is public
+/solutions/
+anvil_projects/
