@@ -16,7 +16,7 @@ current decoder does with each of them, use the interactive
 [HIPV Encoding Explorer](https://claude.ai/artifact/7HMQkkoLqw8NjtmJR6BDCc).
 
 ::: {.callout-note title="Homework"}
-This is a graded homework (30 points), not a lab exercise. The code lives in the `HIPV-SoC` repository, branch `hw1`.
+This is a graded homework (30 points), not a lab exercise. The code lives in the `HIPV-SoC` repository, branch `hw1-student`.
 :::
 
 ## Before you start
@@ -30,19 +30,16 @@ anvil update
 (On the classroom computers you cannot run `anvil update`; use the classroom patch from
 the [Tools introduction](01-tools-intro.qmd) instead.)
 
-**2. Get the `hw1` branch.** The homework is done on the `hw1` branch of the
+**2. Get the `hw1-student` branch.** The homework is done on the `hw1-student` branch of the
 `HIPV-SoC` repository. It contains everything listed under "What is provided".
 
 ```sh
 git clone <HIPV-SoC repository URL>     # skip if you already have a clone
 cd HIPV-SoC
 git fetch origin
-git checkout hw1                        # or: git switch hw1
-git status                              # should say: On branch hw1
+git checkout hw1-student                # or: git switch hw1-student
+git status                              # should say: On branch hw1-student
 ```
-
-Commit your work on this branch (`git add` / `git commit`) as you go, and do not merge
-it into `main`.
 
 **3. Tools.**
 
@@ -135,7 +132,6 @@ Run a testbench with `make` in its directory. Useful options:
 |---|---|
 | `TESTCASE=<name>` | run only one test |
 | `WAVES=1` | write a waveform, `dump.vcd` |
-| `SIM_BUILD=/tmp/sb` | build outside the repository (needed on cloud-synced drives) |
 
 The homework uses testbenches at three levels. The level tells you **what is
 simulated** and **what plays the rest of the world**.
@@ -174,17 +170,31 @@ things on every operation:
 cd tb/unit/mul && make
 ```
 
-### Unit level: `tb/unit/idu` and `tb/unit/ieu` (existing, regression)
+### Unit level: `tb/unit/idu` and `tb/unit/ieu` (regression and Task 1)
 
-These test the Decode and Execute stages as they were before the homework. You will
-change both modules, and these tests **must keep passing**: they check that the RV32I
-behavior is unchanged. They write the existing `ALUControl` codes as numbers, so keep
-those codes unchanged (see Task 1).
+These test the Decode and Execute stages. You will change both modules. The
+original tests **must keep passing**: they check that the RV32I behavior is
+unchanged. They write the existing `ALUControl` codes as numbers, so keep those codes
+unchanged (see Task 1).
 
 - `tb/unit/idu`: field extraction, decoding of every RV32I instruction class, register
   file read/write and bypass, flush, back-pressure.
 - `tb/unit/ieu`: all ten ALU operations, branch conditions and targets, `jal`/`jalr`,
   `lui`/`auipc`, forwarding selection, back-pressure, bubbles.
+
+Both testbenches also contain tests for the homework:
+
+- `tb/unit/idu`: `test_zba_zbb_decode` and `test_zba_zbb_same_funct3_distinct` check
+  that every new instruction decodes to something different from the RV32I instruction
+  with the same `funct3` (and from each other). `test_zmmul_decode` checks that
+  `mul`, `mulh`, `mulhsu` and `mulhu` are flagged for the multiplier, and that `div`,
+  `divu`, `rem` and `remu` do not write a register. These tests do not depend on how
+  you encode the control signals.
+- `tb/unit/ieu`: `test_alu_encoding` checks the ALU codes in `hipv_pkg.sv` against the
+  table in Task 1. `test_zba`, `test_zbb_logic_with_negate`, `test_zbb_min_max` and
+  `test_zbb_count` drive the new codes into the Execute stage and compare the
+  `ALUResultE` with a reference model. The tests read the codes from `hipv_pkg.sv`,
+  so the constants must have the names given in the table.
 
 ### Core level: `tb/core`
 
@@ -321,7 +331,8 @@ instructions use opcode `OP` (`0110011`), the others use `OP-IMM` (`0010011`).
    - `funct7[5]` alone is not enough: `minu` and `srl` share both funct3 and
      `funct7[5]` (both 0) — you need more of `funct7` to tell them apart.
 2. **The ALU control signal.** `ALUControl` is 4 bits wide and 10 of the 16 codes are
-   used. Widen it.
+   used. Widen it to 5 bits and add the new codes to `hipv_pkg.sv` with the
+   [encoding below](#sec-hw1-alu-codes).
    - **Keep the existing codes unchanged.** The unit tests in `tb/unit/idu` and
      `tb/unit/ieu` use them.
    - The width appears in `hipv_pkg`, `idudec`, `idu`, `ieu` (including the D/E
@@ -336,13 +347,40 @@ instructions use opcode `OP` (`0110011`), the others use `OP-IMM` (`0010011`).
 4. **Lint.** The testbenches run Verilator with `-Wall`, and every warning is an
    error. Don't switch warnings off globally.
 
+### ALU control encoding {#sec-hw1-alu-codes}
+
+The ALU, the decoder and the testbenches share one encoding, so `hipv_pkg.sv` must
+define **exactly these constants with exactly these values**, as 5-bit `localparam
+logic [4:0]`. `tb/unit/ieu` (`test_alu_encoding`) fails if a name is missing, a value
+differs, a constant is not 5 bits wide, or two operations share a code.
+
+| Constant | Code | Constant | Code |
+|---|---|---|---|
+| `ALU_ADD` | `00000` | `ALU_SH2ADD` | `01011` |
+| `ALU_SUB` | `00001` | `ALU_SH3ADD` | `01100` |
+| `ALU_SLL` | `00010` | `ALU_ANDN` | `01101` |
+| `ALU_SLT` | `00011` | `ALU_ORN` | `01110` |
+| `ALU_SLTU` | `00100` | `ALU_XNOR` | `01111` |
+| `ALU_XOR` | `00101` | `ALU_MIN` | `10000` |
+| `ALU_SRL` | `00110` | `ALU_MINU` | `10001` |
+| `ALU_SRA` | `00111` | `ALU_MAX` | `10010` |
+| `ALU_OR` | `01000` | `ALU_MAXU` | `10011` |
+| `ALU_AND` | `01001` | `ALU_CLZ` | `10100` |
+| `ALU_SH1ADD` | `01010` | `ALU_CPOP` | `10101` |
+
+: ALU control codes. {#tbl-alu-codes tbl-colwidths="[32,18,32,18]"}
+
+For the bonus instructions (run the tests with `HW1_BONUS=1`) the codes continue:
+`ALU_CTZ` `10110`, `ALU_SEXTB` `10111`, `ALU_SEXTH` `11000`, `ALU_ZEXTH` `11001`,
+`ALU_ROL` `11010`, `ALU_ROR` `11011`, `ALU_ORCB` `11100`, `ALU_REV8` `11101`.
+
 ### Testing Task 1
 
 ```sh
 cd tb/core && make MODULE=test_zbb      # core level, Task 1
 cd tb/core && make                      # core level, RV32I regression
-cd tb/unit/idu && make                  # unit level, regression
-cd tb/unit/ieu && make                  # unit level, regression
+cd tb/unit/idu && make                  # unit level: decoder, regression and Task 1
+cd tb/unit/ieu && make                  # unit level: ALU codes and results, regression and Task 1
 ```
 
 The SoC-level check `sw/hw1/check` also covers Task 1, but it only passes completely
@@ -609,5 +647,5 @@ The homework is worth **30 points**.
 
 ## Submission
 
-- Submit a single ZIP file with your **modified RTL and testbench files** and the **report PDF**. Do not include the provided tests, the SoC, the FPGA flow or the software. The ZIP file must not contain any other files or directories.
+- Submit a single ZIP file with your **modified RTL and newly created testbench files** and the **report PDF**. Do not include the provided tests, the SoC, the FPGA flow or the software. The ZIP file must not contain any other files or directories.
 - The ZIP file must be named `hw1_team_<team_name>.zip`, for example `hw1_team_H.zip`.
