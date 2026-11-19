@@ -277,6 +277,15 @@ The Makefile builds for the Nexys A7 100T by default (`BOARD ?= nexys-100t`). If
 make BOARD=nexys-50t APP=hw1/check all   # same build, for the Nexys A7 50T
 ```
 
+To test your design on the board **instead of** simulating it with `make run`, give the target explicitly. For example, on the Nexys A7 50T:
+
+```sh
+make APP=hw1/check BOARD=nexys-50t fpga      # build the firmware and the bitstream
+make APP=hw1/check BOARD=nexys-50t program   # flash the existing build
+```
+
+`fpga` only builds; `program` flashes the board without rebuilding; `all` runs `sw`, `fpga` and `program` in one go.
+
 The only valid values are `nexys-100t` and `nexys-50t`. Any other value stops `make` with an "Unknown BOARD" error. You can also set the board once for your shell session with `export BOARD=nexys-50t`, which saves repeating it on every command.
 
 After flashing, open a serial terminal at 19200 8N1 (see `docs/FPGA.md`). The program runs
