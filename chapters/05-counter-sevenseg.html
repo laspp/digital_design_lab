@@ -2,23 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.11.9">
+<meta name="generator" content="quarto-1.7.31">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>5&nbsp; Fifth exercise: Counter and seven segment display – Digital Design Lab</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
+code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: 1.5em;}
-div.column{flex: auto;}
-@media screen {
-div.columns{gap: min(4vw, 1.5em);}
-div.column{overflow-x: auto;}
-}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -75,15 +69,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../chapters/04-structural-modeling.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-4f67ab1e4efc86feb5e21e0983fc9301.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-467c603866d931062acf9dde62877a13.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -115,17 +108,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </head>
 
-<body class="nav-sidebar floating quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
+<body class="nav-sidebar floating quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav" aria-label="Toolbar">
+  <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-tools-intro.html">Lab Exercises</a></li><li class="breadcrumb-item"><a href="../chapters/05-counter-sevenseg.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Fifth exercise: Counter and seven segment display</span></a></li></ol></nav>
-        <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-tools-intro.html">Lab Exercises</a></li><li class="breadcrumb-item"><a href="../chapters/05-counter-sevenseg.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Fifth exercise: Counter and seven segment display</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -136,7 +129,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto" aria-label="Site">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Digital Design Lab</a> 
@@ -157,10 +150,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-controls="quarto-sidebar-section-1" aria-expanded="true">
- <span class="menu-text" id="quarto-sidebar-section-1-label">Lab Exercises</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Lab Exercises</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" aria-labelledby="quarto-sidebar-section-1-label" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/01-tools-intro.html" class="sidebar-item-text sidebar-link">
@@ -201,14 +197,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-controls="quarto-sidebar-section-2" aria-expanded="true">
- <span class="menu-text" id="quarto-sidebar-section-2-label">Appendix</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Homework</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" aria-labelledby="quarto-sidebar-section-2-label" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/hw1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Homework 1: Extending the HIPV core</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendix</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/appendix-oscilloscope.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Appendix: Using the Oscilloscope and Signal Generator</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Appendix: Using the Oscilloscope and Signal Generator</span></span></a>
   </div>
 </li>
       </ul>
@@ -219,7 +235,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+        <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
@@ -248,9 +264,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content" tabindex="-1">
+<main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-tools-intro.html">Lab Exercises</a></li><li class="breadcrumb-item"><a href="../chapters/05-counter-sevenseg.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Fifth exercise: Counter and seven segment display</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-tools-intro.html">Lab Exercises</a></li><li class="breadcrumb-item"><a href="../chapters/05-counter-sevenseg.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Fifth exercise: Counter and seven segment display</span></a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Fifth exercise: Counter and seven segment display</span></h1>
 </div>
@@ -383,20 +399,20 @@ Figure&nbsp;5.4: Inside SevSegDisplay. The anode pattern from anode_assert both 
 <section id="step-1-create-the-project" class="level3" data-number="5.2.2">
 <h3 data-number="5.2.2" class="anchored" data-anchor-id="step-1-create-the-project"><span class="header-section-number">5.2.2</span> Step 1: Create the project</h3>
 <p>Create a new Anvil project for the Nexys A7 100T, as in the <a href="../chapters/01-tools-intro.html">tools intro</a>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> counter_7seg <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> counter_7seg</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> init <span class="at">--board</span> Nexys-A7-100T</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> counter_7seg <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> counter_7seg</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> init <span class="at">--board</span> Nexys-A7-100T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Replace the contents of <code>top.sv</code> with the contents of <a href="../code/05_lab/top_draft.sv">top_draft.sv</a>. It contains empty skeletons of every module in this assignment. You will fill them in during the following steps.</p>
 </section>
 <section id="step-2-timer_002s" class="level3" data-number="5.2.3">
 <h3 data-number="5.2.3" class="anchored" data-anchor-id="step-2-timer_002s"><span class="header-section-number">5.2.3</span> Step 2: <code>timer_002s</code></h3>
 <p>This module produces a <code>time_tick</code> pulse that is high for exactly one clock cycle every 2 ms. It sets the digit period from <a href="#fig-sevenseg-multiplex" class="quarto-xref">Figure&nbsp;<span>5.2</span></a>.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> timer_002s</span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> timer_002s</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        <span class="dt">input</span> logic clock<span class="op">,</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">input</span> logic reset<span class="op">,</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        <span class="dt">output</span> logic time_tick</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol type="1">
 <li>Work out how many clock cycles fit in 2 ms. The clock runs at 100 MHz, so one cycle is 10 ns and 2 ms is 2 ms / 10 ns = 200 000 cycles.</li>
 <li>Declare a counter register wide enough to hold 199 999. That needs 18 bits, because 2^18 = 262 144.</li>
@@ -408,14 +424,14 @@ Figure&nbsp;5.4: Inside SevSegDisplay. The anode pattern from anode_assert both 
 <section id="step-3-counter_1s" class="level3" data-number="5.2.4">
 <h3 data-number="5.2.4" class="anchored" data-anchor-id="step-3-counter_1s"><span class="header-section-number">5.2.4</span> Step 3: <code>counter_1s</code></h3>
 <p>This module holds the 32-bit count. The count increases by one every second while <code>enable</code> is high, and holds its value while <code>enable</code> is low.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> counter_1s</span>
+<div class="sourceCode" id="cb3"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> counter_1s</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        <span class="dt">input</span> logic clock<span class="op">,</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">input</span> logic reset<span class="op">,</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        <span class="dt">input</span> logic enable<span class="op">,</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">output</span> logic <span class="op">[</span><span class="dv">31</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> count</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol type="1">
 <li>Inside the module, build a 1 s tick in the same way as in Step 2. One second is 100 000 000 cycles, so the prescaler counts from 0 to 99 999 999. That needs 27 bits.</li>
 <li>Add a second register for <code>count</code>. Reset it to 0 when <code>reset</code> is high.</li>
@@ -426,7 +442,7 @@ Figure&nbsp;5.4: Inside SevSegDisplay. The anode pattern from anode_assert both 
 <section id="step-4-anode_assert" class="level3" data-number="5.2.5">
 <h3 data-number="5.2.5" class="anchored" data-anchor-id="step-4-anode_assert"><span class="header-section-number">5.2.5</span> Step 4: <code>anode_assert</code></h3>
 <p>This module selects which digit is active. It has a 3-bit counter that advances on every 2 ms tick and turns the counter value into an active-low anode pattern.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> anode_assert <span class="op">(</span></span>
+<div class="sourceCode" id="cb4"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> anode_assert <span class="op">(</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic clock<span class="op">,</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic reset<span class="op">,</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic clock_enable<span class="op">,</span>       <span class="co">// time_tick from timer_002s</span></span>
@@ -434,7 +450,7 @@ Figure&nbsp;5.4: Inside SevSegDisplay. The anode pattern from anode_assert both 
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    logic <span class="op">[</span><span class="dv">2</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> count<span class="op">;</span></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> anode_select <span class="op">=</span> <span class="op">~(</span><span class="bn">8'b1</span> <span class="op">&lt;&lt;</span> count<span class="op">);</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol type="1">
 <li>Write an <code>always_ff</code> block that resets <code>count</code> to 0 and increments it whenever <code>clock_enable</code> is high. A 3-bit counter wraps from 7 back to 0 on its own, so no extra comparison is needed.</li>
 <li>The <code>assign</code> line is already given. Shifting <code>1</code> left by <code>count</code> sets exactly one bit, and the <code>~</code> inverts it so that exactly one anode is at logic 0:</li>
@@ -479,12 +495,12 @@ Figure&nbsp;5.4: Inside SevSegDisplay. The anode pattern from anode_assert both 
 <section id="step-5-value_to_digit" class="level3" data-number="5.2.6">
 <h3 data-number="5.2.6" class="anchored" data-anchor-id="step-5-value_to_digit"><span class="header-section-number">5.2.6</span> Step 5: <code>value_to_digit</code></h3>
 <p>This purely combinational module picks the nibble of the 32-bit value that belongs to the active digit.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> value_to_digit<span class="op">(</span></span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> value_to_digit<span class="op">(</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic <span class="op">[</span><span class="dv">31</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> value<span class="op">,</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic <span class="op">[</span><span class="dv">7</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> anode_select<span class="op">,</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> digit</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol type="1">
 <li>Write an <code>always_comb</code> block with a <code>case</code> statement on <code>anode_select</code>.</li>
 <li>Add one branch per row of the table in Step 4. For <code>8'hFE</code> output <code>value[3:0]</code>, for <code>8'hFD</code> output <code>value[7:4]</code>, and so on up to <code>8'h7F</code>, which outputs <code>value[31:28]</code>.</li>
@@ -498,11 +514,11 @@ Figure&nbsp;5.4: Inside SevSegDisplay. The anode pattern from anode_assert both 
 <li>The bit order is <code>segs[6:0] = {G, F, E, D, C, B, A}</code>. So <code>segs[0]</code> drives segment A and <code>segs[6]</code> drives segment G (see <a href="#fig-sevenseg-layout" class="quarto-xref">Figure&nbsp;<span>5.1</span></a>).</li>
 <li>The cathodes are active low. A segment that should light needs a <strong>0</strong>.</li>
 </ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> digit_to_segments <span class="op">(</span></span>
+<div class="sourceCode" id="cb6"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> digit_to_segments <span class="op">(</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> digit<span class="op">,</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic <span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> segs</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol type="1">
 <li>For each hex digit, list the segments that must light. The table below gives them.</li>
 <li>Write the 7-bit pattern in the order G F E D C B A. Put a 0 for every lit segment and a 1 for every dark one.</li>
@@ -605,7 +621,7 @@ Figure&nbsp;5.4: Inside SevSegDisplay. The anode pattern from anode_assert both 
 <section id="step-7-sevsegdisplay" class="level3" data-number="5.2.8">
 <h3 data-number="5.2.8" class="anchored" data-anchor-id="step-7-sevsegdisplay"><span class="header-section-number">5.2.8</span> Step 7: <code>SevSegDisplay</code></h3>
 <p>Now connect the four modules as shown in <a href="#fig-sevseg-display" class="quarto-xref">Figure&nbsp;<span>5.4</span></a>.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> SevSegDisplay <span class="op">(</span></span>
+<div class="sourceCode" id="cb7"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> SevSegDisplay <span class="op">(</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic clock<span class="op">,</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic reset<span class="op">,</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> digit1<span class="op">,</span> <span class="co">// least significant digit, shown on AN0</span></span>
@@ -621,7 +637,7 @@ Figure&nbsp;5.4: Inside SevSegDisplay. The anode pattern from anode_assert both 
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span>
 <span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    logic <span class="op">[</span><span class="dv">31</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> digit<span class="op">;</span></span>
 <span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> digit <span class="op">=</span> <span class="op">{</span>digit8<span class="op">,</span> digit7<span class="op">,</span> digit6<span class="op">,</span> digit5<span class="op">,</span> digit4<span class="op">,</span> digit3<span class="op">,</span> digit2<span class="op">,</span> digit1<span class="op">};</span></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol type="1">
 <li>Declare two internal signals: <code>logic time_tick</code> and <code>logic [3:0] current_digit</code>. Do not name the 4-bit signal <code>digit</code>, because the skeleton already uses <code>digit</code> for the packed 32-bit value.</li>
 <li>Instantiate <code>timer_002s</code>. Connect <code>clock</code> and <code>reset</code>, and connect its output to <code>time_tick</code>.</li>
@@ -633,14 +649,14 @@ Figure&nbsp;5.4: Inside SevSegDisplay. The anode pattern from anode_assert both 
 <section id="step-8-top" class="level3" data-number="5.2.9">
 <h3 data-number="5.2.9" class="anchored" data-anchor-id="step-8-top"><span class="header-section-number">5.2.9</span> Step 8: <code>top</code></h3>
 <p>The top module connects the counter to the display, as shown in <a href="#fig-sevseg-top" class="quarto-xref">Figure&nbsp;<span>5.3</span></a>.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> top <span class="op">(</span></span>
+<div class="sourceCode" id="cb8"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> top <span class="op">(</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic clock<span class="op">,</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic reset<span class="op">,</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic enable<span class="op">,</span></span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic <span class="op">[</span><span class="dv">7</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> anode_assert<span class="op">,</span></span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic <span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> segs</span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol type="1">
 <li>Declare an internal signal <code>logic [31:0] count</code>.</li>
 <li>Instantiate <code>counter_1s</code> and connect <code>clock</code>, <code>reset</code>, <code>enable</code> and <code>count</code>.</li>
@@ -653,8 +669,8 @@ Figure&nbsp;5.4: Inside SevSegDisplay. The anode pattern from anode_assert both 
 <p>Simulate before you build. Finding a bug in GTKWave takes minutes. Finding it on the board takes much longer.</p>
 <p>With the real limits, one second of hardware time is 100 million clock cycles, which is far too slow to simulate. Temporarily shrink the limits instead. For example, make the 2 ms timer tick every 4 cycles and the 1 s timer every 64 cycles. A parametrized timer from Step 2 makes this a one-line change. Remember to restore the real values before you build.</p>
 <p>Use <a href="../code/05_lab/top_tb.sv">top_tb.sv</a> as a starting point. Put it in the project’s <code>tb/</code> folder and run it:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> test tb/top_tb.sv</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">gtkwave</span> tb/top_tb.vcd <span class="kw">&amp;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> test tb/top_tb.sv</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">gtkwave</span> tb/top_tb.vcd <span class="kw">&amp;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>In the waveform, check that:</p>
 <ul>
 <li><code>anode_assert</code> steps through <code>FE</code>, <code>FD</code>, <code>FB</code>, … <code>7F</code> and then starts again at <code>FE</code>.</li>
@@ -717,8 +733,8 @@ set_property IOSTANDARD LVCMOS33 [get_ports {anode_assert[7]}]</code></pre>
 <section id="step-11-build-and-program" class="level3" data-number="5.2.12">
 <h3 data-number="5.2.12" class="anchored" data-anchor-id="step-11-build-and-program"><span class="header-section-number">5.2.12</span> Step 11: Build and program</h3>
 <p>Check that the timer limits are back at their real values (200 000 and 100 000 000). Then build and program the board:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> build</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> program</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> build</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> program</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>All eight digits should show <code>00000000</code>. Turn on SW0, and the rightmost digit should count up once per second: 1, 2, … 9, A, b, … F. Then the next digit increments to 1. Turning SW0 off freezes the value, and pressing BTNC clears it to zero.</p>
 <p>If the display looks wrong, use these hints:</p>
 <ul>
@@ -790,14 +806,13 @@ set_property IOSTANDARD LVCMOS33 [get_ports {anode_assert[7]}]</code></pre>
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
         }
-      }
-      return codeEl.innerText;
+        return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -817,8 +832,7 @@ set_property IOSTANDARD LVCMOS33 [get_ports {anode_assert[7]}]</code></pre>
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
       // Inspect non-navigation links and adorn them if external
-      window.quartoDecorateExternalLinks = function (root) {
-     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
       for (var i=0; i<links.length; i++) {
         const link = links[i];
         if (!isInternal(link.href)) {
@@ -827,69 +841,8 @@ set_property IOSTANDARD LVCMOS33 [get_ports {anode_assert[7]}]</code></pre>
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
-          if (!link.classList.contains('no-external-icon')) {
-          }
         }
       }
-      };
-      window.quartoDecorateExternalLinks(window.document);
-    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
-    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
-    const hideOnEscAndFocusOut = {
-      name: 'hideOnEscAndFocusOut',
-      defaultValue: true,
-      fn(instance) {
-        const dismiss = () => {
-          // A show scheduled by the trigger delay would otherwise reopen it
-          instance.clearDelayTimeouts();
-          instance.hide();
-        };
-        const onKeyDown = (event) => {
-          if (event.key !== 'Escape') {
-            return;
-          }
-          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
-          // except an open reveal.js slide menu, which Esc should close too.
-          // The menu handles keys only when its keyboard option is on.
-          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
-            window.Reveal.getConfig().menu?.keyboard !== false;
-          if (!menuHandlesEsc) {
-            event.stopPropagation();
-          }
-          if (instance.popper.contains(window.document.activeElement)) {
-            // Disabled while refocusing so the focus trigger does not reopen it
-            instance.disable();
-            instance.reference.focus();
-            instance.enable();
-          }
-          dismiss();
-        };
-        const onFocusOut = (event) => {
-          const target = event.relatedTarget;
-          if (target && !instance.reference.contains(target) &&
-              !instance.popper.contains(target)) {
-            dismiss();
-          }
-        };
-        // On the trigger too: a click trigger (code-annotations: select) has no
-        // blur handling. Attached for the instance's lifetime so leaving the
-        // trigger also cancels a show still pending on the trigger delay.
-        instance.reference.addEventListener('focusout', onFocusOut);
-        return {
-          onShow() {
-            window.document.addEventListener('keydown', onKeyDown, true);
-            instance.popper.addEventListener('focusout', onFocusOut);
-          },
-          onHide() {
-            window.document.removeEventListener('keydown', onKeyDown, true);
-            instance.popper.removeEventListener('focusout', onFocusOut);
-          },
-          onDestroy() {
-            instance.reference.removeEventListener('focusout', onFocusOut);
-          },
-        };
-      },
-    };
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
       const config = {
         allowHTML: true,
@@ -903,7 +856,6 @@ set_property IOSTANDARD LVCMOS33 [get_ports {anode_assert[7]}]</code></pre>
         interactiveBorder: 10,
         theme: 'quarto',
         placement: 'bottom-start',
-        plugins: [hideOnEscAndFocusOut],
       };
       if (contentFn) {
         config.content = contentFn;
@@ -1066,54 +1018,44 @@ set_property IOSTANDARD LVCMOS33 [get_ports {anode_assert[7]}]</code></pre>
           const lineIds = lines.map((line) => {
             return targetCell + "-" + line;
           })
-          // Each band is positioned against its own containing block, which is
-          // not the offsetParent of the lines, so place it from client rects.
-          const placeBand = (band, firstEl, lastEl, codeBlock) => {
-            const container = band.offsetParent;
-            if (container === null) {
-              return;
-            }
-            const containerRect = container.getBoundingClientRect();
-            // Reveal.js scales slides with a transform, so convert client
-            // pixels back to the CSS pixels of the container.
-            const scale = containerRect.height / container.offsetHeight || 1;
-            const firstRect = firstEl.getBoundingClientRect();
-            const lastRect = lastEl.getBoundingClientRect();
-            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
-            const height = (lastRect.bottom - firstRect.top) / scale;
-            band.style.top = top - 2 + "px";
-            band.style.height = height + 4 + "px";
-            if (codeBlock) {
-              // Without the copy button wrapper, the containing block is wider
-              // than the code block, so span the code block explicitly.
-              const blockRect = codeBlock.getBoundingClientRect();
-              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
-              band.style.width = blockRect.width / scale + "px";
-            }
-          };
+          let top = null;
+          let height = null;
+          let parent = null;
           if (lineIds.length > 0) {
-            const el = window.document.getElementById(lineIds[0]);
-            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-            const parent = el.parentElement.parentElement;
-            // cook up a div (if necessary) and position it
-            let div = window.document.getElementById("code-annotation-line-highlight");
-            if (div === null) {
-              div = window.document.createElement("div");
-              div.setAttribute("id", "code-annotation-line-highlight");
-              div.style.position = 'absolute';
-              parent.appendChild(div);
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
             }
-            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
-            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-            if (gutterDiv === null) {
-              gutterDiv = window.document.createElement("div");
-              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-              gutterDiv.style.position = 'absolute';
-              const codeCell = window.document.getElementById(targetCell);
-              const gutter = codeCell.querySelector('.code-annotation-gutter');
-              gutter.appendChild(gutterDiv);
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
             }
-            placeBand(gutterDiv, el, lastEl);
             selectedAnnoteEl = annoteEl;
           }
         };
@@ -1212,10 +1154,7 @@ set_property IOSTANDARD LVCMOS33 [get_ports {anode_assert[7]}]</code></pre>
     }
   });
   </script>
-  <script type="application/javascript">
-  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
-  </script>
-<nav class="page-navigation" aria-label="Page">
+<nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../chapters/04-structural-modeling.html" class="pagination-link" aria-label="Fourth exercise: Structural modeling and Simulation">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fourth exercise: Structural modeling and Simulation</span></span>

@@ -2,23 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.11.9">
+<meta name="generator" content="quarto-1.7.31">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>6&nbsp; Sixth exercise: UART transmitter – Digital Design Lab</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
+code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: 1.5em;}
-div.column{flex: auto;}
-@media screen {
-div.columns{gap: min(4vw, 1.5em);}
-div.column{overflow-x: auto;}
-}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -71,19 +65,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../chapters/appendix-oscilloscope.html" rel="next">
+<link href="../chapters/hw1.html" rel="next">
 <link href="../chapters/05-counter-sevenseg.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-4f67ab1e4efc86feb5e21e0983fc9301.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-467c603866d931062acf9dde62877a13.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -115,17 +108,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </head>
 
-<body class="nav-sidebar floating quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
+<body class="nav-sidebar floating quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav" aria-label="Toolbar">
+  <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-tools-intro.html">Lab Exercises</a></li><li class="breadcrumb-item"><a href="../chapters/06-uart.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sixth exercise: UART transmitter</span></a></li></ol></nav>
-        <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-tools-intro.html">Lab Exercises</a></li><li class="breadcrumb-item"><a href="../chapters/06-uart.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sixth exercise: UART transmitter</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -136,7 +129,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto" aria-label="Site">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Digital Design Lab</a> 
@@ -157,10 +150,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-controls="quarto-sidebar-section-1" aria-expanded="true">
- <span class="menu-text" id="quarto-sidebar-section-1-label">Lab Exercises</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Lab Exercises</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" aria-labelledby="quarto-sidebar-section-1-label" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/01-tools-intro.html" class="sidebar-item-text sidebar-link">
@@ -201,14 +197,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-controls="quarto-sidebar-section-2" aria-expanded="true">
- <span class="menu-text" id="quarto-sidebar-section-2-label">Appendix</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Homework</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" aria-labelledby="quarto-sidebar-section-2-label" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/hw1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Homework 1: Extending the HIPV core</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendix</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/appendix-oscilloscope.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Appendix: Using the Oscilloscope and Signal Generator</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Appendix: Using the Oscilloscope and Signal Generator</span></span></a>
   </div>
 </li>
       </ul>
@@ -219,7 +235,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+        <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
@@ -252,9 +268,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content" tabindex="-1">
+<main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-tools-intro.html">Lab Exercises</a></li><li class="breadcrumb-item"><a href="../chapters/06-uart.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sixth exercise: UART transmitter</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-tools-intro.html">Lab Exercises</a></li><li class="breadcrumb-item"><a href="../chapters/06-uart.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sixth exercise: UART transmitter</span></a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sixth exercise: UART transmitter</span></h1>
 </div>
@@ -455,10 +471,10 @@ Figure&nbsp;6.3: Top-level design. A press of BTNC starts hellotxctrl, which fee
 <section id="step-1-create-the-project" class="level3" data-number="6.3.1">
 <h3 data-number="6.3.1" class="anchored" data-anchor-id="step-1-create-the-project"><span class="header-section-number">6.3.1</span> Step 1: Create the project</h3>
 <p>Create a new Anvil project for the Nexys A7 100T, as in the <a href="../chapters/01-tools-intro.html">tools intro</a>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> uart_hello <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> uart_hello</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> init <span class="at">--board</span> Nexys-A7-100T</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> uart_hello <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> uart_hello</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> init <span class="at">--board</span> Nexys-A7-100T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Copy all ten <code>.sv</code> design files into the project root, replacing the generated <code>top.sv</code>. Copy the two testbenches into <code>tb/</code>. You can download them all at once by running this command inside the <code>uart_hello</code> folder:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-f</span> top.sv<span class="kw">;</span> <span class="va">B</span><span class="op">=</span>https://raw.githubusercontent.com/laspp/digital_design_lab/main/code/06_lab<span class="kw">;</span> <span class="fu">wget</span> <span class="at">-q</span> <span class="va">$B</span>/<span class="dt">{top</span><span class="op">,</span><span class="dt">uarttx</span><span class="op">,</span><span class="dt">uarttxctrl</span><span class="op">,</span><span class="dt">baudgen</span><span class="op">,</span><span class="dt">shiftreg</span><span class="op">,</span><span class="dt">hellotxctrl</span><span class="op">,</span><span class="dt">msgrom</span><span class="op">,</span><span class="dt">btnpulse</span><span class="op">,</span><span class="dt">flopenr</span><span class="op">,</span><span class="dt">mux2}</span>.sv <span class="kw">&amp;&amp;</span> <span class="fu">wget</span> <span class="at">-q</span> <span class="at">-P</span> tb <span class="va">$B</span>/<span class="dt">{uarttx_tb</span><span class="op">,</span><span class="dt">top_tb}</span>.sv</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-f</span> top.sv<span class="kw">;</span> <span class="va">B</span><span class="op">=</span>https://raw.githubusercontent.com/laspp/digital_design_lab/main/code/06_lab<span class="kw">;</span> <span class="fu">wget</span> <span class="at">-q</span> <span class="va">$B</span>/<span class="dt">{top</span><span class="op">,</span><span class="dt">uarttx</span><span class="op">,</span><span class="dt">uarttxctrl</span><span class="op">,</span><span class="dt">baudgen</span><span class="op">,</span><span class="dt">shiftreg</span><span class="op">,</span><span class="dt">hellotxctrl</span><span class="op">,</span><span class="dt">msgrom</span><span class="op">,</span><span class="dt">btnpulse</span><span class="op">,</span><span class="dt">flopenr</span><span class="op">,</span><span class="dt">mux2}</span>.sv <span class="kw">&amp;&amp;</span> <span class="fu">wget</span> <span class="at">-q</span> <span class="at">-P</span> tb <span class="va">$B</span>/<span class="dt">{uarttx_tb</span><span class="op">,</span><span class="dt">top_tb}</span>.sv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>It first removes the <code>top.sv</code> generated by <code>anvil init</code>. Otherwise <code>wget</code> would save the starter file as <code>top.sv.1</code> next to it. The <code>{...}</code> part expands into one URL per file, and <code>-P tb</code> puts the testbenches into <code>tb/</code>. On macOS, install <code>wget</code> first with <code>brew install wget</code>.</p>
 <p>The project should then look like this:</p>
 <pre><code>uart_hello/
@@ -474,7 +490,7 @@ Figure&nbsp;6.3: Top-level design. A press of BTNC starts hellotxctrl, which fee
 <section id="step-2-baudgen" class="level3" data-number="6.3.2">
 <h3 data-number="6.3.2" class="anchored" data-anchor-id="step-2-baudgen"><span class="header-section-number">6.3.2</span> Step 2: <code>baudgen</code></h3>
 <p>The baud rate generator is a counter that produces a one-cycle <code>Tick</code> once every bit period. It is the same idea as the prescaler from the <a href="../chapters/04-structural-modeling.html">fourth exercise</a> and the 2 ms timer from the <a href="../chapters/05-counter-sevenseg.html">fifth</a>, with one addition: a <code>Clear</code> input.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> baudgen #(<span class="kw">parameter</span> LIMIT = <span class="dv">868</span>) (</span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> baudgen #(<span class="kw">parameter</span> LIMIT = <span class="dv">868</span>) (</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">input</span>  <span class="kw">logic</span> clk, reset,</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">input</span>  <span class="kw">logic</span> Clear,</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">output</span> <span class="kw">logic</span> Tick);</span>
@@ -483,7 +499,7 @@ Figure&nbsp;6.3: Top-level design. A press of BTNC starts hellotxctrl, which fee
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">localparam</span> <span class="kw">logic</span> [WIDTH<span class="dv">-1</span>:<span class="dv">0</span>] LAST_COUNT = WIDTH'(LIMIT - <span class="dv">1</span>);</span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">logic</span> [WIDTH<span class="dv">-1</span>:<span class="dv">0</span>] Count;</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol type="1">
 <li><code>WIDTH</code> and <code>LAST_COUNT</code> are already worked out from <code>LIMIT</code>. <code>$clog2(868)</code> is 10, because 2^10 = 1024 is the smallest power of two above 868. The cast <code>WIDTH'(...)</code> resizes the 32-bit result of <code>LIMIT - 1</code> to <code>WIDTH</code> bits, so the comparison below has matching widths.</li>
 <li>Write an <code>always_ff</code> block. When <code>reset</code>, <code>Clear</code> or <code>Tick</code> is high, set <code>Count</code> to 0. Otherwise increment it.</li>
@@ -494,11 +510,11 @@ Figure&nbsp;6.3: Top-level design. A press of BTNC starts hellotxctrl, which fee
 <section id="step-3-shiftreg" class="level3" data-number="6.3.3">
 <h3 data-number="6.3.3" class="anchored" data-anchor-id="step-3-shiftreg"><span class="header-section-number">6.3.3</span> Step 3: <code>shiftreg</code></h3>
 <p>The shift register holds the byte being sent and presents it one bit at a time, LSB first, on <code>SerialOut</code>.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> shiftreg #(<span class="kw">parameter</span> WIDTH = <span class="dv">8</span>) (</span>
+<div class="sourceCode" id="cb6"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> shiftreg #(<span class="kw">parameter</span> WIDTH = <span class="dv">8</span>) (</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">input</span>  <span class="kw">logic</span>             clk, reset,</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">input</span>  <span class="kw">logic</span>             Load, Shift,</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">input</span>  <span class="kw">logic</span> [WIDTH<span class="dv">-1</span>:<span class="dv">0</span>] D,</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">output</span> <span class="kw">logic</span>             SerialOut);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">output</span> <span class="kw">logic</span>             SerialOut);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -567,7 +583,7 @@ Figure&nbsp;6.5: State diagram of uarttxctrl. Each state shows the level it puts
 </ul>
 <p>A 3-bit counter <code>BitCount</code> keeps track of which data bit is on the line. It is cleared in START and incremented on every <code>Tick</code> in DATA. <code>LastBit</code> is high while it equals <code>DATA_BITS - 1</code>, which is 7.</p>
 <p>The skeleton gives you the state type and the state register, written in the same style as the HIPV core’s FSMs:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  <span class="kw">typedef</span> <span class="kw">enum</span> <span class="kw">logic</span> [<span class="dv">1</span>:<span class="dv">0</span>] {IDLE, START, DATA, STOP} statetype;</span>
+<div class="sourceCode" id="cb7"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  <span class="kw">typedef</span> <span class="kw">enum</span> <span class="kw">logic</span> [<span class="dv">1</span>:<span class="dv">0</span>] {IDLE, START, DATA, STOP} statetype;</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  statetype             State, NextState;</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">logic</span> [CNT_WIDTH<span class="dv">-1</span>:<span class="dv">0</span>] BitCount;</span>
@@ -576,7 +592,7 @@ Figure&nbsp;6.5: State diagram of uarttxctrl. Each state shows the level it puts
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">// state register</span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">always_ff</span> @(<span class="kw">posedge</span> clk)</span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> (reset) State &lt;= IDLE;</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">else</span>       State &lt;= NextState;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">else</span>       State &lt;= NextState;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol type="1">
 <li>Write the bit counter as described above.</li>
 <li>Write the next state logic as an <code>always_comb</code> block with a <code>case</code> on <code>State</code>. Start with <code>NextState = State</code>, so that every state holds unless a transition applies, and add a <code>default</code> branch.</li>
@@ -620,18 +636,18 @@ Figure&nbsp;6.5: State diagram of uarttxctrl. Each state shows the level it puts
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Do not infer latches in the next state logic
+Do not infer latches in the next state logic
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>An <code>always_comb</code> block describes combinational logic only if it assigns every signal on every path through the block. If some path leaves <code>NextState</code> unassigned, the signal has to keep its old value on that path. Combinational logic cannot remember anything, so synthesis adds a <strong>latch</strong>, a level-sensitive storage element, to hold the value. A latch is not what you meant. It makes the timing unpredictable, and the design can behave differently on the board than in simulation.</p>
 <p>This happens easily in an FSM. The following next state logic infers a latch:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">always_comb</span></span>
+<div class="sourceCode" id="cb8"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">always_comb</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">case</span> (State)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    IDLE:  <span class="kw">if</span> (Start) NextState = START;  <span class="co">// no else: NextState is not assigned</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    START: <span class="kw">if</span> (Tick)  NextState = DATA;</span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    ...</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">endcase</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">endcase</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>In IDLE without <code>Start</code>, nothing assigns <code>NextState</code>. Two habits prevent this:</p>
 <ul>
 <li>Give every signal a default value at the top of the block, before the <code>case</code>. <code>NextState = State;</code> means “stay in the current state” on every path that does not assign a transition.</li>
@@ -656,14 +672,14 @@ Figure&nbsp;6.6: Inside uarttx. The FSM controls the baud rate generator and the
 </figcaption>
 </figure>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> uarttx #(<span class="kw">parameter</span> CLK_FREQ = <span class="dv">100</span>_000_000, BAUD_RATE = <span class="dv">115</span>_200) (</span>
+<div class="sourceCode" id="cb9"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> uarttx #(<span class="kw">parameter</span> CLK_FREQ = <span class="dv">100</span>_000_000, BAUD_RATE = <span class="dv">115</span>_200) (</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">input</span>  <span class="kw">logic</span>       clk, reset,</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">input</span>  <span class="kw">logic</span>       Start,</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">input</span>  <span class="kw">logic</span> [<span class="dv">7</span>:<span class="dv">0</span>] Data,</span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">output</span> <span class="kw">logic</span>       Tx,</span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">output</span> <span class="kw">logic</span>       Busy, Done);</span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">localparam</span> LIMIT = CLK_FREQ / BAUD_RATE;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">localparam</span> LIMIT = CLK_FREQ / BAUD_RATE;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol type="1">
 <li>Instantiate <code>baudgen #(LIMIT) baud</code>.</li>
 <li>Instantiate <code>shiftreg #(8) datareg</code> with <code>.D(Data)</code> and <code>.SerialOut(SerialBit)</code>.</li>
@@ -674,8 +690,8 @@ Figure&nbsp;6.6: Inside uarttx. The FSM controls the baud rate generator and the
 <section id="step-6-simulate-the-transmitter" class="level3" data-number="6.3.6">
 <h3 data-number="6.3.6" class="anchored" data-anchor-id="step-6-simulate-the-transmitter"><span class="header-section-number">6.3.6</span> Step 6: Simulate the transmitter</h3>
 <p>Simulate the transmitter before going further. At 115200 baud a frame is 8680 clock cycles long, which is a lot to scroll through in a waveform viewer. The testbench avoids this by instantiating <code>uarttx</code> with <code>BAUD_RATE = 10_000_000</code>, so <code>LIMIT</code> is only 10 cycles. Because the baud rate is a parameter, you do not have to edit the design to make simulation faster, unlike the timers in the previous exercise.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> test tb/uarttx_tb.sv</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">gtkwave</span> tb/uarttx_tb.vcd <span class="kw">&amp;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> test tb/uarttx_tb.sv</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">gtkwave</span> tb/uarttx_tb.vcd <span class="kw">&amp;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The testbench sends five bytes and decodes the <code>Tx</code> line with the mid-bit sampling described earlier. A working transmitter prints:</p>
 <pre><code>OK:    sent 0x55, received 0x55
 OK:    sent 0xa3, received 0xa3
@@ -694,8 +710,8 @@ PASS: all frames correct</code></pre>
 <section id="step-7-msgrom" class="level3" data-number="6.3.7">
 <h3 data-number="6.3.7" class="anchored" data-anchor-id="step-7-msgrom"><span class="header-section-number">6.3.7</span> Step 7: <code>msgrom</code></h3>
 <p>The message is stored in a small read-only memory, written as a <code>case</code> statement that maps an address to a character.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> msgrom (<span class="kw">input</span>  <span class="kw">logic</span> [<span class="dv">3</span>:<span class="dv">0</span>] Addr,</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>               <span class="kw">output</span> <span class="kw">logic</span> [<span class="dv">7</span>:<span class="dv">0</span>] Char);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> msgrom (<span class="kw">input</span>  <span class="kw">logic</span> [<span class="dv">3</span>:<span class="dv">0</span>] Addr,</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>               <span class="kw">output</span> <span class="kw">logic</span> [<span class="dv">7</span>:<span class="dv">0</span>] Char);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The message is <code>Hello World!</code> followed by two control characters. <strong>Carriage return</strong> (CR, 0x0D) moves the terminal cursor to the start of the line, and <strong>line feed</strong> (LF, 0x0A) moves it down one line. Together they start a new line, so each press of the button prints the message on its own line. That makes 14 characters, at addresses 0 to 13.</p>
 <p>The skeleton already has <code>H</code>, <code>e</code>, CR, LF and the <code>default</code> branch. Fill in addresses 2 to 11 using an ASCII table. These are the codes you need:</p>
 <table class="caption-top table">
@@ -743,13 +759,13 @@ PASS: all frames correct</code></pre>
 <section id="step-8-hellotxctrl" class="level3" data-number="6.3.8">
 <h3 data-number="6.3.8" class="anchored" data-anchor-id="step-8-hellotxctrl"><span class="header-section-number">6.3.8</span> Step 8: <code>hellotxctrl</code></h3>
 <p>The message sender is a second FSM. It walks the address through the 14 characters and hands each one to <code>uarttx</code>.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> hellotxctrl #(<span class="kw">parameter</span> MSG_LEN = <span class="dv">14</span>) (</span>
+<div class="sourceCode" id="cb13"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> hellotxctrl #(<span class="kw">parameter</span> MSG_LEN = <span class="dv">14</span>) (</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">input</span>  <span class="kw">logic</span>       clk, reset,</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">input</span>  <span class="kw">logic</span>       Send, TxDone,</span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">output</span> <span class="kw">logic</span> [<span class="dv">3</span>:<span class="dv">0</span>] Addr,</span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">output</span> <span class="kw">logic</span>       TxStart, Busy);</span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">typedef</span> <span class="kw">enum</span> <span class="kw">logic</span> [<span class="dv">1</span>:<span class="dv">0</span>] {IDLE, START, WAIT} statetype;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">typedef</span> <span class="kw">enum</span> <span class="kw">logic</span> [<span class="dv">1</span>:<span class="dv">0</span>] {IDLE, START, WAIT} statetype;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><a href="#fig-hellotx-fsm" class="quarto-xref">Figure&nbsp;<span>6.7</span></a> shows the state transitions.</p>
 <div id="fig-hellotx-fsm" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -791,7 +807,7 @@ Figure&nbsp;6.7: State diagram of hellotxctrl. START lasts exactly one cycle and
 <section id="step-10-simulate-the-system" class="level3" data-number="6.3.10">
 <h3 data-number="6.3.10" class="anchored" data-anchor-id="step-10-simulate-the-system"><span class="header-section-number">6.3.10</span> Step 10: Simulate the system</h3>
 <p>The system testbench resets the design, presses BTNC once, and decodes the <code>uart_tx</code> pin at the real 115200 baud:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> test tb/top_tb.sv</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> test tb/top_tb.sv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The whole message takes about 1.2 ms of simulated time, which is around 120 000 clock cycles. That takes only a few seconds to simulate. A working design prints:</p>
 <pre><code>Received: "Hello World!\r\n"
 PASS: message received correctly</code></pre>
@@ -830,8 +846,8 @@ set_property IOSTANDARD LVCMOS33 [get_ports {led[1]}]</code></pre>
 <section id="step-12-build-program-and-open-a-terminal" class="level3" data-number="6.3.12">
 <h3 data-number="6.3.12" class="anchored" data-anchor-id="step-12-build-program-and-open-a-terminal"><span class="header-section-number">6.3.12</span> Step 12: Build, program and open a terminal</h3>
 <p>Build the design and program the board:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> build</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> program</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> build</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> program</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>To see the message you need a <strong>serial terminal</strong> on your computer, set to 115200 baud, 8N1. The FT2232 chip shows up as two serial ports. The first one is the JTAG programmer, and the UART is the second one.</p>
 <ul>
 <li><strong>Linux &amp; WSL.</strong> The UART is usually <code>/dev/ttyUSB1</code>. Open it with <code>screen /dev/ttyUSB1 115200</code> or <code>picocom -b 115200 /dev/ttyUSB1</code>. If you get a permission error, add yourself to the <code>dialout</code> group (or <code>uucp</code> on Arch) and log in again.</li>
@@ -935,14 +951,13 @@ set_property IOSTANDARD LVCMOS33 [get_ports {led[1]}]</code></pre>
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
         }
-      }
-      return codeEl.innerText;
+        return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -962,8 +977,7 @@ set_property IOSTANDARD LVCMOS33 [get_ports {led[1]}]</code></pre>
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
       // Inspect non-navigation links and adorn them if external
-      window.quartoDecorateExternalLinks = function (root) {
-     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
       for (var i=0; i<links.length; i++) {
         const link = links[i];
         if (!isInternal(link.href)) {
@@ -972,69 +986,8 @@ set_property IOSTANDARD LVCMOS33 [get_ports {led[1]}]</code></pre>
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
-          if (!link.classList.contains('no-external-icon')) {
-          }
         }
       }
-      };
-      window.quartoDecorateExternalLinks(window.document);
-    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
-    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
-    const hideOnEscAndFocusOut = {
-      name: 'hideOnEscAndFocusOut',
-      defaultValue: true,
-      fn(instance) {
-        const dismiss = () => {
-          // A show scheduled by the trigger delay would otherwise reopen it
-          instance.clearDelayTimeouts();
-          instance.hide();
-        };
-        const onKeyDown = (event) => {
-          if (event.key !== 'Escape') {
-            return;
-          }
-          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
-          // except an open reveal.js slide menu, which Esc should close too.
-          // The menu handles keys only when its keyboard option is on.
-          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
-            window.Reveal.getConfig().menu?.keyboard !== false;
-          if (!menuHandlesEsc) {
-            event.stopPropagation();
-          }
-          if (instance.popper.contains(window.document.activeElement)) {
-            // Disabled while refocusing so the focus trigger does not reopen it
-            instance.disable();
-            instance.reference.focus();
-            instance.enable();
-          }
-          dismiss();
-        };
-        const onFocusOut = (event) => {
-          const target = event.relatedTarget;
-          if (target && !instance.reference.contains(target) &&
-              !instance.popper.contains(target)) {
-            dismiss();
-          }
-        };
-        // On the trigger too: a click trigger (code-annotations: select) has no
-        // blur handling. Attached for the instance's lifetime so leaving the
-        // trigger also cancels a show still pending on the trigger delay.
-        instance.reference.addEventListener('focusout', onFocusOut);
-        return {
-          onShow() {
-            window.document.addEventListener('keydown', onKeyDown, true);
-            instance.popper.addEventListener('focusout', onFocusOut);
-          },
-          onHide() {
-            window.document.removeEventListener('keydown', onKeyDown, true);
-            instance.popper.removeEventListener('focusout', onFocusOut);
-          },
-          onDestroy() {
-            instance.reference.removeEventListener('focusout', onFocusOut);
-          },
-        };
-      },
-    };
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
       const config = {
         allowHTML: true,
@@ -1048,7 +1001,6 @@ set_property IOSTANDARD LVCMOS33 [get_ports {led[1]}]</code></pre>
         interactiveBorder: 10,
         theme: 'quarto',
         placement: 'bottom-start',
-        plugins: [hideOnEscAndFocusOut],
       };
       if (contentFn) {
         config.content = contentFn;
@@ -1211,54 +1163,44 @@ set_property IOSTANDARD LVCMOS33 [get_ports {led[1]}]</code></pre>
           const lineIds = lines.map((line) => {
             return targetCell + "-" + line;
           })
-          // Each band is positioned against its own containing block, which is
-          // not the offsetParent of the lines, so place it from client rects.
-          const placeBand = (band, firstEl, lastEl, codeBlock) => {
-            const container = band.offsetParent;
-            if (container === null) {
-              return;
-            }
-            const containerRect = container.getBoundingClientRect();
-            // Reveal.js scales slides with a transform, so convert client
-            // pixels back to the CSS pixels of the container.
-            const scale = containerRect.height / container.offsetHeight || 1;
-            const firstRect = firstEl.getBoundingClientRect();
-            const lastRect = lastEl.getBoundingClientRect();
-            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
-            const height = (lastRect.bottom - firstRect.top) / scale;
-            band.style.top = top - 2 + "px";
-            band.style.height = height + 4 + "px";
-            if (codeBlock) {
-              // Without the copy button wrapper, the containing block is wider
-              // than the code block, so span the code block explicitly.
-              const blockRect = codeBlock.getBoundingClientRect();
-              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
-              band.style.width = blockRect.width / scale + "px";
-            }
-          };
+          let top = null;
+          let height = null;
+          let parent = null;
           if (lineIds.length > 0) {
-            const el = window.document.getElementById(lineIds[0]);
-            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-            const parent = el.parentElement.parentElement;
-            // cook up a div (if necessary) and position it
-            let div = window.document.getElementById("code-annotation-line-highlight");
-            if (div === null) {
-              div = window.document.createElement("div");
-              div.setAttribute("id", "code-annotation-line-highlight");
-              div.style.position = 'absolute';
-              parent.appendChild(div);
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
             }
-            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
-            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-            if (gutterDiv === null) {
-              gutterDiv = window.document.createElement("div");
-              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-              gutterDiv.style.position = 'absolute';
-              const codeCell = window.document.getElementById(targetCell);
-              const gutter = codeCell.querySelector('.code-annotation-gutter');
-              gutter.appendChild(gutterDiv);
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
             }
-            placeBand(gutterDiv, el, lastEl);
             selectedAnnoteEl = annoteEl;
           }
         };
@@ -1357,18 +1299,15 @@ set_property IOSTANDARD LVCMOS33 [get_ports {led[1]}]</code></pre>
     }
   });
   </script>
-  <script type="application/javascript">
-  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
-  </script>
-<nav class="page-navigation" aria-label="Page">
+<nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../chapters/05-counter-sevenseg.html" class="pagination-link" aria-label="Fifth exercise: Counter and seven segment display">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Fifth exercise: Counter and seven segment display</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../chapters/appendix-oscilloscope.html" class="pagination-link" aria-label="Appendix: Using the Oscilloscope and Signal Generator">
-        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Appendix: Using the Oscilloscope and Signal Generator</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../chapters/hw1.html" class="pagination-link" aria-label="Homework 1: Extending the HIPV core">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Homework 1: Extending the HIPV core</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

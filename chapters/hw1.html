@@ -1,0 +1,1871 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>7&nbsp; Homework 1: Extending the HIPV core – Digital Design Lab</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/appendix-oscilloscope.html" rel="next">
+<link href="../chapters/06-uart.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-467c603866d931062acf9dde62877a13.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/hw1.html">Homework</a></li><li class="breadcrumb-item"><a href="../chapters/hw1.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Homework 1: Extending the HIPV core</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Digital Design Lab</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Lab Exercises</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-tools-intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">First exercise: Tools and the Digital Design Cycle</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-alu.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Second exercise: Introduction to (System)Verilog</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-sequential.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Third exercise: Designing sequential circuits with SystemVerilog</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-structural-modeling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fourth exercise: Structural modeling and Simulation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-counter-sevenseg.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Fifth exercise: Counter and seven segment display</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-uart.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sixth exercise: UART transmitter</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Homework</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/hw1.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Homework 1: Extending the HIPV core</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendix</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/appendix-oscilloscope.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Appendix: Using the Oscilloscope and Signal Generator</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#before-you-start" id="toc-before-you-start" class="nav-link active" data-scroll-target="#before-you-start"><span class="header-section-number">7.1</span> Before you start</a></li>
+  <li><a href="#what-is-provided" id="toc-what-is-provided" class="nav-link" data-scroll-target="#what-is-provided"><span class="header-section-number">7.2</span> What is provided</a>
+  <ul class="collapse">
+  <li><a href="#where-to-change-the-code" id="toc-where-to-change-the-code" class="nav-link" data-scroll-target="#where-to-change-the-code"><span class="header-section-number">7.2.1</span> Where to change the code</a></li>
+  </ul></li>
+  <li><a href="#testbenches" id="toc-testbenches" class="nav-link" data-scroll-target="#testbenches"><span class="header-section-number">7.3</span> Testbenches</a>
+  <ul class="collapse">
+  <li><a href="#unit-level-tbunitmul-task-2" id="toc-unit-level-tbunitmul-task-2" class="nav-link" data-scroll-target="#unit-level-tbunitmul-task-2"><span class="header-section-number">7.3.1</span> Unit level: <code>tb/unit/mul</code> (Task 2)</a></li>
+  <li><a href="#unit-level-tbunitidu-and-tbunitieu-regression-and-task-1" id="toc-unit-level-tbunitidu-and-tbunitieu-regression-and-task-1" class="nav-link" data-scroll-target="#unit-level-tbunitidu-and-tbunitieu-regression-and-task-1"><span class="header-section-number">7.3.2</span> Unit level: <code>tb/unit/idu</code> and <code>tb/unit/ieu</code> (regression and Task 1)</a></li>
+  <li><a href="#core-level-tbcore" id="toc-core-level-tbcore" class="nav-link" data-scroll-target="#core-level-tbcore"><span class="header-section-number">7.3.3</span> Core level: <code>tb/core</code></a></li>
+  <li><a href="#soc-level-swhw1check-and-swhw1bench" id="toc-soc-level-swhw1check-and-swhw1bench" class="nav-link" data-scroll-target="#soc-level-swhw1check-and-swhw1bench"><span class="header-section-number">7.3.4</span> SoC level: <code>sw/hw1/check</code> and <code>sw/hw1/bench</code></a></li>
+  <li><a href="#existing-soc-and-fpga-testbenches-regression" id="toc-existing-soc-and-fpga-testbenches-regression" class="nav-link" data-scroll-target="#existing-soc-and-fpga-testbenches-regression"><span class="header-section-number">7.3.5</span> Existing SoC and FPGA testbenches (regression)</a></li>
+  <li><a href="#hidden-tests" id="toc-hidden-tests" class="nav-link" data-scroll-target="#hidden-tests"><span class="header-section-number">7.3.6</span> Hidden tests</a></li>
+  </ul></li>
+  <li><a href="#task-1-zbazbb-subset" id="toc-task-1-zbazbb-subset" class="nav-link" data-scroll-target="#task-1-zbazbb-subset"><span class="header-section-number">7.4</span> Task 1: Zba/Zbb subset</a>
+  <ul class="collapse">
+  <li><a href="#instructions" id="toc-instructions" class="nav-link" data-scroll-target="#instructions"><span class="header-section-number">7.4.1</span> Instructions</a></li>
+  <li><a href="#what-to-change" id="toc-what-to-change" class="nav-link" data-scroll-target="#what-to-change"><span class="header-section-number">7.4.2</span> What to change</a></li>
+  <li><a href="#sec-hw1-alu-codes" id="toc-sec-hw1-alu-codes" class="nav-link" data-scroll-target="#sec-hw1-alu-codes"><span class="header-section-number">7.4.3</span> ALU control encoding</a></li>
+  <li><a href="#testing-task-1" id="toc-testing-task-1" class="nav-link" data-scroll-target="#testing-task-1"><span class="header-section-number">7.4.4</span> Testing Task 1</a></li>
+  </ul></li>
+  <li><a href="#task-2-zmmul-with-a-single-1616-multiplier" id="toc-task-2-zmmul-with-a-single-1616-multiplier" class="nav-link" data-scroll-target="#task-2-zmmul-with-a-single-1616-multiplier"><span class="header-section-number">7.5</span> Task 2: Zmmul with a single 16×16 multiplier</a>
+  <ul class="collapse">
+  <li><a href="#instructions-1" id="toc-instructions-1" class="nav-link" data-scroll-target="#instructions-1"><span class="header-section-number">7.5.1</span> Instructions</a></li>
+  <li><a href="#required-architecture" id="toc-required-architecture" class="nav-link" data-scroll-target="#required-architecture"><span class="header-section-number">7.5.2</span> Required architecture</a></li>
+  <li><a href="#timing-of-the-mul-interface" id="toc-timing-of-the-mul-interface" class="nav-link" data-scroll-target="#timing-of-the-mul-interface"><span class="header-section-number">7.5.3</span> Timing of the <code>mul</code> interface</a></li>
+  <li><a href="#a-suggested-control-unit-mulctrl" id="toc-a-suggested-control-unit-mulctrl" class="nav-link" data-scroll-target="#a-suggested-control-unit-mulctrl"><span class="header-section-number">7.5.4</span> A suggested control unit (<code>mulctrl</code>)</a></li>
+  <li><a href="#connecting-it-to-the-pipeline" id="toc-connecting-it-to-the-pipeline" class="nav-link" data-scroll-target="#connecting-it-to-the-pipeline"><span class="header-section-number">7.5.5</span> Connecting it to the pipeline</a></li>
+  <li><a href="#testing-task-2" id="toc-testing-task-2" class="nav-link" data-scroll-target="#testing-task-2"><span class="header-section-number">7.5.6</span> Testing Task 2</a></li>
+  </ul></li>
+  <li><a href="#software-on-the-soc" id="toc-software-on-the-soc" class="nav-link" data-scroll-target="#software-on-the-soc"><span class="header-section-number">7.6</span> Software on the SoC</a>
+  <ul class="collapse">
+  <li><a href="#the-self-check-swhw1check" id="toc-the-self-check-swhw1check" class="nav-link" data-scroll-target="#the-self-check-swhw1check"><span class="header-section-number">7.6.1</span> The self-check: <code>sw/hw1/check</code></a></li>
+  <li><a href="#the-benchmark-swhw1bench" id="toc-the-benchmark-swhw1bench" class="nav-link" data-scroll-target="#the-benchmark-swhw1bench"><span class="header-section-number">7.6.2</span> The benchmark: <code>sw/hw1/bench</code></a></li>
+  </ul></li>
+  <li><a href="#report" id="toc-report" class="nav-link" data-scroll-target="#report"><span class="header-section-number">7.7</span> Report</a></li>
+  <li><a href="#grading" id="toc-grading" class="nav-link" data-scroll-target="#grading"><span class="header-section-number">7.8</span> Grading</a></li>
+  <li><a href="#submission" id="toc-submission" class="nav-link" data-scroll-target="#submission"><span class="header-section-number">7.9</span> Submission</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/hw1.html">Homework</a></li><li class="breadcrumb-item"><a href="../chapters/hw1.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Homework 1: Extending the HIPV core</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-hw1" class="quarto-section-identifier"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Homework 1: Extending the HIPV core</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>HIPV implements the RV32I base ISA. In this homework you add two standard RISC-V extensions to the core:</p>
+<ul>
+<li><strong>Task 1</strong> adds a subset of the bit-manipulation extensions <strong>Zba</strong> and <strong>Zbb</strong>. These are single-cycle instructions, and the work is in the decoder and the ALU.</li>
+<li><strong>Task 2</strong> adds <strong>Zmmul</strong>, the multiply half of the M extension. It is built from a single 16×16 multiplier, so a multiply takes several cycles and has to stall the pipeline.</li>
+</ul>
+<p>Do the tasks in order. Task 2 relies on the decoder changes you make in Task 1.</p>
+<p>To explore the instruction encodings of both tasks bit by bit, and to see what the current decoder does with each of them, use the interactive <a href="https://claude.ai/artifact/7HMQkkoLqw8NjtmJR6BDCc">HIPV Encoding Explorer</a>.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Homework">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Homework
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This is a graded homework (30 points), not a lab exercise. The code lives in the <code>HIPV-SoC</code> repository, branch <code>hw1-student</code>.</p>
+</div>
+</div>
+<section id="before-you-start" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="before-you-start"><span class="header-section-number">7.1</span> Before you start</h2>
+<p><strong>1. Update Anvil.</strong> The FPGA flow needs a current Anvil. Run once on your own computer:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> update</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>(On the classroom computers you cannot run <code>anvil update</code>; use the classroom patch from the <a href="../chapters/01-tools-intro.html">Tools introduction</a> instead.)</p>
+<p><strong>2. Get the <code>hw1-student</code> branch.</strong> The homework is done on the <code>hw1-student</code> branch of the <code>HIPV-SoC</code> repository. It contains everything listed under “What is provided”.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="op">&lt;</span>HIPV-SoC repository URL<span class="op">&gt;</span>     <span class="co"># skip if you already have a clone</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> HIPV-SoC</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> fetch origin</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout hw1-student                <span class="co"># or: git switch hw1-student</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status                              <span class="co"># should say: On branch hw1-student</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>3. Tools.</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tool</th>
+<th>Version</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Verilator</td>
+<td>≥ 5.036</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>cocotb</td>
+<td>2.x</td>
+<td><code>pip install -r requirements.txt</code></td>
+</tr>
+<tr class="odd">
+<td>RISC-V GCC</td>
+<td>recent</td>
+<td>Tested with <code>riscv64-unknown-elf-gcc</code> 15.2. Needs <code>.option arch</code> support in the assembler.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>4. Reading.</strong></p>
+<ul>
+<li>Lecture notes posted on Ucilnica (E-classroom)</li>
+<li>The RISC-V Unprivileged ISA specification (<a href="https://github.com/riscv/riscv-isa-manual/releases">releases</a>): the chapter on the B extension (Zba, Zbb) and the chapter on the M extension (Zmmul).</li>
+</ul>
+<p><strong>5. Sanity check.</strong> Before you change anything, check the setup:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> scripts/check_setup.py     <span class="co"># Verilator, cocotb, pytest, RISC-V GCC</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This catches most setup problems in seconds — including a cocotb that’s too old (the testbenches need the 2.x API) and a RISC-V GCC whose assembler doesn’t accept <code>.option arch, +zbb</code> (needed for Task 1). Then run the existing testbenches (see <a href="#testbenches">Testbenches</a>); they must pass:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> tb/core <span class="kw">&amp;&amp;</span> <span class="fu">make</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> tb/unit/idu <span class="kw">&amp;&amp;</span> <span class="fu">make</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> tb/unit/ieu <span class="kw">&amp;&amp;</span> <span class="fu">make</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="what-is-provided" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="what-is-provided"><span class="header-section-number">7.2</span> What is provided</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>File</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>tb/common/rv32i.py</code></td>
+<td>Python encoders for all homework instructions (<code>andn</code>, <code>min</code>, <code>mul</code>, …) and <code>li</code> for 32-bit constants</td>
+</tr>
+<tr class="even">
+<td><code>tb/common/hw1_model.py</code></td>
+<td>Python reference model of every homework instruction</td>
+</tr>
+<tr class="odd">
+<td><code>rtl/core/ieu/mul.sv</code></td>
+<td>Task 2 skeleton with the <strong>fixed interface</strong> of the multiplier</td>
+</tr>
+<tr class="even">
+<td><code>rtl/core/ieu/mulctrl.sv</code></td>
+<td>Task 2 skeleton for the multiplier’s control unit</td>
+</tr>
+<tr class="odd">
+<td><code>tb/unit/mul/</code></td>
+<td>Testbench for the <code>mul</code> module</td>
+</tr>
+<tr class="even">
+<td><code>tb/core/test_zbb.py</code>, <code>tb/core/test_zmmul.py</code></td>
+<td>Testbenches for the whole pipeline, Task 1 and Task 2</td>
+</tr>
+<tr class="odd">
+<td><code>sw/hw1/check/</code></td>
+<td>Self-checking C program for both tasks, run on the SoC</td>
+</tr>
+<tr class="even">
+<td><code>sw/hw1/bench/</code></td>
+<td>Benchmark comparing the new instructions with RV32I code</td>
+</tr>
+<tr class="odd">
+<td><code>sw/hw1/hw1_insn.h</code></td>
+<td>Inline-assembly wrappers for the new instructions</td>
+</tr>
+</tbody>
+</table>
+<section id="where-to-change-the-code" class="level3" data-number="7.2.1">
+<h3 data-number="7.2.1" class="anchored" data-anchor-id="where-to-change-the-code"><span class="header-section-number">7.2.1</span> Where to change the code</h3>
+<p>Every place you have to change is marked in the source with a comment starting with <code>HW1 Task 1</code> or <code>HW1 Task 2</code>. The comments say <em>where</em> to work, not <em>what</em> to write. List them with:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">"HW1 Task"</span> config rtl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>File</th>
+<th>Task</th>
+<th>What happens there</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>config/hipv_pkg.sv</code></td>
+<td>1</td>
+<td>ALU operation codes</td>
+</tr>
+<tr class="even">
+<td><code>rtl/core/idu/idudec.sv</code></td>
+<td>1, 2</td>
+<td>decoder inputs, a multiply control output, the main decoder (multiply, divide), the ALU decoder (Zba/Zbb)</td>
+</tr>
+<tr class="odd">
+<td><code>rtl/core/idu/idu.sv</code></td>
+<td>1, 2</td>
+<td>the bits passed to the decoder, the new outputs of the Decode stage</td>
+</tr>
+<tr class="even">
+<td><code>rtl/core/ieu/alu.sv</code></td>
+<td>1</td>
+<td>the Zba/Zbb operations</td>
+</tr>
+<tr class="odd">
+<td><code>rtl/core/ieu/ieu.sv</code></td>
+<td>1, 2</td>
+<td>the new inputs, the D/E control register, the handshake (<code>ReadyE</code>/<code>ValidE</code>), the multiplier instance and its result</td>
+</tr>
+<tr class="even">
+<td><code>rtl/core/hipv_core.sv</code></td>
+<td>1, 2</td>
+<td>the wires between <code>idu</code> and <code>ieu</code></td>
+</tr>
+<tr class="odd">
+<td><code>rtl/core/ieu/mul.sv</code></td>
+<td>2</td>
+<td>the multiplier datapath (new)</td>
+</tr>
+<tr class="even">
+<td><code>rtl/core/ieu/mulctrl.sv</code></td>
+<td>2</td>
+<td>the multiplier state machine (new)</td>
+</tr>
+</tbody>
+</table>
+<p><code>mul.sv</code> and <code>mulctrl.sv</code> are already listed in every testbench Makefile and in the FPGA flow. If you add another RTL file, add it to the <code>VERILOG_SOURCES</code> of <code>tb/unit/ieu</code>, <code>tb/unit/mul</code>, <code>tb/core</code>, <code>tb/soc</code> and <code>tb/fpga</code>, and to <code>scripts/anvil_flow.py</code>.</p>
+<hr>
+</section>
+</section>
+<section id="testbenches" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="testbenches"><span class="header-section-number">7.3</span> Testbenches</h2>
+<p>HIPV is verified with <a href="https://www.cocotb.org">cocotb</a> and Verilator: the design is simulated by Verilator, and the test itself is a Python program that drives the design’s inputs and checks its outputs. Each directory under <code>tb/</code> is one testbench:</p>
+<ul>
+<li>a <code>Makefile</code>, which says which RTL files to compile and which module is the top (<code>TOPLEVEL</code>);</li>
+<li>one or more <code>test_*.py</code> files, each holding several tests (Python functions marked <code>@cocotb.test()</code>).</li>
+</ul>
+<p>Run a testbench with <code>make</code> in its directory. Useful options:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>TESTCASE=&lt;name&gt;</code></td>
+<td>run only one test</td>
+</tr>
+<tr class="even">
+<td><code>WAVES=1</code></td>
+<td>write a waveform, <code>dump.vcd</code></td>
+</tr>
+</tbody>
+</table>
+<p>The homework uses testbenches at three levels. The level tells you <strong>what is simulated</strong> and <strong>what plays the rest of the world</strong>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Level</th>
+<th>Directory</th>
+<th>Simulated RTL</th>
+<th>The testbench plays</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Unit</strong></td>
+<td><code>tb/unit/&lt;module&gt;</code></td>
+<td>one module (<code>mul</code>, <code>idu</code>, <code>ieu</code>, …)</td>
+<td>the modules around it: it drives every input port directly, cycle by cycle</td>
+</tr>
+<tr class="even">
+<td><strong>Core</strong></td>
+<td><code>tb/core</code></td>
+<td>the CPU pipeline <code>hipv_core</code> only: fetch, decode, execute, memory, writeback, forwarding. No RAM, bus or peripherals.</td>
+<td>the two memories: Python models of an instruction and a data memory on the core’s OBI bus ports, with configurable wait states</td>
+</tr>
+<tr class="odd">
+<td><strong>SoC</strong></td>
+<td><code>tb/soc</code> (via <code>make run</code> in <code>sw/</code>)</td>
+<td>the complete system <code>hipv_soc</code>: core, crossbar, RAM, UART, timer, GPIO</td>
+<td>the outside world: it loads a compiled C program into the RAM and decodes the characters the program prints on the UART pin</td>
+</tr>
+</tbody>
+</table>
+<p>A failure at a lower level is easier to debug: the unit testbench points straight at one module, while a failed SoC test only tells you the printed text was wrong. Work upwards: unit first, then core, then SoC.</p>
+<section id="unit-level-tbunitmul-task-2" class="level3" data-number="7.3.1">
+<h3 data-number="7.3.1" class="anchored" data-anchor-id="unit-level-tbunitmul-task-2"><span class="header-section-number">7.3.1</span> Unit level: <code>tb/unit/mul</code> (Task 2)</h3>
+<p>Toplevel: your <code>mul</code> module alone. The testbench plays the Execute stage. It pulses <code>Start</code> with the operands, waits for <code>Done</code>, then raises <code>Ack</code>. Every result is compared with <code>hw1_model.py</code>.</p>
+<p>To check the interface contract in the header of <code>mul.sv</code>, the testbench does two things on every operation:</p>
+<ul>
+<li>it drives <strong>random values on <code>A</code>, <code>B</code> and <code>Funct3</code> after the <code>Start</code> cycle</strong>, so a unit that does not capture its operands fails;</li>
+<li>it checks that <code>Busy</code>, <code>Done</code> and <code>Result</code> follow the contract.</li>
+</ul>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Test</th>
+<th>What it checks</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>test_edge_cases</code></td>
+<td>all four instructions on 12×12 operands chosen to break naive designs: 0, 1, all ones, <code>0x80000000</code>, <code>0x7FFFFFFF</code>, values on the 16-bit seam such as <code>0x0000FFFF</code> and <code>0x00010000</code></td>
+</tr>
+<tr class="even">
+<td><code>test_random</code></td>
+<td>400 random operations; <code>Ack</code> is delayed by 0–3 cycles, and <code>Done</code>/<code>Result</code> must hold steady meanwhile</td>
+</tr>
+<tr class="odd">
+<td><code>test_latency</code></td>
+<td>logs the <code>Start → Done</code> latency of each instruction (record it for the report); fails if it exceeds 8 cycles</td>
+</tr>
+<tr class="even">
+<td><code>test_back_to_back</code></td>
+<td>a new <code>Start</code> in the cycle right after <code>Ack</code></td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> tb/unit/mul <span class="kw">&amp;&amp;</span> <span class="fu">make</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="unit-level-tbunitidu-and-tbunitieu-regression-and-task-1" class="level3" data-number="7.3.2">
+<h3 data-number="7.3.2" class="anchored" data-anchor-id="unit-level-tbunitidu-and-tbunitieu-regression-and-task-1"><span class="header-section-number">7.3.2</span> Unit level: <code>tb/unit/idu</code> and <code>tb/unit/ieu</code> (regression and Task 1)</h3>
+<p>These test the Decode and Execute stages. You will change both modules. The original tests <strong>must keep passing</strong>: they check that the RV32I behavior is unchanged. They write the existing <code>ALUControl</code> codes as numbers, so keep those codes unchanged (see Task 1).</p>
+<ul>
+<li><code>tb/unit/idu</code>: field extraction, decoding of every RV32I instruction class, register file read/write and bypass, flush, back-pressure.</li>
+<li><code>tb/unit/ieu</code>: all ten ALU operations, branch conditions and targets, <code>jal</code>/<code>jalr</code>, <code>lui</code>/<code>auipc</code>, forwarding selection, back-pressure, bubbles.</li>
+</ul>
+<p>Both testbenches also contain tests for the homework:</p>
+<ul>
+<li><code>tb/unit/idu</code>: <code>test_zba_zbb_decode</code> and <code>test_zba_zbb_same_funct3_distinct</code> check that every new instruction decodes to something different from the RV32I instruction with the same <code>funct3</code> (and from each other). <code>test_zmmul_decode</code> checks that <code>mul</code>, <code>mulh</code>, <code>mulhsu</code> and <code>mulhu</code> are flagged for the multiplier, and that <code>div</code>, <code>divu</code>, <code>rem</code> and <code>remu</code> do not write a register. These tests do not depend on how you encode the control signals.</li>
+<li><code>tb/unit/ieu</code>: <code>test_alu_encoding</code> checks the ALU codes in <code>hipv_pkg.sv</code> against the table in Task 1. <code>test_zba</code>, <code>test_zbb_logic_with_negate</code>, <code>test_zbb_min_max</code> and <code>test_zbb_count</code> drive the new codes into the Execute stage and compare the <code>ALUResultE</code> with a reference model. The tests read the codes from <code>hipv_pkg.sv</code>, so the constants must have the names given in the table.</li>
+</ul>
+</section>
+<section id="core-level-tbcore" class="level3" data-number="7.3.3">
+<h3 data-number="7.3.3" class="anchored" data-anchor-id="core-level-tbcore"><span class="header-section-number">7.3.3</span> Core level: <code>tb/core</code></h3>
+<p>Toplevel: <code>hipv_core</code>, the pipeline without the SoC around it. Each test:</p>
+<ol type="1">
+<li>builds a short program in Python with the encoders in <code>rv32i.py</code> (<code>li(1, 0x80000000)</code>, <code>andn(3, 1, 2)</code>, <code>sw(3, 0, 10)</code>, …);</li>
+<li>places it in the Python instruction memory and runs the core for a fixed number of cycles;</li>
+<li>checks the values the program stored in the Python data memory against <code>hw1_model.py</code>.</li>
+</ol>
+<p>A failure prints the instruction, its operands, the stored value and the expected value, for example <code>andn(0x00000001, 0x00000000) = 0x00000000, expected 0x00000001</code>. “Never written” means the store never happened; usually the pipeline hung, or the store went to the wrong address.</p>
+<p>The Makefile selects the test file with <code>MODULE</code>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>File</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>make</code></td>
+<td><code>test_hipv_core.py</code></td>
+<td>the existing RV32I tests (regression): forwarding, load-use, branches, calls, byte/half accesses, slow memories, forwarding while Execute stalls</td>
+</tr>
+<tr class="even">
+<td><code>make MODULE=test_zbb</code></td>
+<td><code>test_zbb.py</code></td>
+<td>Task 1</td>
+</tr>
+<tr class="odd">
+<td><code>make MODULE=test_zmmul</code></td>
+<td><code>test_zmmul.py</code></td>
+<td>Task 2</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>test_zbb.py</code> (Task 1)</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Test</th>
+<th>What it checks</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>test_zba</code></td>
+<td><code>sh1add</code>, <code>sh2add</code>, <code>sh3add</code> on 12×4 edge-case pairs plus random pairs</td>
+</tr>
+<tr class="even">
+<td><code>test_logic_with_negate</code></td>
+<td><code>andn</code>, <code>orn</code>, <code>xnor</code> on the same pairs</td>
+</tr>
+<tr class="odd">
+<td><code>test_min_max</code></td>
+<td><code>min</code>, <code>minu</code>, <code>max</code>, <code>maxu</code>; the pairs include operands where signed and unsigned order differ</td>
+</tr>
+<tr class="even">
+<td><code>test_forwarding_chain</code></td>
+<td>six new instructions in a row, each using the previous result (forwarding into and out of the new operations)</td>
+</tr>
+<tr class="odd">
+<td><code>test_rv32i_still_works</code></td>
+<td>the RV32I instructions that share encodings with the new ones: <code>add</code>, <code>sub</code>, <code>xor</code>, <code>sll</code>/<code>srl</code>/<code>sra</code>, <code>slli</code>/<code>srli</code>/<code>srai</code>, <code>andi</code>, <code>ori</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>test_zmmul.py</code> (Task 2)</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Test</th>
+<th>What it checks</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>test_mul_edge</code></td>
+<td>all four instructions on edge-case operand pairs</td>
+</tr>
+<tr class="even">
+<td><code>test_mul_random</code></td>
+<td>all four instructions on random pairs</td>
+</tr>
+<tr class="odd">
+<td><code>test_mul_dependencies</code></td>
+<td>a multiply using the result of the previous multiply, an ALU instruction using multiply results, a multiply using an ALU result, a store of a multiply result</td>
+</tr>
+<tr class="even">
+<td><code>test_mul_after_load_slow_memory</code></td>
+<td>multiplies whose operands come from loads that are <strong>still waiting for a slow data memory</strong> while instruction fetch is fast. This is the case behind “When may the multiplier start?” (Task 2).</td>
+</tr>
+<tr class="odd">
+<td><code>test_mul_and_branches</code></td>
+<td>a branch on a multiply result, and a multiply on a branch path that is skipped (it must not write its register)</td>
+</tr>
+<tr class="even">
+<td><code>test_back_to_back</code></td>
+<td>six independent multiplies in a row</td>
+</tr>
+<tr class="odd">
+<td><code>test_div_rem_are_nops</code></td>
+<td><code>div</code>, <code>divu</code>, <code>rem</code>, <code>remu</code> must leave their destination register unchanged</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="soc-level-swhw1check-and-swhw1bench" class="level3" data-number="7.3.4">
+<h3 data-number="7.3.4" class="anchored" data-anchor-id="soc-level-swhw1check-and-swhw1bench"><span class="header-section-number">7.3.4</span> SoC level: <code>sw/hw1/check</code> and <code>sw/hw1/bench</code></h3>
+<p>Toplevel: <code>hipv_soc</code>, the complete system. <code>make run</code> in a program directory compiles the C program, loads the binary into the SoC’s RAM, simulates the whole system and captures everything the program prints on the UART (<code>tb/soc/test_sw.py</code>).</p>
+<ul>
+<li><p><strong><code>sw/hw1/check</code></strong> is self-checking. Every instruction runs on all pairs of 12 operands and is compared with a reference written in plain RV32I C, so the reference does not depend on your hardware. The run passes if the printed text matches <code>expected.txt</code> exactly. A failing line shows how many results were wrong and the first one:</p>
+<pre><code>sh1add  OK
+min     FAIL 23/144  a=80000000 b=00000001 hw=00000001 ref=80000000</code></pre></li>
+<li><p><strong><code>sw/hw1/bench</code></strong> prints a table and does not check anything (see <a href="#software-on-the-soc">Software on the SoC</a>).</p></li>
+</ul>
+<p>A run simulates 4 million cycles and takes about half a minute.</p>
+<p><strong>Testing on real hardware.</strong> <code>sw/hw1/check</code> is the binary to flash to the board — <code>sw/hw1/bench</code> is simulation/report-only. Build and program it with:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> APP=hw1/check all              <span class="co"># build, synthesise, flash</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The Makefile builds for the Nexys A7 100T by default (<code>BOARD ?= nexys-100t</code>). If you have the Nexys A7 50T, select it with the <code>BOARD</code> variable:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> BOARD=nexys-50t APP=hw1/check all   <span class="co"># same build, for the Nexys A7 50T</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To test your design on the board <strong>instead of</strong> simulating it with <code>make run</code>, give the target explicitly. For example, on the Nexys A7 50T:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> APP=hw1/check BOARD=nexys-50t fpga      <span class="co"># build the firmware and the bitstream</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> APP=hw1/check BOARD=nexys-50t program   <span class="co"># flash the existing build</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>fpga</code> only builds; <code>program</code> flashes the board without rebuilding; <code>all</code> runs <code>sw</code>, <code>fpga</code> and <code>program</code> in one go.</p>
+<p>The only valid values are <code>nexys-100t</code> and <code>nexys-50t</code>. Any other value stops <code>make</code> with an “Unknown BOARD” error. You can also set the board once for your shell session with <code>export BOARD=nexys-50t</code>, which saves repeating it on every command.</p>
+<p>After flashing, open a serial terminal at 19200 8N1 (see <code>docs/FPGA.md</code>). The program runs <strong>once</strong> at boot and stops — it does not loop. If you don’t see output (the terminal was opened after it already ran, or you want to see it again), press the <strong><code>CPU_RESETN</code></strong> button (the red one) to restart it; you do not need to reflash.</p>
+</section>
+<section id="existing-soc-and-fpga-testbenches-regression" class="level3" data-number="7.3.5">
+<h3 data-number="7.3.5" class="anchored" data-anchor-id="existing-soc-and-fpga-testbenches-regression"><span class="header-section-number">7.3.5</span> Existing SoC and FPGA testbenches (regression)</h3>
+<p><code>tb/soc</code> (with plain <code>make</code>: a small assembly program exercising every peripheral) and <code>tb/fpga</code> (the board wrapper) must still pass at the end. They don’t test the new instructions; they show you haven’t broken the system.</p>
+</section>
+<section id="hidden-tests" class="level3" data-number="7.3.6">
+<h3 data-number="7.3.6" class="anchored" data-anchor-id="hidden-tests"><span class="header-section-number">7.3.6</span> Hidden tests</h3>
+<p>The provided tests are a good start, not the whole story. Your design is also graded with <strong>additional hidden tests of the same kind and at the same levels</strong>: more operand values, other instruction sequences, other memory timings. Write your own tests for the corner cases you can think of (see <a href="#rules">Rules</a>).</p>
+<hr>
+</section>
+</section>
+<section id="task-1-zbazbb-subset" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="task-1-zbazbb-subset"><span class="header-section-number">7.4</span> Task 1: Zba/Zbb subset</h2>
+<section id="instructions" class="level3" data-number="7.4.1">
+<h3 data-number="7.4.1" class="anchored" data-anchor-id="instructions"><span class="header-section-number">7.4.1</span> Instructions</h3>
+<p>All instructions write <code>rd</code>. <code>rs1</code> and <code>rs2</code> are the register operands. R-type instructions use opcode <code>OP</code> (<code>0110011</code>), the others use <code>OP-IMM</code> (<code>0010011</code>).</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Instruction</th>
+<th>Ext.</th>
+<th>Opcode</th>
+<th>funct7</th>
+<th>rs2 field</th>
+<th>funct3</th>
+<th>Operation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>sh1add</code></td>
+<td>Zba</td>
+<td>OP</td>
+<td><code>0010000</code></td>
+<td>rs2</td>
+<td><code>010</code></td>
+<td><code>(rs1 &lt;&lt; 1) + rs2</code></td>
+</tr>
+<tr class="even">
+<td><code>sh2add</code></td>
+<td>Zba</td>
+<td>OP</td>
+<td><code>0010000</code></td>
+<td>rs2</td>
+<td><code>100</code></td>
+<td><code>(rs1 &lt;&lt; 2) + rs2</code></td>
+</tr>
+<tr class="odd">
+<td><code>sh3add</code></td>
+<td>Zba</td>
+<td>OP</td>
+<td><code>0010000</code></td>
+<td>rs2</td>
+<td><code>110</code></td>
+<td><code>(rs1 &lt;&lt; 3) + rs2</code></td>
+</tr>
+<tr class="even">
+<td><code>andn</code></td>
+<td>Zbb</td>
+<td>OP</td>
+<td><code>0100000</code></td>
+<td>rs2</td>
+<td><code>111</code></td>
+<td><code>rs1 &amp; ~rs2</code></td>
+</tr>
+<tr class="odd">
+<td><code>orn</code></td>
+<td>Zbb</td>
+<td>OP</td>
+<td><code>0100000</code></td>
+<td>rs2</td>
+<td><code>110</code></td>
+<td><code>rs1 \| ~rs2</code></td>
+</tr>
+<tr class="even">
+<td><code>xnor</code></td>
+<td>Zbb</td>
+<td>OP</td>
+<td><code>0100000</code></td>
+<td>rs2</td>
+<td><code>100</code></td>
+<td><code>~(rs1 ^ rs2)</code></td>
+</tr>
+<tr class="odd">
+<td><code>min</code></td>
+<td>Zbb</td>
+<td>OP</td>
+<td><code>0000101</code></td>
+<td>rs2</td>
+<td><code>100</code></td>
+<td>signed minimum</td>
+</tr>
+<tr class="even">
+<td><code>minu</code></td>
+<td>Zbb</td>
+<td>OP</td>
+<td><code>0000101</code></td>
+<td>rs2</td>
+<td><code>101</code></td>
+<td>unsigned minimum</td>
+</tr>
+<tr class="odd">
+<td><code>max</code></td>
+<td>Zbb</td>
+<td>OP</td>
+<td><code>0000101</code></td>
+<td>rs2</td>
+<td><code>110</code></td>
+<td>signed maximum</td>
+</tr>
+<tr class="even">
+<td><code>maxu</code></td>
+<td>Zbb</td>
+<td>OP</td>
+<td><code>0000101</code></td>
+<td>rs2</td>
+<td><code>111</code></td>
+<td>unsigned maximum</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="what-to-change" class="level3" data-number="7.4.2">
+<h3 data-number="7.4.2" class="anchored" data-anchor-id="what-to-change"><span class="header-section-number">7.4.2</span> What to change</h3>
+<ol type="1">
+<li><strong>The decoder.</strong> Today <code>idudec.sv</code> only receives <code>funct7[5]</code>. Every encoding it doesn’t recognize silently runs as an RV32I instruction. Assemble an <code>andn</code> and work out which RV32I instruction the current core executes instead. Pass the bits you need into <code>idudec</code>.
+<ul>
+<li>Most new instructions share their funct3 with an RV32I instruction (<code>andn</code> with <code>and</code>, <code>xnor</code> with <code>xor</code>, <code>minu</code> with <code>srl</code>/<code>sra</code>, …). The RV32I instructions must keep working.</li>
+<li><code>funct7[5]</code> alone is not enough: <code>minu</code> and <code>srl</code> share both funct3 and <code>funct7[5]</code> (both 0) — you need more of <code>funct7</code> to tell them apart.</li>
+</ul></li>
+<li><strong>The ALU control signal.</strong> <code>ALUControl</code> is 4 bits wide and 10 of the 16 codes are used. Widen it to 5 bits and add the new codes to <code>hipv_pkg.sv</code> with the <a href="#sec-hw1-alu-codes">encoding below</a>.
+<ul>
+<li><strong>Keep the existing codes unchanged.</strong> The unit tests in <code>tb/unit/idu</code> and <code>tb/unit/ieu</code> use them.</li>
+<li>The width appears in <code>hipv_pkg</code>, <code>idudec</code>, <code>idu</code>, <code>ieu</code> (including the D/E pipeline register <code>ctrlreg</code>), <code>alu</code> and <code>hipv_core</code>.</li>
+</ul></li>
+<li><strong>The ALU.</strong> Add the new operations. Before you add a new block for every instruction, look for hardware you already have:
+<ul>
+<li><code>sh2add</code> is an add with one operand shifted.</li>
+<li><code>andn</code> is an <code>and</code> with one operand inverted.</li>
+<li><code>min</code>/<code>max</code> need exactly the comparison that <code>slt</code>/<code>sltu</code> already compute.</li>
+</ul>
+Explain your choices in the report.</li>
+<li><strong>Lint.</strong> The testbenches run Verilator with <code>-Wall</code>, and every warning is an error. Don’t switch warnings off globally.</li>
+</ol>
+</section>
+<section id="sec-hw1-alu-codes" class="level3" data-number="7.4.3">
+<h3 data-number="7.4.3" class="anchored" data-anchor-id="sec-hw1-alu-codes"><span class="header-section-number">7.4.3</span> ALU control encoding</h3>
+<p>The ALU, the decoder and the testbenches share one encoding, so <code>hipv_pkg.sv</code> must define <strong>exactly these constants with exactly these values</strong>, as 5-bit <code>localparam logic [4:0]</code>. <code>tb/unit/ieu</code> (<code>test_alu_encoding</code>) fails if a name is missing, a value differs, a constant is not 5 bits wide, or two operations share a code.</p>
+<div id="tbl-alu-codes" class="quarto-float quarto-figure quarto-figure-center anchored" data-tbl-colwidths="[32,18,32,18]">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-alu-codes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;7.1: ALU control codes.
+</figcaption>
+<div aria-describedby="tbl-alu-codes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 32%">
+<col style="width: 18%">
+<col style="width: 32%">
+<col style="width: 18%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Constant</th>
+<th>Code</th>
+<th>Constant</th>
+<th>Code</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>ALU_ADD</code></td>
+<td><code>00000</code></td>
+<td><code>ALU_SH2ADD</code></td>
+<td><code>01011</code></td>
+</tr>
+<tr class="even">
+<td><code>ALU_SUB</code></td>
+<td><code>00001</code></td>
+<td><code>ALU_SH3ADD</code></td>
+<td><code>01100</code></td>
+</tr>
+<tr class="odd">
+<td><code>ALU_SLL</code></td>
+<td><code>00010</code></td>
+<td><code>ALU_ANDN</code></td>
+<td><code>01101</code></td>
+</tr>
+<tr class="even">
+<td><code>ALU_SLT</code></td>
+<td><code>00011</code></td>
+<td><code>ALU_ORN</code></td>
+<td><code>01110</code></td>
+</tr>
+<tr class="odd">
+<td><code>ALU_SLTU</code></td>
+<td><code>00100</code></td>
+<td><code>ALU_XNOR</code></td>
+<td><code>01111</code></td>
+</tr>
+<tr class="even">
+<td><code>ALU_XOR</code></td>
+<td><code>00101</code></td>
+<td><code>ALU_MIN</code></td>
+<td><code>10000</code></td>
+</tr>
+<tr class="odd">
+<td><code>ALU_SRL</code></td>
+<td><code>00110</code></td>
+<td><code>ALU_MINU</code></td>
+<td><code>10001</code></td>
+</tr>
+<tr class="even">
+<td><code>ALU_SRA</code></td>
+<td><code>00111</code></td>
+<td><code>ALU_MAX</code></td>
+<td><code>10010</code></td>
+</tr>
+<tr class="odd">
+<td><code>ALU_OR</code></td>
+<td><code>01000</code></td>
+<td><code>ALU_MAXU</code></td>
+<td><code>10011</code></td>
+</tr>
+<tr class="even">
+<td><code>ALU_AND</code></td>
+<td><code>01001</code></td>
+<td><code>ALU_CLZ</code></td>
+<td><code>10100</code></td>
+</tr>
+<tr class="odd">
+<td><code>ALU_SH1ADD</code></td>
+<td><code>01010</code></td>
+<td><code>ALU_CPOP</code></td>
+<td><code>10101</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>For the bonus instructions (run the tests with <code>HW1_BONUS=1</code>) the codes continue: <code>ALU_CTZ</code> <code>10110</code>, <code>ALU_SEXTB</code> <code>10111</code>, <code>ALU_SEXTH</code> <code>11000</code>, <code>ALU_ZEXTH</code> <code>11001</code>, <code>ALU_ROL</code> <code>11010</code>, <code>ALU_ROR</code> <code>11011</code>, <code>ALU_ORCB</code> <code>11100</code>, <code>ALU_REV8</code> <code>11101</code>.</p>
+</section>
+<section id="testing-task-1" class="level3" data-number="7.4.4">
+<h3 data-number="7.4.4" class="anchored" data-anchor-id="testing-task-1"><span class="header-section-number">7.4.4</span> Testing Task 1</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> tb/core <span class="kw">&amp;&amp;</span> <span class="fu">make</span> MODULE=test_zbb      <span class="co"># core level, Task 1</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> tb/core <span class="kw">&amp;&amp;</span> <span class="fu">make</span>                      <span class="co"># core level, RV32I regression</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> tb/unit/idu <span class="kw">&amp;&amp;</span> <span class="fu">make</span>                  <span class="co"># unit level: decoder, regression and Task 1</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> tb/unit/ieu <span class="kw">&amp;&amp;</span> <span class="fu">make</span>                  <span class="co"># unit level: ALU codes and results, regression and Task 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The SoC-level check <code>sw/hw1/check</code> also covers Task 1, but it only passes completely once Task 2 is done as well.</p>
+<hr>
+</section>
+</section>
+<section id="task-2-zmmul-with-a-single-1616-multiplier" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="task-2-zmmul-with-a-single-1616-multiplier"><span class="header-section-number">7.5</span> Task 2: Zmmul with a single 16×16 multiplier</h2>
+<section id="instructions-1" class="level3" data-number="7.5.1">
+<h3 data-number="7.5.1" class="anchored" data-anchor-id="instructions-1"><span class="header-section-number">7.5.1</span> Instructions</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Instruction</th>
+<th>funct7</th>
+<th>funct3</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>mul</code></td>
+<td><code>0000001</code></td>
+<td><code>000</code></td>
+<td>low 32 bits of <code>rs1 × rs2</code></td>
+</tr>
+<tr class="even">
+<td><code>mulh</code></td>
+<td><code>0000001</code></td>
+<td><code>001</code></td>
+<td>high 32 bits, both operands signed</td>
+</tr>
+<tr class="odd">
+<td><code>mulhsu</code></td>
+<td><code>0000001</code></td>
+<td><code>010</code></td>
+<td>high 32 bits, <code>rs1</code> signed and <code>rs2</code> unsigned</td>
+</tr>
+<tr class="even">
+<td><code>mulhu</code></td>
+<td><code>0000001</code></td>
+<td><code>011</code></td>
+<td>high 32 bits, both operands unsigned</td>
+</tr>
+</tbody>
+</table>
+<p>All four use opcode <code>OP</code>. The divide instructions <code>div</code>, <code>divu</code>, <code>rem</code> and <code>remu</code> (funct7 <code>0000001</code>, funct3 <code>1xx</code>) are <strong>not</strong> part of Zmmul. HIPV has no illegal-instruction trap yet, so they must execute as <strong>nops</strong>: no register is written.</p>
+</section>
+<section id="required-architecture" class="level3" data-number="7.5.2">
+<h3 data-number="7.5.2" class="anchored" data-anchor-id="required-architecture"><span class="header-section-number">7.5.2</span> Required architecture</h3>
+<p><strong>Constraints.</strong> The whole design may contain <strong>exactly one</strong> multiplication operator, with two <strong>16-bit unsigned</strong> operands. A multiply must finish (<code>Done</code>) at most <strong>8 cycles</strong> after <code>Start</code>.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Use the `*` operator">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Use the <code>*</code> operator
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Implement the 16×16 multiplier with the SystemVerilog <code>*</code> operator, for example <code>P = A16 * B16;</code> with 16-bit unsigned operands. Do not write your own multiplier out of shifts and adds. The synthesis tool maps <code>*</code> onto the FPGA’s dedicated multiplier hardware, and this single <code>*</code> is the one multiplication operator the design may contain.</p>
+</div>
+</div>
+<p><strong>Idea.</strong> Split each operand into 16-bit halves, A = A<sub>H</sub>·2¹⁶ + A<sub>L</sub> (and the same for B). Then</p>
+<pre><code>A·B = A_L·B_L  +  (A_L·B_H + A_H·B_L)·2¹⁶  +  A_H·B_H·2³²</code></pre>
+<p>so four 16×16 products, each shifted to its weight, give the full 64-bit product. The unit computes one of them per cycle and sums them in a 64-bit accumulator.</p>
+<p><strong>Algorithm.</strong> The unit executes <a href="#tbl-mul-algorithm" class="quarto-xref">Table&nbsp;<span>7.2</span></a> once per multiply. <code>A</code>, <code>B</code> and <code>Funct3</code> are valid <strong>only in the <code>Start</code> cycle</strong>, so everything the later steps need must be stored there.</p>
+<div id="tbl-mul-algorithm" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-mul-algorithm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;7.2: Multiplication with one 16×16 multiplier. All four <code>·</code> use the same multiplier.
+</figcaption>
+<div aria-describedby="tbl-mul-algorithm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Cycle</th>
+<th>Step</th>
+<th>Operations</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Start</code></td>
+<td></td>
+<td><code>AReg ← A</code>, <code>BReg ← B</code><br><code>HighWord ← (Funct3 ≠ 000)</code><br><code>Acc ← AccInit(A, B, Funct3)</code></td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>0</td>
+<td><code>Acc ← Acc + A_L · B_L</code></td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>1</td>
+<td><code>Acc ← Acc + (A_L · B_H) &lt;&lt; 16</code></td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>2</td>
+<td><code>Acc ← Acc + (A_H · B_L) &lt;&lt; 16</code></td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>3</td>
+<td><code>Acc ← Acc + (A_H · B_H) &lt;&lt; 32</code></td>
+</tr>
+<tr class="even">
+<td><code>Done</code></td>
+<td></td>
+<td><code>Result ← HighWord ? Acc[63:32] : Acc[31:0]</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>In every step, <code>Step</code> selects the operand halves and the shift:</p>
+<ul>
+<li>the half of A is <code>Step[1] ? AReg[31:16] : AReg[15:0]</code>;</li>
+<li>the half of B is <code>Step[0] ? BReg[31:16] : BReg[15:0]</code>;</li>
+<li>the shift is 16 · (<code>Step[1]</code> + <code>Step[0]</code>) bits.</li>
+</ul>
+<p><code>mul</code> returns the low word of the sum, <code>mulh</code>, <code>mulhsu</code> and <code>mulhu</code> the high word.</p>
+<p><strong>Signed operands.</strong> The four partial products are unsigned, so the sum above is the product of the <em>unsigned</em> bit patterns. A signed 32-bit value equals its unsigned bit pattern minus 2³² when bit 31 is set:</p>
+<p>A<sub>signed</sub> = A<sub>unsigned</sub> − a<sub>31</sub>·2³²</p>
+<p>Work out from this what correction <code>mulh</code> and <code>mulhsu</code> need, and what <code>AccInit</code> must be for each of the four instructions. Explain in your report why the correction only affects the high word, and why <code>mul</code> needs none. One clean way to apply it costs no extra cycle: look at the <code>Acc ← AccInit</code> operation in the <code>Start</code> cycle.</p>
+<p><strong>Structure.</strong></p>
+<ul>
+<li><code>mul.sv</code> holds the datapath. Its ports are fixed and must not change, because the unit testbench depends on them. The header of <code>mul.sv</code> defines the contract for <code>Start</code>, <code>Ack</code>, <code>Busy</code> and <code>Done</code>; read it carefully.</li>
+<li><code>mulctrl.sv</code> holds the state machine. Its ports are up to you.</li>
+</ul>
+</section>
+<section id="timing-of-the-mul-interface" class="level3" data-number="7.5.3">
+<h3 data-number="7.5.3" class="anchored" data-anchor-id="timing-of-the-mul-interface"><span class="header-section-number">7.5.3</span> Timing of the <code>mul</code> interface</h3>
+<p>The diagrams below show the reference design, which needs 5 cycles from <code>Start</code> to <code>Done</code>: one <code>Start</code> cycle, four partial-product cycles (<code>Step</code> 0–3) and one cycle presenting the result. Your design may be faster or slower, up to 8 cycles. One column is one clock cycle. <code>x</code> means “don’t care”: the value can be anything, and the testbench drives random values there.</p>
+<p>Result taken at once (<code>Ack</code> in the first <code>Done</code> cycle). Cycle 0 is the <code>Start</code> cycle:</p>
+<div id="fig-mul-immediate" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mul-immediate-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../img/hw1/mul-timing-immediate.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mul-immediate-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.1: Result taken at once: <code>Ack</code> in the first <code>Done</code> cycle. Dashed lines mark don’t-care values.
+</figcaption>
+</figure>
+</div>
+<ul>
+<li><strong>Cycle 0:</strong> <code>Start</code> is high. This is the only cycle in which <code>A</code>, <code>B</code> and <code>Funct3</code> are valid, so everything the unit needs from them is captured at the end of this cycle.</li>
+<li><strong>Cycles 1–4:</strong> one partial product per cycle, selected by <code>Step</code>.</li>
+<li><strong>Cycle 5:</strong> <code>Done</code> is high and <code>Result</code> holds the product. <code>Ack</code> in the same cycle means “taken”.</li>
+<li><strong>Cycle 6:</strong> the unit is idle again, and a new <code>Start</code> may come.</li>
+</ul>
+<p>Result taken later (the pipeline is not ready yet). <code>Done</code> and <code>Result</code> hold until <code>Ack</code>:</p>
+<div id="fig-mul-delayed" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mul-delayed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../img/hw1/mul-timing-delayed.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mul-delayed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.2: Result taken later: <code>Done</code> and <code>Result</code> hold until <code>Ack</code>.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="a-suggested-control-unit-mulctrl" class="level3" data-number="7.5.4">
+<h3 data-number="7.5.4" class="anchored" data-anchor-id="a-suggested-control-unit-mulctrl"><span class="header-section-number">7.5.4</span> A suggested control unit (<code>mulctrl</code>)</h3>
+<p>The contract above already implies three states. The control unit below is one straightforward way to implement it. Other designs are fine as long as they keep the contract.</p>
+<div id="fig-mulctrl-fsm" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mulctrl-fsm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../img/hw1/mulctrl-fsm.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mulctrl-fsm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.3: State diagram of the suggested <code>mulctrl</code>.
+</figcaption>
+</figure>
+</div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>State</th>
+<th>Meaning</th>
+<th><code>Busy</code></th>
+<th><code>Done</code></th>
+<th>Accumulate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>IDLE</code></td>
+<td>no operation; waiting for <code>Start</code></td>
+<td>0</td>
+<td>0</td>
+<td>no</td>
+</tr>
+<tr class="even">
+<td><code>BUSY</code></td>
+<td>one partial product per cycle, <code>Step</code> = 0, 1, 2, 3</td>
+<td>1</td>
+<td>0</td>
+<td>yes</td>
+</tr>
+<tr class="odd">
+<td><code>DONE</code></td>
+<td>result ready, waiting for <code>Ack</code></td>
+<td>1</td>
+<td>1</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<p>Transitions:</p>
+<ul>
+<li><strong><code>IDLE → BUSY</code> on <code>Start</code>.</strong> In that same cycle the datapath captures the operands, remembers whether the low or the high word is wanted, and loads the accumulator with its starting value. The step counter is cleared.</li>
+<li><strong><code>BUSY → BUSY</code> while <code>Step</code> ≠ 3.</strong> Each cycle adds one shifted partial product to the accumulator and increments <code>Step</code>.</li>
+<li><strong><code>BUSY → DONE</code> when <code>Step</code> = 3.</strong> The last partial product is added, so the accumulator holds the full 64-bit result from the next cycle on.</li>
+<li><strong><code>DONE → IDLE</code> on <code>Ack</code>.</strong> Without <code>Ack</code> the unit stays in <code>DONE</code> and keeps the result.</li>
+</ul>
+<p><code>Step</code> drives the datapath directly. Its two bits select the operand halves, and the number of high halves sets the shift:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><code>Step</code></th>
+<th>A half (<code>Step[1]</code>)</th>
+<th>B half (<code>Step[0]</code>)</th>
+<th>Partial product</th>
+<th>Shift left</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>A<sub>L</sub></td>
+<td>B<sub>L</sub></td>
+<td>A<sub>L</sub>·B<sub>L</sub></td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>A<sub>L</sub></td>
+<td>B<sub>H</sub></td>
+<td>A<sub>L</sub>·B<sub>H</sub></td>
+<td>16</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>A<sub>H</sub></td>
+<td>B<sub>L</sub></td>
+<td>A<sub>H</sub>·B<sub>L</sub></td>
+<td>16</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>A<sub>H</sub></td>
+<td>B<sub>H</sub></td>
+<td>A<sub>H</sub>·B<sub>H</sub></td>
+<td>32</td>
+</tr>
+</tbody>
+</table>
+<p>So <code>mulctrl</code> needs only <code>Start</code> and <code>Ack</code> as inputs, and gives the datapath <code>Busy</code>, <code>Done</code>, an accumulate enable and <code>Step</code>.</p>
+</section>
+<section id="connecting-it-to-the-pipeline" class="level3" data-number="7.5.5">
+<h3 data-number="7.5.5" class="anchored" data-anchor-id="connecting-it-to-the-pipeline"><span class="header-section-number">7.5.5</span> Connecting it to the pipeline</h3>
+<p>The multiplier lives in the Execute stage (<code>ieu.sv</code>). Three questions guide the integration:</p>
+<ol type="1">
+<li><p><strong>How does Execute hold an instruction?</strong> At the moment, Execute is ready whenever it is empty or the Memory stage accepts (<code>ReadyE = ~ValidEReg | ReadyM</code>). A multiply has to stay in Execute until its result is ready, and must not be offered to Memory (<code>ValidE</code>) before that. Change <code>ReadyE</code> and <code>ValidE</code> so that the handshake does this. The rest of the pipeline then stalls on its own.</p>
+<p>This is what the reference design looks like when the Memory stage is free (<code>ReadyM</code> = 1). The multiply enters Execute in cycle 0 and leaves it in cycle 5. The <code>addi</code> behind it waits in Decode, and the Memory stage sees bubbles meanwhile:</p>
+<div id="fig-mul-pipeline" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mul-pipeline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../img/hw1/mul-timing-pipeline.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mul-pipeline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.4: Reference design with <code>ReadyM</code> = 1: the multiply holds Execute for six cycles while <code>addi</code> waits in Decode.
+</figcaption>
+</figure>
+</div></li>
+<li><p><strong>Where does the result go?</strong> Forwarding takes the newest value from the Memory stage (<code>ForwardDataM</code>) and from Writeback. If the product leaves Execute on the same path as an ALU result, forwarding works unchanged. Explain why in the report.</p></li>
+<li><p><strong>When may the multiplier start?</strong> This is the subtle one. Your multiplier uses the forwarded operands in its <code>Start</code> cycle, while an ALU instruction uses them in the cycle it leaves Execute. Read the comment on <code>PCSrcE</code> in <code>ieu.sv</code> and the section “Branches and jumps” in <code>IEU.md</code>. Then think about what <code>ForwardDataM</code> contains while a load in the Memory stage is still waiting for its data.</p></li>
+</ol>
+<p><strong>Conditions for <code>Start</code> and <code>Ack</code>.</strong> Both signals are generated in <code>ieu.sv</code>, and each is the AND of several conditions:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Signal</th>
+<th>Condition</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Start</code></td>
+<td>a <strong>valid</strong> instruction is in Execute (<code>ValidEReg</code>)</td>
+<td>a bubble must not start the multiplier</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>that instruction <strong>is a multiply</strong> (<code>MulE</code>)</td>
+<td>ALU instructions never use the unit</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>the multiplier is <strong>not busy</strong> (<code>~Busy</code>)</td>
+<td><code>Start</code> is a one-cycle pulse that is only legal while <code>Busy = 0</code>; without this term the unit would restart on every cycle that the multiply stays in Execute</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>the operands are <strong>final</strong></td>
+<td>the multiplier captures <code>A</code> and <code>B</code> in this one cycle, so a wrong forwarded value cannot be fixed later. Question 3 above asks which signal tells you this.</td>
+</tr>
+<tr class="odd">
+<td><code>Ack</code></td>
+<td>a valid multiply is in Execute and the unit reports <strong><code>Done</code></strong></td>
+<td>there is a result to hand over</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>the <strong>Memory stage accepts</strong> it (<code>ReadyM</code>)</td>
+<td><code>Ack</code> is the handshake between the multiplier and the Memory stage. The result leaves Execute in the same cycle, so it is consumed only if Memory takes it.</td>
+</tr>
+</tbody>
+</table>
+<p>Two consequences:</p>
+<ul>
+<li><code>Done</code> and <code>Result</code> stay stable until <code>Ack</code>. If Memory stalls, the multiply waits in <code>DONE</code> with its result, and the multiplier is released only in the cycle the result moves on (the second waveform above).</li>
+<li>The <code>Ack</code> condition is the same condition under which <code>ValidE</code> is offered to Memory and <code>ReadyE</code> rises. Use it in both places, so the multiplier and the pipeline never disagree about whether the instruction has left.</li>
+</ul>
+</section>
+<section id="testing-task-2" class="level3" data-number="7.5.6">
+<h3 data-number="7.5.6" class="anchored" data-anchor-id="testing-task-2"><span class="header-section-number">7.5.6</span> Testing Task 2</h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> tb/unit/mul <span class="kw">&amp;&amp;</span> <span class="fu">make</span>                  <span class="co"># unit level: the mul module alone</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> tb/core <span class="kw">&amp;&amp;</span> <span class="fu">make</span> MODULE=test_zmmul    <span class="co"># core level: the multiplier in the pipeline</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> sw/hw1/check <span class="kw">&amp;&amp;</span> <span class="fu">make</span> run             <span class="co"># SoC level: both tasks from C</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>At the end, run every testbench once more: <code>tb/core</code> with all three <code>MODULE</code> values, <code>tb/unit/idu</code>, <code>tb/unit/ieu</code>, <code>tb/unit/mul</code>, <code>tb/soc</code> and <code>tb/fpga</code>.</p>
+<hr>
+</section>
+</section>
+<section id="software-on-the-soc" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="software-on-the-soc"><span class="header-section-number">7.6</span> Software on the SoC</h2>
+<section id="the-self-check-swhw1check" class="level3" data-number="7.6.1">
+<h3 data-number="7.6.1" class="anchored" data-anchor-id="the-self-check-swhw1check"><span class="header-section-number">7.6.1</span> The self-check: <code>sw/hw1/check</code></h3>
+<p>The program is compiled with <code>-march=rv32i</code>, so the compiler never emits a new instruction on its own. The only new instructions in the binary come from the wrappers in <code>hw1_insn.h</code>, for example:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="kw">inline</span> <span class="dt">uint32_t</span> hw_andn<span class="op">(</span><span class="dt">uint32_t</span> a<span class="op">,</span> <span class="dt">uint32_t</span> b<span class="op">)</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">uint32_t</span> r<span class="op">;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    __asm__ <span class="dt">volatile</span> <span class="op">(</span><span class="st">".option push</span><span class="sc">\n</span><span class="st">.option arch, +zbb</span><span class="sc">\n</span><span class="st">"</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"andn %0, %1, %2</span><span class="sc">\n</span><span class="st">.option pop"</span> <span class="op">:</span> <span class="st">"=r"</span><span class="op">(</span>r<span class="op">)</span> <span class="op">:</span> <span class="st">"r"</span><span class="op">(</span>a<span class="op">),</span> <span class="st">"r"</span><span class="op">(</span>b<span class="op">));</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> r<span class="op">;</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>.option arch, +zbb</code> enables the extension for the assembler inside this one block only. <code>make dump</code> shows the disassembly.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> sw/hw1/check</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> run              <span class="co"># compared with expected.txt</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> run REF=1        <span class="co"># reference against itself: checks the program on the unmodified core</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="the-benchmark-swhw1bench" class="level3" data-number="7.6.2">
+<h3 data-number="7.6.2" class="anchored" data-anchor-id="the-benchmark-swhw1bench"><span class="header-section-number">7.6.2</span> The benchmark: <code>sw/hw1/bench</code></h3>
+<p><code>make run</code> in <code>sw/hw1/bench</code> prints timer ticks per operation for each new instruction, next to the code an RV32I compiler produces without it (a libgcc call such as <code>__mulsi3</code>, or a few base instructions). Both columns include the same loop overhead, shown in the <code>loop only</code> row. It is not graded; it shows what your hardware buys. <code>make run REF=1</code> prints the software version in both columns.</p>
+<hr>
+</section>
+</section>
+<section id="report" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="report"><span class="header-section-number">7.7</span> Report</h2>
+<p>Submit a PDF of at most <strong>2 pages</strong>, explaining your design choices and the results of your tests.</p>
+</section>
+<section id="grading" class="level2" data-number="7.8">
+<h2 data-number="7.8" class="anchored" data-anchor-id="grading"><span class="header-section-number">7.8</span> Grading</h2>
+<p>The homework is worth <strong>30 points</strong>.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Part</th>
+<th>Points</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Task 1: provided and hidden tests</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td>Task 2: provided and hidden tests</td>
+<td>12</td>
+</tr>
+<tr class="odd">
+<td>Your own tests (new cases, not copies)</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>Report</td>
+<td>4</td>
+</tr>
+<tr class="odd">
+<td>Code quality</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td><strong>Total</strong></td>
+<td><strong>30</strong></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="submission" class="level2" data-number="7.9">
+<h2 data-number="7.9" class="anchored" data-anchor-id="submission"><span class="header-section-number">7.9</span> Submission</h2>
+<ul>
+<li>Submit a single ZIP file with your <strong>modified RTL and newly created testbench files</strong> and the <strong>report PDF</strong>. Do not include the provided tests, the SoC, the FPGA flow or the software. The ZIP file must not contain any other files or directories.</li>
+<li>The ZIP file must be named <code>hw1_team_&lt;team_name&gt;.zip</code>, for example <code>hw1_team_H.zip</code>.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/06-uart.html" class="pagination-link" aria-label="Sixth exercise: UART transmitter">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sixth exercise: UART transmitter</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/appendix-oscilloscope.html" class="pagination-link" aria-label="Appendix: Using the Oscilloscope and Signal Generator">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Appendix: Using the Oscilloscope and Signal Generator</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

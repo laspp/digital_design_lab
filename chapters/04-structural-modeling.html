@@ -2,23 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.11.9">
+<meta name="generator" content="quarto-1.7.31">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>4&nbsp; Fourth exercise: Structural modeling and Simulation – Digital Design Lab</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
+code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: 1.5em;}
-div.column{flex: auto;}
-@media screen {
-div.columns{gap: min(4vw, 1.5em);}
-div.column{overflow-x: auto;}
-}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -75,15 +69,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../chapters/03-sequential.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-4f67ab1e4efc86feb5e21e0983fc9301.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-467c603866d931062acf9dde62877a13.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -115,17 +108,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </head>
 
-<body class="nav-sidebar floating quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
+<body class="nav-sidebar floating quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav" aria-label="Toolbar">
+  <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-tools-intro.html">Lab Exercises</a></li><li class="breadcrumb-item"><a href="../chapters/04-structural-modeling.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fourth exercise: Structural modeling and Simulation</span></a></li></ol></nav>
-        <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-tools-intro.html">Lab Exercises</a></li><li class="breadcrumb-item"><a href="../chapters/04-structural-modeling.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fourth exercise: Structural modeling and Simulation</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -136,7 +129,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto" aria-label="Site">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Digital Design Lab</a> 
@@ -157,10 +150,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-controls="quarto-sidebar-section-1" aria-expanded="true">
- <span class="menu-text" id="quarto-sidebar-section-1-label">Lab Exercises</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Lab Exercises</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" aria-labelledby="quarto-sidebar-section-1-label" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/01-tools-intro.html" class="sidebar-item-text sidebar-link">
@@ -201,14 +197,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-controls="quarto-sidebar-section-2" aria-expanded="true">
- <span class="menu-text" id="quarto-sidebar-section-2-label">Appendix</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Homework</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" aria-labelledby="quarto-sidebar-section-2-label" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/hw1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Homework 1: Extending the HIPV core</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendix</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/appendix-oscilloscope.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Appendix: Using the Oscilloscope and Signal Generator</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Appendix: Using the Oscilloscope and Signal Generator</span></span></a>
   </div>
 </li>
       </ul>
@@ -219,7 +235,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+        <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
@@ -246,9 +262,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content" tabindex="-1">
+<main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-tools-intro.html">Lab Exercises</a></li><li class="breadcrumb-item"><a href="../chapters/04-structural-modeling.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fourth exercise: Structural modeling and Simulation</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-tools-intro.html">Lab Exercises</a></li><li class="breadcrumb-item"><a href="../chapters/04-structural-modeling.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fourth exercise: Structural modeling and Simulation</span></a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fourth exercise: Structural modeling and Simulation</span></h1>
 </div>
@@ -268,7 +284,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>In the previous exercise, we focused on designing counters or flip-flops by describing their functionality in SystemVerilog. This style of modeling is referred to as behavioral modeling. This exercise focuses on structural modeling, where we describe a module in terms of how it is composed of simpler modules. In the example below, we assemble a 4:1 multiplexer from three 2:1 multiplexers. Each copy of the 2:1 multiplexer is called an instance and has a unique name.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> mux2to1 <span class="op">(</span></span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> mux2to1 <span class="op">(</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic a<span class="op">,</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic b<span class="op">,</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic sel<span class="op">,</span></span>
@@ -307,9 +323,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>        .sel<span class="op">(</span>sel<span class="op">[</span><span class="dv">1</span><span class="op">]),</span></span>
 <span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>        .y<span class="op">(</span>y<span class="op">)</span></span>
 <span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>As we can see, the instantiation of a module has following syntax: first, we specify the module name, followed by the instance name. In parentheses, we connect the module’s inputs and outputs to signals defined at the current level of hierarchy.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// module name - mux2to1</span></span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// module name - mux2to1</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">// instance name - mux_final</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">// parenthesis - we map ports </span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">//             - .a(y0) - port a of module is connected to signal y0</span></span>
@@ -320,13 +336,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        .y<span class="op">(</span>y<span class="op">)</span></span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">// alternative, more C-like instation</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">// mux2to1 mux_final(y0,y1,sel[1],y)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">// mux2to1 mux_final(y0,y1,sel[1],y)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The bellow image depicts the resulting design:</p>
 <p><img src="../img/Mux4to1.png" alt="MUX4to1" width="400"></p>
 <section id="parametrized-components" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="parametrized-components"><span class="header-section-number">4.1</span> Parametrized components</h2>
 <p>So far, all of our modules have had fixed-width inputs and outputs. SystemVerilog allows variable-width modules through the use of parameterized modules. The code below illustrates a parameterized counter module with a variable length output signal.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> counter #<span class="op">(</span></span>
+<div class="sourceCode" id="cb3"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> counter #<span class="op">(</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Default value if we do ommit </span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// WIDTH parameter while instatiating module</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">parameter</span> WIDTH <span class="op">=</span> <span class="dv">8</span></span>
@@ -346,9 +362,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
 <span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> count <span class="op">=</span> count_reg<span class="op">;</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This module defines a counter with a parameterized width. To instatiate in a another module, we need to do following:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> top<span class="op">(</span></span>
+<div class="sourceCode" id="cb4"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> top<span class="op">(</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic clk<span class="op">,</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic reset<span class="op">,</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic <span class="op">[</span><span class="dv">15</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> count<span class="op">);</span></span>
@@ -361,21 +377,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        .reset<span class="op">(</span>reset<span class="op">),</span></span>
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        .count<span class="op">(</span>count<span class="op">)</span></span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>To define parameters inside a module, we can use local parameters (<code>localparam</code>). Verilog HDL local parameters are identical to parameters except that they cannot be directly modified by <code>defparam</code> statements or module instance parameter value assignments.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>    ....</span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>    ....</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">localparam</span> CNT_WIDTH <span class="op">=</span> <span class="dv">16</span><span class="op">;</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Instantiate the counter with a width of 16</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    counter #<span class="op">(</span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        .WIDTH<span class="op">(</span>CNT_WIDTH<span class="op">)</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    ....</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    ....</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="testbenches" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="testbenches"><span class="header-section-number">4.2</span> Testbenches</h2>
 <p>A testbench is an HDL module used to test another module, known as the device under test (DUT) or unit under test (UUT). The testbench includes statements to apply inputs to the DUT and, ideally, to verify that the correct outputs are generated. The input and expected output patterns are referred to as test vectors.</p>
 <p>Let us write the DUT for our 4:1 MUX. Lets fix length to 4-bit.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> tb_mux4to1<span class="op">;</span></span>
+<div class="sourceCode" id="cb6"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> tb_mux4to1<span class="op">;</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Testbench signals</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> d<span class="op">;</span></span>
@@ -417,10 +433,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Finish simulation</span></span>
 <span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>        <span class="dt">$finish</span><span class="op">;</span></span>
 <span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
-<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>A testbench has no ports of its own. It sits at the top of the simulation hierarchy, so everything it needs (<code>d</code>, <code>sel</code>, <code>y</code>) is declared as a plain <code>logic</code> signal inside the module and then wired to the DUT by name, exactly as you would wire a module instance in any other design. <code>mux4to1</code> is purely combinational, so the testbench doesn’t need to worry about clocking it at all. The <code>initial</code> block simply drives a new value onto <code>d</code>/<code>sel</code>, waits <code>#10</code> time units for the change to propagate through the DUT’s <code>assign</code> statements, and then <code>$display</code>s the result. The <code>#10</code> delay here isn’t required by the circuit, since a combinational output settles essentially instantly. It just gives each test case a clean slice of simulation time so the four <code>$display</code> lines don’t collide, and makes the resulting waveform easier to read if you open it in GTKWave. Each of the four test cases holds <code>sel</code> at all four possible values while <code>d</code> stays fixed, letting you check by eye that <code>y</code> always equals the bit of <code>d</code> selected by <code>sel</code>. <code>$finish</code> at the end tells the simulator to stop. Without it, a testbench with no more statements to execute would simply hang.</p>
 <p>For testing sequential design, we need to account the clock signal. In testbenches we need to create a separate always block that will generate clock signal. Bellow code shows the testbench for our parametrized counter (case for 4-bit).</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> tb_counter<span class="op">;</span></span>
+<div class="sourceCode" id="cb7"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> tb_counter<span class="op">;</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Testbench signals</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    logic clk<span class="op">;</span></span>
@@ -455,24 +471,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Finish simulation</span></span>
 <span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>        <span class="dt">$finish</span><span class="op">;</span></span>
 <span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
-<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Unlike the MUX testbench, <code>counter</code> is a registered design (<code>always_ff</code>), so its output only changes on a rising <code>clk</code> edge. The testbench has to actually supply that clock, since nothing else in simulation will. That’s what the separate <code>always</code> block does. With no sensitivity list and no guarding <code>if</code>, it just keeps re-executing <code>#5 clk = ~clk;</code> for the entire simulation, flipping <code>clk</code> every 5 time units and producing a free-running clock with a 10-unit period. This block runs concurrently with the <code>initial</code> block below it. In SystemVerilog, every <code>initial</code>/<code>always</code> block in a module starts at time 0 and proceeds independently, which is exactly why the clock generator has to live in its own block rather than inside the stimulus sequence.</p>
 <p>The <code>initial</code> block still drives the test, but now in terms of clock edges rather than raw delays. It sets <code>clk = 0</code> and <code>reset = 1</code> at time 0, holds <code>reset</code> high for <code>#10</code> (one full clock period) to model a real power-on reset pulse, then deasserts it and waits <code>#100</code> (ten clock periods) for the counter to free-run before sampling <code>count</code> with <code>$display</code>. That wait is the key difference from the combinational case. A combinational output is valid almost immediately after its inputs change, but a register only updates once per clock edge, so a sequential testbench must always budget enough simulated time (or, in more thorough testbenches, wait for a specific number of <code>@(posedge clk)</code> events) before checking the DUT’s outputs. <code>$finish</code> matters more here than in the MUX testbench, because the clock-generation <code>always</code> block never terminates on its own. Without an explicit <code>$finish</code>, the simulation would run forever.</p>
 <section id="simulating-with-anvil-icarus-verilog" class="level3" data-number="4.2.1">
 <h3 data-number="4.2.1" class="anchored" data-anchor-id="simulating-with-anvil-icarus-verilog"><span class="header-section-number">4.2.1</span> Simulating with Anvil / Icarus Verilog</h3>
 <p>Save the testbench alongside the DUT it exercises. Inside an Anvil project, place it under <code>tb/</code> and let <code>anvil test</code> drive Icarus Verilog for you:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> test tb/tb_mux4to1.sv     <span class="co"># runs Icarus Verilog, writes tb/tb_mux4to1.vcd</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> test tb/tb_mux4to1.sv     <span class="co"># runs Icarus Verilog, writes tb/tb_mux4to1.vcd</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You can also invoke Icarus Verilog directly. This is handy while experimenting with standalone snippets like the ones above, outside of a full Anvil project. <code>iverilog</code> compiles every file passed on the command line into a single simulation executable, which <code>vvp</code> then runs:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">iverilog</span> <span class="at">-g2012</span> <span class="at">-o</span> sim mux2to1.sv mux4to1.sv tb_mux4to1.sv</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vvp</span> sim</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">iverilog</span> <span class="at">-g2012</span> <span class="at">-o</span> sim mux2to1.sv mux4to1.sv tb_mux4to1.sv</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vvp</span> sim</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><code>-g2012</code> selects SystemVerilog-2012 syntax, needed for constructs like <code>logic</code> and <code>always_ff</code> that plain Verilog doesn’t have. The <code>$display</code> calls in the testbench print straight to the terminal.</p>
 <p>To inspect signals over time instead of just the printed values, add a dump block to the testbench:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">initial</span> <span class="kw">begin</span></span>
+<div class="sourceCode" id="cb10"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">initial</span> <span class="kw">begin</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">$dumpfile</span><span class="op">(</span><span class="st">"tb_counter.vcd"</span><span class="op">);</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">$dumpvars</span><span class="op">(</span><span class="dv">0</span><span class="op">,</span> tb_counter<span class="op">);</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>then open the resulting <code>.vcd</code> file in GTKWave:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gtkwave</span> tb_counter.vcd <span class="kw">&amp;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gtkwave</span> tb_counter.vcd <span class="kw">&amp;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <!--
 ## Task: Implement a 4-bit Gray counter
 
@@ -563,14 +579,14 @@ Modify the code from previous exercise, in such a way that design relies on foll
 <section id="prescaler" class="level3" data-number="4.4.1">
 <h3 data-number="4.4.1" class="anchored" data-anchor-id="prescaler"><span class="header-section-number">4.4.1</span> Prescaler</h3>
 <p>The prescaler turns the fast system clock into the slower <code>pwm_tick</code> the PWM module counts on. It is a free running counter that produces a single cycle pulse once every <code>limit</code> clock cycles. Its interface is already declared in the starter file:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> prescaler</span>
+<div class="sourceCode" id="cb12"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> prescaler</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    #(<span class="kw">parameter</span> PRESCALER_WIDTH = <span class="dv">8</span>)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    (</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">input</span> <span class="kw">logic</span> clk,</span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">input</span> <span class="kw">logic</span> rst,</span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">input</span> <span class="kw">logic</span> [PRESCALER_WIDTH<span class="dv">-1</span>:<span class="dv">0</span>] limit,</span>
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">output</span> <span class="kw">logic</span> pwm_tick</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    );</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    );</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 25%">
@@ -624,14 +640,14 @@ Modify the code from previous exercise, in such a way that design relies on foll
 <section id="pwm-controller" class="level3" data-number="4.4.2">
 <h3 data-number="4.4.2" class="anchored" data-anchor-id="pwm-controller"><span class="header-section-number">4.4.2</span> PWM controller</h3>
 <p>The PWM controller turns a 2-bit duty cycle selection into a single PWM output for one LED color. One instance drives the red LED, one drives green, one drives blue, each fed by its own pair of switches and all three sharing the same <code>pwm_tick</code> from the prescaler. Its interface is already declared in the starter file:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> PWM_controller</span>
+<div class="sourceCode" id="cb13"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> PWM_controller</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>(</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">input</span> <span class="kw">logic</span> clk,</span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">input</span> <span class="kw">logic</span> rst,</span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">input</span> <span class="kw">logic</span> [<span class="dv">1</span>:<span class="dv">0</span>] SW,</span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">input</span> <span class="kw">logic</span> pwm_tick,</span>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">output</span> <span class="kw">logic</span> PWM</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 25%">
@@ -691,13 +707,13 @@ Modify the code from previous exercise, in such a way that design relies on foll
 <section id="top-level-rgb_controller" class="level3" data-number="4.4.3">
 <h3 data-number="4.4.3" class="anchored" data-anchor-id="top-level-rgb_controller"><span class="header-section-number">4.4.3</span> Top level: rgb_controller</h3>
 <p>The top module has no logic of its own beyond the oscilloscope channel selector described below. It otherwise only wires the prescaler and three <code>PWM_controller</code> instances together, using structural modeling exactly as introduced at the start of this chapter. Its interface, extended with the oscilloscope probe from the task above, is already declared in the starter file:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> rgb_controller (</span>
+<div class="sourceCode" id="cb14"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> rgb_controller (</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">input</span> <span class="kw">logic</span> clock,</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">input</span> <span class="kw">logic</span> reset,</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">input</span> <span class="kw">logic</span> [<span class="dv">7</span>:<span class="dv">0</span>] SW,</span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">output</span> <span class="kw">logic</span> [<span class="dv">2</span>:<span class="dv">0</span>] RGB,</span>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">output</span> <span class="kw">logic</span> pwm_out</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 25%">
@@ -751,25 +767,25 @@ Modify the code from previous exercise, in such a way that design relies on foll
 <li>One instance of <code>prescaler</code>, driven by <code>clock</code>/<code>reset</code> and the <code>limit_value</code> already wired up in the draft, produces a single <code>pwm_tick</code> signal shared by everything downstream.</li>
 <li>Three instances of <code>PWM_controller</code>, conventionally named <code>PWM_red</code>, <code>PWM_green</code>, and <code>PWM_blue</code>. These are three separate instances of the exact same module, the same way <code>mux2to1</code> was instantiated three times to build <code>mux4to1</code> earlier in this chapter, not three different modules. Each instance shares <code>clock</code>, <code>reset</code>, and the one <code>pwm_tick</code> from the prescaler, but connects to a different 2-bit slice of <code>SW</code> and drives a different bit of <code>RGB</code>. For example, the red instance looks like:</li>
 </ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>PWM_controller PWM_red (</span>
+<div class="sourceCode" id="cb15"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>PWM_controller PWM_red (</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    .clk(clock),</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    .rst(reset),</span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    .SW(SW[<span class="dv">1</span>:<span class="dv">0</span>]),</span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    .pwm_tick(pwm_tick),</span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    .PWM(RGB[<span class="dv">0</span>])</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><code>PWM_green</code> and <code>PWM_blue</code> follow the same pattern, connecting <code>SW[3:2]</code>/<code>RGB[1]</code> and <code>SW[5:4]</code>/<code>RGB[2]</code> respectively. The draft file’s instantiation comments all read “for the red LED”. That’s a leftover from copy-pasting the first instance, and should read green and blue for the other two.</p>
 <ul>
 <li>On top of the three instances above, drive <code>pwm_out</code> from <code>RGB</code> with a combinational multiplexer on <code>SW[7:6]</code>, using <code>always_comb</code> and <code>case</code> exactly as introduced for <code>Mux4to1</code> in the previous exercise:</li>
 </ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">always_comb</span> <span class="kw">begin</span></span>
+<div class="sourceCode" id="cb16"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">always_comb</span> <span class="kw">begin</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">case</span> (SW[<span class="dv">7</span>:<span class="dv">6</span>])</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>        <span class="bn">2'b00</span>: pwm_out = RGB[<span class="dv">0</span>];</span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>        <span class="bn">2'b01</span>: pwm_out = RGB[<span class="dv">1</span>];</span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>        <span class="bn">2'b10</span>: pwm_out = RGB[<span class="dv">2</span>];</span>
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">default</span>: pwm_out = <span class="bn">1'b0</span>;</span>
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">endcase</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><code>SW[7:6] = 2'b11</code> has no explicit case, so it falls through to <code>default</code>, holding <code>pwm_out</code> at <code>1'b0</code> rather than leaving it undriven. Always keep that <code>default</code> branch, even on cases that look fully covered. Leaving it out, as the “Infering latch” mistake earlier in the previous chapter explains, would infer a latch instead of the combinational multiplexer you want.</p>
 <ul>
 <li>Create a testbench to verify the functionality of your PWM module. The testbench is provided in the repository.</li>
@@ -780,7 +796,7 @@ Modify the code from previous exercise, in such a way that design relies on foll
 <p>Before wiring everything together, verify <code>prescaler</code> and <code>PWM_controller</code> on their own, the same way <code>tb_mux4to1</code> and <code>tb_counter</code> tested individual modules earlier in this chapter. A bug isolated to one small module is far easier to find than the same bug hiding inside the fully assembled <code>rgb_controller</code>.</p>
 <section id="tb_prescaler" class="level4" data-number="4.4.4.1">
 <h4 data-number="4.4.4.1" class="anchored" data-anchor-id="tb_prescaler"><span class="header-section-number">4.4.4.1</span> tb_prescaler</h4>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> tb_prescaler;</span>
+<div class="sourceCode" id="cb17"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> tb_prescaler;</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Testbench signals</span></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">logic</span> clk;</span>
@@ -824,7 +840,7 @@ Modify the code from previous exercise, in such a way that design relies on foll
 <span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>            <span class="kw">$display</span>(<span class="st">"t=%0t pwm_tick pulse"</span>, <span class="kw">$time</span>);</span>
 <span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
 <span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -842,7 +858,7 @@ Note
 <section id="tb_pwm_controller" class="level4" data-number="4.4.4.2">
 <h4 data-number="4.4.4.2" class="anchored" data-anchor-id="tb_pwm_controller"><span class="header-section-number">4.4.4.2</span> tb_pwm_controller</h4>
 <p><code>PWM_controller</code> takes <code>pwm_tick</code> as an input rather than generating it, so this testbench stands in for the prescaler with a small free running counter of its own, pulsing <code>pwm_tick</code> high for one clock cycle out of every 4, instead of instantiating a full <code>prescaler</code> with a large <code>limit</code>. The DUT’s internal counter then advances once every 4 clock cycles, so a full 16-step PWM period takes 64 clock cycles to simulate, still far shorter than testing against the real <code>limit = 3125</code> prescaler.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> tb_pwm_controller;</span>
+<div class="sourceCode" id="cb18"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> tb_pwm_controller;</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Testbench signals</span></span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">logic</span> clk;</span>
@@ -902,7 +918,7 @@ Note
 <span id="cb18-58"><a href="#cb18-58" aria-hidden="true" tabindex="-1"></a>        <span class="kw">$display</span>(<span class="st">"t=%0t SW=%b PWM=%b"</span>, <span class="kw">$time</span>, SW, PWM);</span>
 <span id="cb18-59"><a href="#cb18-59" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
 <span id="cb18-60"><a href="#cb18-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-61"><a href="#cb18-61" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb18-61"><a href="#cb18-61" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Both testbenches call <code>$dumpfile</code>/<code>$dumpvars</code> up front, so running them through <code>anvil test</code> or <code>iverilog</code>/<code>vvp</code> produces a <code>.vcd</code> file you can open with <code>gtkwave tb_prescaler.vcd &amp;</code> or <code>gtkwave tb_pwm_controller.vcd &amp;</code>, as described earlier in this chapter. Watching <code>pwm_tick</code> and the internal counters directly in the waveform is often faster than reading through <code>$display</code> output.</p>
 </section>
 </section>
@@ -1020,14 +1036,13 @@ set_property IOSTANDARD LVCMOS33 [get_ports {pwm_out}]</code></pre>
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
         }
-      }
-      return codeEl.innerText;
+        return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1047,8 +1062,7 @@ set_property IOSTANDARD LVCMOS33 [get_ports {pwm_out}]</code></pre>
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
       // Inspect non-navigation links and adorn them if external
-      window.quartoDecorateExternalLinks = function (root) {
-     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
       for (var i=0; i<links.length; i++) {
         const link = links[i];
         if (!isInternal(link.href)) {
@@ -1057,69 +1071,8 @@ set_property IOSTANDARD LVCMOS33 [get_ports {pwm_out}]</code></pre>
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
-          if (!link.classList.contains('no-external-icon')) {
-          }
         }
       }
-      };
-      window.quartoDecorateExternalLinks(window.document);
-    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
-    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
-    const hideOnEscAndFocusOut = {
-      name: 'hideOnEscAndFocusOut',
-      defaultValue: true,
-      fn(instance) {
-        const dismiss = () => {
-          // A show scheduled by the trigger delay would otherwise reopen it
-          instance.clearDelayTimeouts();
-          instance.hide();
-        };
-        const onKeyDown = (event) => {
-          if (event.key !== 'Escape') {
-            return;
-          }
-          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
-          // except an open reveal.js slide menu, which Esc should close too.
-          // The menu handles keys only when its keyboard option is on.
-          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
-            window.Reveal.getConfig().menu?.keyboard !== false;
-          if (!menuHandlesEsc) {
-            event.stopPropagation();
-          }
-          if (instance.popper.contains(window.document.activeElement)) {
-            // Disabled while refocusing so the focus trigger does not reopen it
-            instance.disable();
-            instance.reference.focus();
-            instance.enable();
-          }
-          dismiss();
-        };
-        const onFocusOut = (event) => {
-          const target = event.relatedTarget;
-          if (target && !instance.reference.contains(target) &&
-              !instance.popper.contains(target)) {
-            dismiss();
-          }
-        };
-        // On the trigger too: a click trigger (code-annotations: select) has no
-        // blur handling. Attached for the instance's lifetime so leaving the
-        // trigger also cancels a show still pending on the trigger delay.
-        instance.reference.addEventListener('focusout', onFocusOut);
-        return {
-          onShow() {
-            window.document.addEventListener('keydown', onKeyDown, true);
-            instance.popper.addEventListener('focusout', onFocusOut);
-          },
-          onHide() {
-            window.document.removeEventListener('keydown', onKeyDown, true);
-            instance.popper.removeEventListener('focusout', onFocusOut);
-          },
-          onDestroy() {
-            instance.reference.removeEventListener('focusout', onFocusOut);
-          },
-        };
-      },
-    };
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
       const config = {
         allowHTML: true,
@@ -1133,7 +1086,6 @@ set_property IOSTANDARD LVCMOS33 [get_ports {pwm_out}]</code></pre>
         interactiveBorder: 10,
         theme: 'quarto',
         placement: 'bottom-start',
-        plugins: [hideOnEscAndFocusOut],
       };
       if (contentFn) {
         config.content = contentFn;
@@ -1296,54 +1248,44 @@ set_property IOSTANDARD LVCMOS33 [get_ports {pwm_out}]</code></pre>
           const lineIds = lines.map((line) => {
             return targetCell + "-" + line;
           })
-          // Each band is positioned against its own containing block, which is
-          // not the offsetParent of the lines, so place it from client rects.
-          const placeBand = (band, firstEl, lastEl, codeBlock) => {
-            const container = band.offsetParent;
-            if (container === null) {
-              return;
-            }
-            const containerRect = container.getBoundingClientRect();
-            // Reveal.js scales slides with a transform, so convert client
-            // pixels back to the CSS pixels of the container.
-            const scale = containerRect.height / container.offsetHeight || 1;
-            const firstRect = firstEl.getBoundingClientRect();
-            const lastRect = lastEl.getBoundingClientRect();
-            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
-            const height = (lastRect.bottom - firstRect.top) / scale;
-            band.style.top = top - 2 + "px";
-            band.style.height = height + 4 + "px";
-            if (codeBlock) {
-              // Without the copy button wrapper, the containing block is wider
-              // than the code block, so span the code block explicitly.
-              const blockRect = codeBlock.getBoundingClientRect();
-              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
-              band.style.width = blockRect.width / scale + "px";
-            }
-          };
+          let top = null;
+          let height = null;
+          let parent = null;
           if (lineIds.length > 0) {
-            const el = window.document.getElementById(lineIds[0]);
-            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-            const parent = el.parentElement.parentElement;
-            // cook up a div (if necessary) and position it
-            let div = window.document.getElementById("code-annotation-line-highlight");
-            if (div === null) {
-              div = window.document.createElement("div");
-              div.setAttribute("id", "code-annotation-line-highlight");
-              div.style.position = 'absolute';
-              parent.appendChild(div);
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
             }
-            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
-            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-            if (gutterDiv === null) {
-              gutterDiv = window.document.createElement("div");
-              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-              gutterDiv.style.position = 'absolute';
-              const codeCell = window.document.getElementById(targetCell);
-              const gutter = codeCell.querySelector('.code-annotation-gutter');
-              gutter.appendChild(gutterDiv);
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
             }
-            placeBand(gutterDiv, el, lastEl);
             selectedAnnoteEl = annoteEl;
           }
         };
@@ -1442,10 +1384,7 @@ set_property IOSTANDARD LVCMOS33 [get_ports {pwm_out}]</code></pre>
     }
   });
   </script>
-  <script type="application/javascript">
-  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
-  </script>
-<nav class="page-navigation" aria-label="Page">
+<nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../chapters/03-sequential.html" class="pagination-link" aria-label="Third exercise: Designing sequential circuits with SystemVerilog">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Third exercise: Designing sequential circuits with SystemVerilog</span></span>
