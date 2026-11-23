@@ -703,19 +703,14 @@ sw    a0,0(a5)        # store the pattern into GPIO_OUT</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Linux</td>
+<td>Linux and WSL</td>
 <td><code>/dev/ttyUSB1</code> or similar</td>
-<td><code>picocom -b 19200 /dev/ttyUSB1</code></td>
+<td><code>screen /dev/ttyUSB1 19200</code> (leave <code>screen</code> with <code>Ctrl-A</code>, then <code>D</code>)</td>
 </tr>
 <tr class="even">
 <td>macOS</td>
 <td><code>/dev/cu.usbserial-...</code></td>
-<td><code>screen /dev/cu.usbserial-XXXX 19200</code> (leave <code>screen</code> with <code>Ctrl-A</code>, then <code>K</code>)</td>
-</tr>
-<tr class="odd">
-<td>Windows (also when you build in WSL)</td>
-<td><code>COM3</code> or similar, see Device Manager</td>
-<td>PuTTY, with connection type <em>Serial</em></td>
+<td><code>screen /dev/cu.usbserial-XXX1 19200</code> (leave <code>screen</code> with <code>Ctrl-A</code>, then <code>K</code>)</td>
 </tr>
 </tbody>
 </table>
