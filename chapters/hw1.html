@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>7&nbsp; Homework 1: Extending the HIPV core – Digital Design Lab</title>
+<title>8&nbsp; Homework 1: Extending the HIPV core – Digital Design Lab</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -66,7 +66,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../chapters/appendix-oscilloscope.html" rel="next">
-<link href="../chapters/06-uart.html" rel="prev">
+<link href="../chapters/07-hipv-soc.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -117,7 +117,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/hw1.html">Homework</a></li><li class="breadcrumb-item"><a href="../chapters/hw1.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Homework 1: Extending the HIPV core</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/hw1.html">Homework</a></li><li class="breadcrumb-item"><a href="../chapters/hw1.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Homework 1: Extending the HIPV core</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -193,6 +193,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sixth exercise: UART transmitter</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-hipv-soc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Seventh laboratory exercise: HIPV SoC tutorial</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -207,7 +213,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/hw1.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Homework 1: Extending the HIPV core</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Homework 1: Extending the HIPV core</span></span></a>
   </div>
 </li>
       </ul>
@@ -224,7 +230,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/appendix-oscilloscope.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Appendix: Using the Oscilloscope and Signal Generator</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Appendix: Using the Oscilloscope and Signal Generator</span></span></a>
   </div>
 </li>
       </ul>
@@ -239,53 +245,53 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#before-you-start" id="toc-before-you-start" class="nav-link active" data-scroll-target="#before-you-start"><span class="header-section-number">7.1</span> Before you start</a></li>
-  <li><a href="#what-is-provided" id="toc-what-is-provided" class="nav-link" data-scroll-target="#what-is-provided"><span class="header-section-number">7.2</span> What is provided</a>
+  <li><a href="#before-you-start" id="toc-before-you-start" class="nav-link active" data-scroll-target="#before-you-start"><span class="header-section-number">8.1</span> Before you start</a></li>
+  <li><a href="#what-is-provided" id="toc-what-is-provided" class="nav-link" data-scroll-target="#what-is-provided"><span class="header-section-number">8.2</span> What is provided</a>
   <ul class="collapse">
-  <li><a href="#where-to-change-the-code" id="toc-where-to-change-the-code" class="nav-link" data-scroll-target="#where-to-change-the-code"><span class="header-section-number">7.2.1</span> Where to change the code</a></li>
+  <li><a href="#where-to-change-the-code" id="toc-where-to-change-the-code" class="nav-link" data-scroll-target="#where-to-change-the-code"><span class="header-section-number">8.2.1</span> Where to change the code</a></li>
   </ul></li>
-  <li><a href="#testbenches" id="toc-testbenches" class="nav-link" data-scroll-target="#testbenches"><span class="header-section-number">7.3</span> Testbenches</a>
+  <li><a href="#testbenches" id="toc-testbenches" class="nav-link" data-scroll-target="#testbenches"><span class="header-section-number">8.3</span> Testbenches</a>
   <ul class="collapse">
-  <li><a href="#unit-level-tbunitmul-task-2" id="toc-unit-level-tbunitmul-task-2" class="nav-link" data-scroll-target="#unit-level-tbunitmul-task-2"><span class="header-section-number">7.3.1</span> Unit level: <code>tb/unit/mul</code> (Task 2)</a></li>
-  <li><a href="#unit-level-tbunitidu-and-tbunitieu-regression-and-task-1" id="toc-unit-level-tbunitidu-and-tbunitieu-regression-and-task-1" class="nav-link" data-scroll-target="#unit-level-tbunitidu-and-tbunitieu-regression-and-task-1"><span class="header-section-number">7.3.2</span> Unit level: <code>tb/unit/idu</code> and <code>tb/unit/ieu</code> (regression and Task 1)</a></li>
-  <li><a href="#core-level-tbcore" id="toc-core-level-tbcore" class="nav-link" data-scroll-target="#core-level-tbcore"><span class="header-section-number">7.3.3</span> Core level: <code>tb/core</code></a></li>
-  <li><a href="#soc-level-swhw1check-and-swhw1bench" id="toc-soc-level-swhw1check-and-swhw1bench" class="nav-link" data-scroll-target="#soc-level-swhw1check-and-swhw1bench"><span class="header-section-number">7.3.4</span> SoC level: <code>sw/hw1/check</code> and <code>sw/hw1/bench</code></a></li>
-  <li><a href="#existing-soc-and-fpga-testbenches-regression" id="toc-existing-soc-and-fpga-testbenches-regression" class="nav-link" data-scroll-target="#existing-soc-and-fpga-testbenches-regression"><span class="header-section-number">7.3.5</span> Existing SoC and FPGA testbenches (regression)</a></li>
-  <li><a href="#hidden-tests" id="toc-hidden-tests" class="nav-link" data-scroll-target="#hidden-tests"><span class="header-section-number">7.3.6</span> Hidden tests</a></li>
+  <li><a href="#unit-level-tbunitmul-task-2" id="toc-unit-level-tbunitmul-task-2" class="nav-link" data-scroll-target="#unit-level-tbunitmul-task-2"><span class="header-section-number">8.3.1</span> Unit level: <code>tb/unit/mul</code> (Task 2)</a></li>
+  <li><a href="#unit-level-tbunitidu-and-tbunitieu-regression-and-task-1" id="toc-unit-level-tbunitidu-and-tbunitieu-regression-and-task-1" class="nav-link" data-scroll-target="#unit-level-tbunitidu-and-tbunitieu-regression-and-task-1"><span class="header-section-number">8.3.2</span> Unit level: <code>tb/unit/idu</code> and <code>tb/unit/ieu</code> (regression and Task 1)</a></li>
+  <li><a href="#core-level-tbcore" id="toc-core-level-tbcore" class="nav-link" data-scroll-target="#core-level-tbcore"><span class="header-section-number">8.3.3</span> Core level: <code>tb/core</code></a></li>
+  <li><a href="#soc-level-swhw1check-and-swhw1bench" id="toc-soc-level-swhw1check-and-swhw1bench" class="nav-link" data-scroll-target="#soc-level-swhw1check-and-swhw1bench"><span class="header-section-number">8.3.4</span> SoC level: <code>sw/hw1/check</code> and <code>sw/hw1/bench</code></a></li>
+  <li><a href="#existing-soc-and-fpga-testbenches-regression" id="toc-existing-soc-and-fpga-testbenches-regression" class="nav-link" data-scroll-target="#existing-soc-and-fpga-testbenches-regression"><span class="header-section-number">8.3.5</span> Existing SoC and FPGA testbenches (regression)</a></li>
+  <li><a href="#hidden-tests" id="toc-hidden-tests" class="nav-link" data-scroll-target="#hidden-tests"><span class="header-section-number">8.3.6</span> Hidden tests</a></li>
   </ul></li>
-  <li><a href="#task-1-zbazbb-subset" id="toc-task-1-zbazbb-subset" class="nav-link" data-scroll-target="#task-1-zbazbb-subset"><span class="header-section-number">7.4</span> Task 1: Zba/Zbb subset</a>
+  <li><a href="#task-1-zbazbb-subset" id="toc-task-1-zbazbb-subset" class="nav-link" data-scroll-target="#task-1-zbazbb-subset"><span class="header-section-number">8.4</span> Task 1: Zba/Zbb subset</a>
   <ul class="collapse">
-  <li><a href="#instructions" id="toc-instructions" class="nav-link" data-scroll-target="#instructions"><span class="header-section-number">7.4.1</span> Instructions</a></li>
-  <li><a href="#what-to-change" id="toc-what-to-change" class="nav-link" data-scroll-target="#what-to-change"><span class="header-section-number">7.4.2</span> What to change</a></li>
-  <li><a href="#sec-hw1-alu-codes" id="toc-sec-hw1-alu-codes" class="nav-link" data-scroll-target="#sec-hw1-alu-codes"><span class="header-section-number">7.4.3</span> ALU control encoding</a></li>
-  <li><a href="#testing-task-1" id="toc-testing-task-1" class="nav-link" data-scroll-target="#testing-task-1"><span class="header-section-number">7.4.4</span> Testing Task 1</a></li>
+  <li><a href="#instructions" id="toc-instructions" class="nav-link" data-scroll-target="#instructions"><span class="header-section-number">8.4.1</span> Instructions</a></li>
+  <li><a href="#what-to-change" id="toc-what-to-change" class="nav-link" data-scroll-target="#what-to-change"><span class="header-section-number">8.4.2</span> What to change</a></li>
+  <li><a href="#sec-hw1-alu-codes" id="toc-sec-hw1-alu-codes" class="nav-link" data-scroll-target="#sec-hw1-alu-codes"><span class="header-section-number">8.4.3</span> ALU control encoding</a></li>
+  <li><a href="#testing-task-1" id="toc-testing-task-1" class="nav-link" data-scroll-target="#testing-task-1"><span class="header-section-number">8.4.4</span> Testing Task 1</a></li>
   </ul></li>
-  <li><a href="#task-2-zmmul-with-a-single-1616-multiplier" id="toc-task-2-zmmul-with-a-single-1616-multiplier" class="nav-link" data-scroll-target="#task-2-zmmul-with-a-single-1616-multiplier"><span class="header-section-number">7.5</span> Task 2: Zmmul with a single 16×16 multiplier</a>
+  <li><a href="#task-2-zmmul-with-a-single-1616-multiplier" id="toc-task-2-zmmul-with-a-single-1616-multiplier" class="nav-link" data-scroll-target="#task-2-zmmul-with-a-single-1616-multiplier"><span class="header-section-number">8.5</span> Task 2: Zmmul with a single 16×16 multiplier</a>
   <ul class="collapse">
-  <li><a href="#instructions-1" id="toc-instructions-1" class="nav-link" data-scroll-target="#instructions-1"><span class="header-section-number">7.5.1</span> Instructions</a></li>
-  <li><a href="#required-architecture" id="toc-required-architecture" class="nav-link" data-scroll-target="#required-architecture"><span class="header-section-number">7.5.2</span> Required architecture</a></li>
-  <li><a href="#timing-of-the-mul-interface" id="toc-timing-of-the-mul-interface" class="nav-link" data-scroll-target="#timing-of-the-mul-interface"><span class="header-section-number">7.5.3</span> Timing of the <code>mul</code> interface</a></li>
-  <li><a href="#a-suggested-control-unit-mulctrl" id="toc-a-suggested-control-unit-mulctrl" class="nav-link" data-scroll-target="#a-suggested-control-unit-mulctrl"><span class="header-section-number">7.5.4</span> A suggested control unit (<code>mulctrl</code>)</a></li>
-  <li><a href="#connecting-it-to-the-pipeline" id="toc-connecting-it-to-the-pipeline" class="nav-link" data-scroll-target="#connecting-it-to-the-pipeline"><span class="header-section-number">7.5.5</span> Connecting it to the pipeline</a></li>
-  <li><a href="#testing-task-2" id="toc-testing-task-2" class="nav-link" data-scroll-target="#testing-task-2"><span class="header-section-number">7.5.6</span> Testing Task 2</a></li>
+  <li><a href="#instructions-1" id="toc-instructions-1" class="nav-link" data-scroll-target="#instructions-1"><span class="header-section-number">8.5.1</span> Instructions</a></li>
+  <li><a href="#required-architecture" id="toc-required-architecture" class="nav-link" data-scroll-target="#required-architecture"><span class="header-section-number">8.5.2</span> Required architecture</a></li>
+  <li><a href="#timing-of-the-mul-interface" id="toc-timing-of-the-mul-interface" class="nav-link" data-scroll-target="#timing-of-the-mul-interface"><span class="header-section-number">8.5.3</span> Timing of the <code>mul</code> interface</a></li>
+  <li><a href="#a-suggested-control-unit-mulctrl" id="toc-a-suggested-control-unit-mulctrl" class="nav-link" data-scroll-target="#a-suggested-control-unit-mulctrl"><span class="header-section-number">8.5.4</span> A suggested control unit (<code>mulctrl</code>)</a></li>
+  <li><a href="#connecting-it-to-the-pipeline" id="toc-connecting-it-to-the-pipeline" class="nav-link" data-scroll-target="#connecting-it-to-the-pipeline"><span class="header-section-number">8.5.5</span> Connecting it to the pipeline</a></li>
+  <li><a href="#testing-task-2" id="toc-testing-task-2" class="nav-link" data-scroll-target="#testing-task-2"><span class="header-section-number">8.5.6</span> Testing Task 2</a></li>
   </ul></li>
-  <li><a href="#software-on-the-soc" id="toc-software-on-the-soc" class="nav-link" data-scroll-target="#software-on-the-soc"><span class="header-section-number">7.6</span> Software on the SoC</a>
+  <li><a href="#software-on-the-soc" id="toc-software-on-the-soc" class="nav-link" data-scroll-target="#software-on-the-soc"><span class="header-section-number">8.6</span> Software on the SoC</a>
   <ul class="collapse">
-  <li><a href="#the-self-check-swhw1check" id="toc-the-self-check-swhw1check" class="nav-link" data-scroll-target="#the-self-check-swhw1check"><span class="header-section-number">7.6.1</span> The self-check: <code>sw/hw1/check</code></a></li>
-  <li><a href="#the-benchmark-swhw1bench" id="toc-the-benchmark-swhw1bench" class="nav-link" data-scroll-target="#the-benchmark-swhw1bench"><span class="header-section-number">7.6.2</span> The benchmark: <code>sw/hw1/bench</code></a></li>
+  <li><a href="#the-self-check-swhw1check" id="toc-the-self-check-swhw1check" class="nav-link" data-scroll-target="#the-self-check-swhw1check"><span class="header-section-number">8.6.1</span> The self-check: <code>sw/hw1/check</code></a></li>
+  <li><a href="#the-benchmark-swhw1bench" id="toc-the-benchmark-swhw1bench" class="nav-link" data-scroll-target="#the-benchmark-swhw1bench"><span class="header-section-number">8.6.2</span> The benchmark: <code>sw/hw1/bench</code></a></li>
   </ul></li>
-  <li><a href="#report" id="toc-report" class="nav-link" data-scroll-target="#report"><span class="header-section-number">7.7</span> Report</a></li>
-  <li><a href="#grading" id="toc-grading" class="nav-link" data-scroll-target="#grading"><span class="header-section-number">7.8</span> Grading</a></li>
-  <li><a href="#submission" id="toc-submission" class="nav-link" data-scroll-target="#submission"><span class="header-section-number">7.9</span> Submission</a></li>
+  <li><a href="#report" id="toc-report" class="nav-link" data-scroll-target="#report"><span class="header-section-number">8.7</span> Report</a></li>
+  <li><a href="#grading" id="toc-grading" class="nav-link" data-scroll-target="#grading"><span class="header-section-number">8.8</span> Grading</a></li>
+  <li><a href="#submission" id="toc-submission" class="nav-link" data-scroll-target="#submission"><span class="header-section-number">8.9</span> Submission</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/hw1.html">Homework</a></li><li class="breadcrumb-item"><a href="../chapters/hw1.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Homework 1: Extending the HIPV core</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/hw1.html">Homework</a></li><li class="breadcrumb-item"><a href="../chapters/hw1.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Homework 1: Extending the HIPV core</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span id="sec-hw1" class="quarto-section-identifier"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Homework 1: Extending the HIPV core</span></span></h1>
+<h1 class="title"><span id="sec-hw1" class="quarto-section-identifier"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Homework 1: Extending the HIPV core</span></span></h1>
 </div>
 
 
@@ -322,8 +328,8 @@ Homework
 <p>This is a graded homework (30 points), not a lab exercise. The code lives in the <code>HIPV-SoC</code> repository, branch <code>hw1-student</code>.</p>
 </div>
 </div>
-<section id="before-you-start" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="before-you-start"><span class="header-section-number">7.1</span> Before you start</h2>
+<section id="before-you-start" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="before-you-start"><span class="header-section-number">8.1</span> Before you start</h2>
 <p><strong>1. Update Anvil.</strong> The FPGA flow needs a current Anvil. Run once on your own computer:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">anvil</span> update</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>(On the classroom computers you cannot run <code>anvil update</code>; use the classroom patch from the <a href="../chapters/01-tools-intro.html">Tools introduction</a> instead.)</p>
@@ -377,8 +383,8 @@ Homework
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> tb/unit/idu <span class="kw">&amp;&amp;</span> <span class="fu">make</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> tb/unit/ieu <span class="kw">&amp;&amp;</span> <span class="fu">make</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="what-is-provided" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="what-is-provided"><span class="header-section-number">7.2</span> What is provided</h2>
+<section id="what-is-provided" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="what-is-provided"><span class="header-section-number">8.2</span> What is provided</h2>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
@@ -429,8 +435,8 @@ Homework
 </tr>
 </tbody>
 </table>
-<section id="where-to-change-the-code" class="level3" data-number="7.2.1">
-<h3 data-number="7.2.1" class="anchored" data-anchor-id="where-to-change-the-code"><span class="header-section-number">7.2.1</span> Where to change the code</h3>
+<section id="where-to-change-the-code" class="level3" data-number="8.2.1">
+<h3 data-number="8.2.1" class="anchored" data-anchor-id="where-to-change-the-code"><span class="header-section-number">8.2.1</span> Where to change the code</h3>
 <p>Every place you have to change is marked in the source with a comment starting with <code>HW1 Task 1</code> or <code>HW1 Task 2</code>. The comments say <em>where</em> to work, not <em>what</em> to write. List them with:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">"HW1 Task"</span> config rtl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <table class="caption-top table">
@@ -493,8 +499,8 @@ Homework
 <hr>
 </section>
 </section>
-<section id="testbenches" class="level2" data-number="7.3">
-<h2 data-number="7.3" class="anchored" data-anchor-id="testbenches"><span class="header-section-number">7.3</span> Testbenches</h2>
+<section id="testbenches" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="testbenches"><span class="header-section-number">8.3</span> Testbenches</h2>
 <p>HIPV is verified with <a href="https://www.cocotb.org">cocotb</a> and Verilator: the design is simulated by Verilator, and the test itself is a Python program that drives the design’s inputs and checks its outputs. Each directory under <code>tb/</code> is one testbench:</p>
 <ul>
 <li>a <code>Makefile</code>, which says which RTL files to compile and which module is the top (<code>TOPLEVEL</code>);</li>
@@ -557,8 +563,8 @@ Homework
 </tbody>
 </table>
 <p>A failure at a lower level is easier to debug: the unit testbench points straight at one module, while a failed SoC test only tells you the printed text was wrong. Work upwards: unit first, then core, then SoC.</p>
-<section id="unit-level-tbunitmul-task-2" class="level3" data-number="7.3.1">
-<h3 data-number="7.3.1" class="anchored" data-anchor-id="unit-level-tbunitmul-task-2"><span class="header-section-number">7.3.1</span> Unit level: <code>tb/unit/mul</code> (Task 2)</h3>
+<section id="unit-level-tbunitmul-task-2" class="level3" data-number="8.3.1">
+<h3 data-number="8.3.1" class="anchored" data-anchor-id="unit-level-tbunitmul-task-2"><span class="header-section-number">8.3.1</span> Unit level: <code>tb/unit/mul</code> (Task 2)</h3>
 <p>Toplevel: your <code>mul</code> module alone. The testbench plays the Execute stage. It pulses <code>Start</code> with the operands, waits for <code>Done</code>, then raises <code>Ack</code>. Every result is compared with <code>hw1_model.py</code>.</p>
 <p>To check the interface contract in the header of <code>mul.sv</code>, the testbench does two things on every operation:</p>
 <ul>
@@ -597,8 +603,8 @@ Homework
 </table>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> tb/unit/mul <span class="kw">&amp;&amp;</span> <span class="fu">make</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="unit-level-tbunitidu-and-tbunitieu-regression-and-task-1" class="level3" data-number="7.3.2">
-<h3 data-number="7.3.2" class="anchored" data-anchor-id="unit-level-tbunitidu-and-tbunitieu-regression-and-task-1"><span class="header-section-number">7.3.2</span> Unit level: <code>tb/unit/idu</code> and <code>tb/unit/ieu</code> (regression and Task 1)</h3>
+<section id="unit-level-tbunitidu-and-tbunitieu-regression-and-task-1" class="level3" data-number="8.3.2">
+<h3 data-number="8.3.2" class="anchored" data-anchor-id="unit-level-tbunitidu-and-tbunitieu-regression-and-task-1"><span class="header-section-number">8.3.2</span> Unit level: <code>tb/unit/idu</code> and <code>tb/unit/ieu</code> (regression and Task 1)</h3>
 <p>These test the Decode and Execute stages. You will change both modules. The original tests <strong>must keep passing</strong>: they check that the RV32I behavior is unchanged. They write the existing <code>ALUControl</code> codes as numbers, so keep those codes unchanged (see Task 1).</p>
 <ul>
 <li><code>tb/unit/idu</code>: field extraction, decoding of every RV32I instruction class, register file read/write and bypass, flush, back-pressure.</li>
@@ -610,8 +616,8 @@ Homework
 <li><code>tb/unit/ieu</code>: <code>test_alu_encoding</code> checks the ALU codes in <code>hipv_pkg.sv</code> against the table in Task 1. <code>test_zba</code>, <code>test_zbb_logic_with_negate</code>, <code>test_zbb_min_max</code> and <code>test_zbb_count</code> drive the new codes into the Execute stage and compare the <code>ALUResultE</code> with a reference model. The tests read the codes from <code>hipv_pkg.sv</code>, so the constants must have the names given in the table.</li>
 </ul>
 </section>
-<section id="core-level-tbcore" class="level3" data-number="7.3.3">
-<h3 data-number="7.3.3" class="anchored" data-anchor-id="core-level-tbcore"><span class="header-section-number">7.3.3</span> Core level: <code>tb/core</code></h3>
+<section id="core-level-tbcore" class="level3" data-number="8.3.3">
+<h3 data-number="8.3.3" class="anchored" data-anchor-id="core-level-tbcore"><span class="header-section-number">8.3.3</span> Core level: <code>tb/core</code></h3>
 <p>Toplevel: <code>hipv_core</code>, the pipeline without the SoC around it. Each test:</p>
 <ol type="1">
 <li>builds a short program in Python with the encoders in <code>rv32i.py</code> (<code>li(1, 0x80000000)</code>, <code>andn(3, 1, 2)</code>, <code>sw(3, 0, 10)</code>, …);</li>
@@ -730,8 +736,8 @@ Homework
 </tbody>
 </table>
 </section>
-<section id="soc-level-swhw1check-and-swhw1bench" class="level3" data-number="7.3.4">
-<h3 data-number="7.3.4" class="anchored" data-anchor-id="soc-level-swhw1check-and-swhw1bench"><span class="header-section-number">7.3.4</span> SoC level: <code>sw/hw1/check</code> and <code>sw/hw1/bench</code></h3>
+<section id="soc-level-swhw1check-and-swhw1bench" class="level3" data-number="8.3.4">
+<h3 data-number="8.3.4" class="anchored" data-anchor-id="soc-level-swhw1check-and-swhw1bench"><span class="header-section-number">8.3.4</span> SoC level: <code>sw/hw1/check</code> and <code>sw/hw1/bench</code></h3>
 <p>Toplevel: <code>hipv_soc</code>, the complete system. <code>make run</code> in a program directory compiles the C program, loads the binary into the SoC’s RAM, simulates the whole system and captures everything the program prints on the UART (<code>tb/soc/test_sw.py</code>).</p>
 <ul>
 <li><p><strong><code>sw/hw1/check</code></strong> is self-checking. Every instruction runs on all pairs of 12 operands and is compared with a reference written in plain RV32I C, so the reference does not depend on your hardware. The run passes if the printed text matches <code>expected.txt</code> exactly. A failing line shows how many results were wrong and the first one:</p>
@@ -751,20 +757,20 @@ min     FAIL 23/144  a=80000000 b=00000001 hw=00000001 ref=80000000</code></pre>
 <p>The only valid values are <code>nexys-100t</code> and <code>nexys-50t</code>. Any other value stops <code>make</code> with an “Unknown BOARD” error. You can also set the board once for your shell session with <code>export BOARD=nexys-50t</code>, which saves repeating it on every command.</p>
 <p>After flashing, open a serial terminal at 19200 8N1 (see <code>docs/FPGA.md</code>). The program runs <strong>once</strong> at boot and stops — it does not loop. If you don’t see output (the terminal was opened after it already ran, or you want to see it again), press the <strong><code>CPU_RESETN</code></strong> button (the red one) to restart it; you do not need to reflash.</p>
 </section>
-<section id="existing-soc-and-fpga-testbenches-regression" class="level3" data-number="7.3.5">
-<h3 data-number="7.3.5" class="anchored" data-anchor-id="existing-soc-and-fpga-testbenches-regression"><span class="header-section-number">7.3.5</span> Existing SoC and FPGA testbenches (regression)</h3>
+<section id="existing-soc-and-fpga-testbenches-regression" class="level3" data-number="8.3.5">
+<h3 data-number="8.3.5" class="anchored" data-anchor-id="existing-soc-and-fpga-testbenches-regression"><span class="header-section-number">8.3.5</span> Existing SoC and FPGA testbenches (regression)</h3>
 <p><code>tb/soc</code> (with plain <code>make</code>: a small assembly program exercising every peripheral) and <code>tb/fpga</code> (the board wrapper) must still pass at the end. They don’t test the new instructions; they show you haven’t broken the system.</p>
 </section>
-<section id="hidden-tests" class="level3" data-number="7.3.6">
-<h3 data-number="7.3.6" class="anchored" data-anchor-id="hidden-tests"><span class="header-section-number">7.3.6</span> Hidden tests</h3>
+<section id="hidden-tests" class="level3" data-number="8.3.6">
+<h3 data-number="8.3.6" class="anchored" data-anchor-id="hidden-tests"><span class="header-section-number">8.3.6</span> Hidden tests</h3>
 <p>The provided tests are a good start, not the whole story. Your design is also graded with <strong>additional hidden tests of the same kind and at the same levels</strong>: more operand values, other instruction sequences, other memory timings. Write your own tests for the corner cases you can think of (see <a href="#rules">Rules</a>).</p>
 <hr>
 </section>
 </section>
-<section id="task-1-zbazbb-subset" class="level2" data-number="7.4">
-<h2 data-number="7.4" class="anchored" data-anchor-id="task-1-zbazbb-subset"><span class="header-section-number">7.4</span> Task 1: Zba/Zbb subset</h2>
-<section id="instructions" class="level3" data-number="7.4.1">
-<h3 data-number="7.4.1" class="anchored" data-anchor-id="instructions"><span class="header-section-number">7.4.1</span> Instructions</h3>
+<section id="task-1-zbazbb-subset" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="task-1-zbazbb-subset"><span class="header-section-number">8.4</span> Task 1: Zba/Zbb subset</h2>
+<section id="instructions" class="level3" data-number="8.4.1">
+<h3 data-number="8.4.1" class="anchored" data-anchor-id="instructions"><span class="header-section-number">8.4.1</span> Instructions</h3>
 <p>All instructions write <code>rd</code>. <code>rs1</code> and <code>rs2</code> are the register operands. R-type instructions use opcode <code>OP</code> (<code>0110011</code>), the others use <code>OP-IMM</code> (<code>0010011</code>).</p>
 <table class="caption-top table">
 <colgroup>
@@ -881,8 +887,8 @@ min     FAIL 23/144  a=80000000 b=00000001 hw=00000001 ref=80000000</code></pre>
 </tbody>
 </table>
 </section>
-<section id="what-to-change" class="level3" data-number="7.4.2">
-<h3 data-number="7.4.2" class="anchored" data-anchor-id="what-to-change"><span class="header-section-number">7.4.2</span> What to change</h3>
+<section id="what-to-change" class="level3" data-number="8.4.2">
+<h3 data-number="8.4.2" class="anchored" data-anchor-id="what-to-change"><span class="header-section-number">8.4.2</span> What to change</h3>
 <ol type="1">
 <li><strong>The decoder.</strong> Today <code>idudec.sv</code> only receives <code>funct7[5]</code>. Every encoding it doesn’t recognize silently runs as an RV32I instruction. Assemble an <code>andn</code> and work out which RV32I instruction the current core executes instead. Pass the bits you need into <code>idudec</code>.
 <ul>
@@ -904,13 +910,13 @@ Explain your choices in the report.</li>
 <li><strong>Lint.</strong> The testbenches run Verilator with <code>-Wall</code>, and every warning is an error. Don’t switch warnings off globally.</li>
 </ol>
 </section>
-<section id="sec-hw1-alu-codes" class="level3" data-number="7.4.3">
-<h3 data-number="7.4.3" class="anchored" data-anchor-id="sec-hw1-alu-codes"><span class="header-section-number">7.4.3</span> ALU control encoding</h3>
+<section id="sec-hw1-alu-codes" class="level3" data-number="8.4.3">
+<h3 data-number="8.4.3" class="anchored" data-anchor-id="sec-hw1-alu-codes"><span class="header-section-number">8.4.3</span> ALU control encoding</h3>
 <p>The ALU, the decoder and the testbenches share one encoding, so <code>hipv_pkg.sv</code> must define <strong>exactly these constants with exactly these values</strong>, as 5-bit <code>localparam logic [4:0]</code>. <code>tb/unit/ieu</code> (<code>test_alu_encoding</code>) fails if a name is missing, a value differs, a constant is not 5 bits wide, or two operations share a code.</p>
 <div id="tbl-alu-codes" class="quarto-float quarto-figure quarto-figure-center anchored" data-tbl-colwidths="[32,18,32,18]">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-alu-codes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7.1: ALU control codes.
+Table&nbsp;8.1: ALU control codes.
 </figcaption>
 <div aria-describedby="tbl-alu-codes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -1002,8 +1008,8 @@ Table&nbsp;7.1: ALU control codes.
 </div>
 <p>For the bonus instructions (run the tests with <code>HW1_BONUS=1</code>) the codes continue: <code>ALU_CTZ</code> <code>10110</code>, <code>ALU_SEXTB</code> <code>10111</code>, <code>ALU_SEXTH</code> <code>11000</code>, <code>ALU_ZEXTH</code> <code>11001</code>, <code>ALU_ROL</code> <code>11010</code>, <code>ALU_ROR</code> <code>11011</code>, <code>ALU_ORCB</code> <code>11100</code>, <code>ALU_REV8</code> <code>11101</code>.</p>
 </section>
-<section id="testing-task-1" class="level3" data-number="7.4.4">
-<h3 data-number="7.4.4" class="anchored" data-anchor-id="testing-task-1"><span class="header-section-number">7.4.4</span> Testing Task 1</h3>
+<section id="testing-task-1" class="level3" data-number="8.4.4">
+<h3 data-number="8.4.4" class="anchored" data-anchor-id="testing-task-1"><span class="header-section-number">8.4.4</span> Testing Task 1</h3>
 <div class="sourceCode" id="cb11"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> tb/core <span class="kw">&amp;&amp;</span> <span class="fu">make</span> MODULE=test_zbb      <span class="co"># core level, Task 1</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> tb/core <span class="kw">&amp;&amp;</span> <span class="fu">make</span>                      <span class="co"># core level, RV32I regression</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> tb/unit/idu <span class="kw">&amp;&amp;</span> <span class="fu">make</span>                  <span class="co"># unit level: decoder, regression and Task 1</span></span>
@@ -1012,10 +1018,10 @@ Table&nbsp;7.1: ALU control codes.
 <hr>
 </section>
 </section>
-<section id="task-2-zmmul-with-a-single-1616-multiplier" class="level2" data-number="7.5">
-<h2 data-number="7.5" class="anchored" data-anchor-id="task-2-zmmul-with-a-single-1616-multiplier"><span class="header-section-number">7.5</span> Task 2: Zmmul with a single 16×16 multiplier</h2>
-<section id="instructions-1" class="level3" data-number="7.5.1">
-<h3 data-number="7.5.1" class="anchored" data-anchor-id="instructions-1"><span class="header-section-number">7.5.1</span> Instructions</h3>
+<section id="task-2-zmmul-with-a-single-1616-multiplier" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="task-2-zmmul-with-a-single-1616-multiplier"><span class="header-section-number">8.5</span> Task 2: Zmmul with a single 16×16 multiplier</h2>
+<section id="instructions-1" class="level3" data-number="8.5.1">
+<h3 data-number="8.5.1" class="anchored" data-anchor-id="instructions-1"><span class="header-section-number">8.5.1</span> Instructions</h3>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 25%">
@@ -1060,8 +1066,8 @@ Table&nbsp;7.1: ALU control codes.
 </table>
 <p>All four use opcode <code>OP</code>. The divide instructions <code>div</code>, <code>divu</code>, <code>rem</code> and <code>remu</code> (funct7 <code>0000001</code>, funct3 <code>1xx</code>) are <strong>not</strong> part of Zmmul. HIPV has no illegal-instruction trap yet, so they must execute as <strong>nops</strong>: no register is written.</p>
 </section>
-<section id="required-architecture" class="level3" data-number="7.5.2">
-<h3 data-number="7.5.2" class="anchored" data-anchor-id="required-architecture"><span class="header-section-number">7.5.2</span> Required architecture</h3>
+<section id="required-architecture" class="level3" data-number="8.5.2">
+<h3 data-number="8.5.2" class="anchored" data-anchor-id="required-architecture"><span class="header-section-number">8.5.2</span> Required architecture</h3>
 <p><strong>Constraints.</strong> The whole design may contain <strong>exactly one</strong> multiplication operator, with two <strong>16-bit unsigned</strong> operands. A multiply must finish (<code>Done</code>) at most <strong>8 cycles</strong> after <code>Start</code>.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Use the `*` operator">
 <div class="callout-header d-flex align-content-center">
@@ -1079,11 +1085,11 @@ Use the <code>*</code> operator
 <p><strong>Idea.</strong> Split each operand into 16-bit halves, A = A<sub>H</sub>·2¹⁶ + A<sub>L</sub> (and the same for B). Then</p>
 <pre><code>A·B = A_L·B_L  +  (A_L·B_H + A_H·B_L)·2¹⁶  +  A_H·B_H·2³²</code></pre>
 <p>so four 16×16 products, each shifted to its weight, give the full 64-bit product. The unit computes one of them per cycle and sums them in a 64-bit accumulator.</p>
-<p><strong>Algorithm.</strong> The unit executes <a href="#tbl-mul-algorithm" class="quarto-xref">Table&nbsp;<span>7.2</span></a> once per multiply. <code>A</code>, <code>B</code> and <code>Funct3</code> are valid <strong>only in the <code>Start</code> cycle</strong>, so everything the later steps need must be stored there.</p>
+<p><strong>Algorithm.</strong> The unit executes <a href="#tbl-mul-algorithm" class="quarto-xref">Table&nbsp;<span>8.2</span></a> once per multiply. <code>A</code>, <code>B</code> and <code>Funct3</code> are valid <strong>only in the <code>Start</code> cycle</strong>, so everything the later steps need must be stored there.</p>
 <div id="tbl-mul-algorithm" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-mul-algorithm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7.2: Multiplication with one 16×16 multiplier. All four <code>·</code> use the same multiplier.
+Table&nbsp;8.2: Multiplication with one 16×16 multiplier. All four <code>·</code> use the same multiplier.
 </figcaption>
 <div aria-describedby="tbl-mul-algorithm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -1151,8 +1157,8 @@ Table&nbsp;7.2: Multiplication with one 16×16 multiplier. All four <code>·</co
 <li><code>mulctrl.sv</code> holds the state machine. Its ports are up to you.</li>
 </ul>
 </section>
-<section id="timing-of-the-mul-interface" class="level3" data-number="7.5.3">
-<h3 data-number="7.5.3" class="anchored" data-anchor-id="timing-of-the-mul-interface"><span class="header-section-number">7.5.3</span> Timing of the <code>mul</code> interface</h3>
+<section id="timing-of-the-mul-interface" class="level3" data-number="8.5.3">
+<h3 data-number="8.5.3" class="anchored" data-anchor-id="timing-of-the-mul-interface"><span class="header-section-number">8.5.3</span> Timing of the <code>mul</code> interface</h3>
 <p>The diagrams below show the reference design, which needs 5 cycles from <code>Start</code> to <code>Done</code>: one <code>Start</code> cycle, four partial-product cycles (<code>Step</code> 0–3) and one cycle presenting the result. Your design may be faster or slower, up to 8 cycles. One column is one clock cycle. <code>x</code> means “don’t care”: the value can be anything, and the testbench drives random values there.</p>
 <p>Result taken at once (<code>Ack</code> in the first <code>Done</code> cycle). Cycle 0 is the <code>Start</code> cycle:</p>
 <div id="fig-mul-immediate" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1161,7 +1167,7 @@ Table&nbsp;7.2: Multiplication with one 16×16 multiplier. All four <code>·</co
 <img src="../img/hw1/mul-timing-immediate.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mul-immediate-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7.1: Result taken at once: <code>Ack</code> in the first <code>Done</code> cycle. Dashed lines mark don’t-care values.
+Figure&nbsp;8.1: Result taken at once: <code>Ack</code> in the first <code>Done</code> cycle. Dashed lines mark don’t-care values.
 </figcaption>
 </figure>
 </div>
@@ -1178,13 +1184,13 @@ Figure&nbsp;7.1: Result taken at once: <code>Ack</code> in the first <code>Done<
 <img src="../img/hw1/mul-timing-delayed.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mul-delayed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7.2: Result taken later: <code>Done</code> and <code>Result</code> hold until <code>Ack</code>.
+Figure&nbsp;8.2: Result taken later: <code>Done</code> and <code>Result</code> hold until <code>Ack</code>.
 </figcaption>
 </figure>
 </div>
 </section>
-<section id="a-suggested-control-unit-mulctrl" class="level3" data-number="7.5.4">
-<h3 data-number="7.5.4" class="anchored" data-anchor-id="a-suggested-control-unit-mulctrl"><span class="header-section-number">7.5.4</span> A suggested control unit (<code>mulctrl</code>)</h3>
+<section id="a-suggested-control-unit-mulctrl" class="level3" data-number="8.5.4">
+<h3 data-number="8.5.4" class="anchored" data-anchor-id="a-suggested-control-unit-mulctrl"><span class="header-section-number">8.5.4</span> A suggested control unit (<code>mulctrl</code>)</h3>
 <p>The contract above already implies three states. The control unit below is one straightforward way to implement it. Other designs are fine as long as they keep the contract.</p>
 <div id="fig-mulctrl-fsm" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -1192,7 +1198,7 @@ Figure&nbsp;7.2: Result taken later: <code>Done</code> and <code>Result</code> h
 <img src="../img/hw1/mulctrl-fsm.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mulctrl-fsm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7.3: State diagram of the suggested <code>mulctrl</code>.
+Figure&nbsp;8.3: State diagram of the suggested <code>mulctrl</code>.
 </figcaption>
 </figure>
 </div>
@@ -1295,8 +1301,8 @@ Figure&nbsp;7.3: State diagram of the suggested <code>mulctrl</code>.
 </table>
 <p>So <code>mulctrl</code> needs only <code>Start</code> and <code>Ack</code> as inputs, and gives the datapath <code>Busy</code>, <code>Done</code>, an accumulate enable and <code>Step</code>.</p>
 </section>
-<section id="connecting-it-to-the-pipeline" class="level3" data-number="7.5.5">
-<h3 data-number="7.5.5" class="anchored" data-anchor-id="connecting-it-to-the-pipeline"><span class="header-section-number">7.5.5</span> Connecting it to the pipeline</h3>
+<section id="connecting-it-to-the-pipeline" class="level3" data-number="8.5.5">
+<h3 data-number="8.5.5" class="anchored" data-anchor-id="connecting-it-to-the-pipeline"><span class="header-section-number">8.5.5</span> Connecting it to the pipeline</h3>
 <p>The multiplier lives in the Execute stage (<code>ieu.sv</code>). Three questions guide the integration:</p>
 <ol type="1">
 <li><p><strong>How does Execute hold an instruction?</strong> At the moment, Execute is ready whenever it is empty or the Memory stage accepts (<code>ReadyE = ~ValidEReg | ReadyM</code>). A multiply has to stay in Execute until its result is ready, and must not be offered to Memory (<code>ValidE</code>) before that. Change <code>ReadyE</code> and <code>ValidE</code> so that the handshake does this. The rest of the pipeline then stalls on its own.</p>
@@ -1307,7 +1313,7 @@ Figure&nbsp;7.3: State diagram of the suggested <code>mulctrl</code>.
 <img src="../img/hw1/mul-timing-pipeline.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mul-pipeline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7.4: Reference design with <code>ReadyM</code> = 1: the multiply holds Execute for six cycles while <code>addi</code> waits in Decode.
+Figure&nbsp;8.4: Reference design with <code>ReadyM</code> = 1: the multiply holds Execute for six cycles while <code>addi</code> waits in Decode.
 </figcaption>
 </figure>
 </div></li>
@@ -1367,8 +1373,8 @@ Figure&nbsp;7.4: Reference design with <code>ReadyM</code> = 1: the multiply hol
 <li>The <code>Ack</code> condition is the same condition under which <code>ValidE</code> is offered to Memory and <code>ReadyE</code> rises. Use it in both places, so the multiplier and the pipeline never disagree about whether the instruction has left.</li>
 </ul>
 </section>
-<section id="testing-task-2" class="level3" data-number="7.5.6">
-<h3 data-number="7.5.6" class="anchored" data-anchor-id="testing-task-2"><span class="header-section-number">7.5.6</span> Testing Task 2</h3>
+<section id="testing-task-2" class="level3" data-number="8.5.6">
+<h3 data-number="8.5.6" class="anchored" data-anchor-id="testing-task-2"><span class="header-section-number">8.5.6</span> Testing Task 2</h3>
 <div class="sourceCode" id="cb13"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> tb/unit/mul <span class="kw">&amp;&amp;</span> <span class="fu">make</span>                  <span class="co"># unit level: the mul module alone</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> tb/core <span class="kw">&amp;&amp;</span> <span class="fu">make</span> MODULE=test_zmmul    <span class="co"># core level: the multiplier in the pipeline</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> sw/hw1/check <span class="kw">&amp;&amp;</span> <span class="fu">make</span> run             <span class="co"># SoC level: both tasks from C</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1376,10 +1382,10 @@ Figure&nbsp;7.4: Reference design with <code>ReadyM</code> = 1: the multiply hol
 <hr>
 </section>
 </section>
-<section id="software-on-the-soc" class="level2" data-number="7.6">
-<h2 data-number="7.6" class="anchored" data-anchor-id="software-on-the-soc"><span class="header-section-number">7.6</span> Software on the SoC</h2>
-<section id="the-self-check-swhw1check" class="level3" data-number="7.6.1">
-<h3 data-number="7.6.1" class="anchored" data-anchor-id="the-self-check-swhw1check"><span class="header-section-number">7.6.1</span> The self-check: <code>sw/hw1/check</code></h3>
+<section id="software-on-the-soc" class="level2" data-number="8.6">
+<h2 data-number="8.6" class="anchored" data-anchor-id="software-on-the-soc"><span class="header-section-number">8.6</span> Software on the SoC</h2>
+<section id="the-self-check-swhw1check" class="level3" data-number="8.6.1">
+<h3 data-number="8.6.1" class="anchored" data-anchor-id="the-self-check-swhw1check"><span class="header-section-number">8.6.1</span> The self-check: <code>sw/hw1/check</code></h3>
 <p>The program is compiled with <code>-march=rv32i</code>, so the compiler never emits a new instruction on its own. The only new instructions in the binary come from the wrappers in <code>hw1_insn.h</code>, for example:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="kw">inline</span> <span class="dt">uint32_t</span> hw_andn<span class="op">(</span><span class="dt">uint32_t</span> a<span class="op">,</span> <span class="dt">uint32_t</span> b<span class="op">)</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
@@ -1393,18 +1399,18 @@ Figure&nbsp;7.4: Reference design with <code>ReadyM</code> = 1: the multiply hol
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> run              <span class="co"># compared with expected.txt</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> run REF=1        <span class="co"># reference against itself: checks the program on the unmodified core</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="the-benchmark-swhw1bench" class="level3" data-number="7.6.2">
-<h3 data-number="7.6.2" class="anchored" data-anchor-id="the-benchmark-swhw1bench"><span class="header-section-number">7.6.2</span> The benchmark: <code>sw/hw1/bench</code></h3>
+<section id="the-benchmark-swhw1bench" class="level3" data-number="8.6.2">
+<h3 data-number="8.6.2" class="anchored" data-anchor-id="the-benchmark-swhw1bench"><span class="header-section-number">8.6.2</span> The benchmark: <code>sw/hw1/bench</code></h3>
 <p><code>make run</code> in <code>sw/hw1/bench</code> prints timer ticks per operation for each new instruction, next to the code an RV32I compiler produces without it (a libgcc call such as <code>__mulsi3</code>, or a few base instructions). Both columns include the same loop overhead, shown in the <code>loop only</code> row. It is not graded; it shows what your hardware buys. <code>make run REF=1</code> prints the software version in both columns.</p>
 <hr>
 </section>
 </section>
-<section id="report" class="level2" data-number="7.7">
-<h2 data-number="7.7" class="anchored" data-anchor-id="report"><span class="header-section-number">7.7</span> Report</h2>
+<section id="report" class="level2" data-number="8.7">
+<h2 data-number="8.7" class="anchored" data-anchor-id="report"><span class="header-section-number">8.7</span> Report</h2>
 <p>Submit a PDF of at most <strong>2 pages</strong>, explaining your design choices and the results of your tests.</p>
 </section>
-<section id="grading" class="level2" data-number="7.8">
-<h2 data-number="7.8" class="anchored" data-anchor-id="grading"><span class="header-section-number">7.8</span> Grading</h2>
+<section id="grading" class="level2" data-number="8.8">
+<h2 data-number="8.8" class="anchored" data-anchor-id="grading"><span class="header-section-number">8.8</span> Grading</h2>
 <p>The homework is worth <strong>30 points</strong>.</p>
 <table class="caption-top table">
 <thead>
@@ -1441,8 +1447,8 @@ Figure&nbsp;7.4: Reference design with <code>ReadyM</code> = 1: the multiply hol
 </tbody>
 </table>
 </section>
-<section id="submission" class="level2" data-number="7.9">
-<h2 data-number="7.9" class="anchored" data-anchor-id="submission"><span class="header-section-number">7.9</span> Submission</h2>
+<section id="submission" class="level2" data-number="8.9">
+<h2 data-number="8.9" class="anchored" data-anchor-id="submission"><span class="header-section-number">8.9</span> Submission</h2>
 <ul>
 <li>Submit a single ZIP file with your <strong>modified RTL and newly created testbench files</strong> and the <strong>report PDF</strong>. Do not include the provided tests, the SoC, the FPGA flow or the software. The ZIP file must not contain any other files or directories.</li>
 <li>The ZIP file must be named <code>hw1_team_&lt;team_name&gt;.zip</code>, for example <code>hw1_team_H.zip</code>.</li>
@@ -1853,13 +1859,13 @@ Figure&nbsp;7.4: Reference design with <code>ReadyM</code> = 1: the multiply hol
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../chapters/06-uart.html" class="pagination-link" aria-label="Sixth exercise: UART transmitter">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sixth exercise: UART transmitter</span></span>
+      <a href="../chapters/07-hipv-soc.html" class="pagination-link" aria-label="Seventh laboratory exercise: HIPV SoC tutorial">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Seventh laboratory exercise: HIPV SoC tutorial</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../chapters/appendix-oscilloscope.html" class="pagination-link" aria-label="Appendix: Using the Oscilloscope and Signal Generator">
-        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Appendix: Using the Oscilloscope and Signal Generator</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Appendix: Using the Oscilloscope and Signal Generator</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

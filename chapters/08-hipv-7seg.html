@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>8&nbsp; Eighth laboratory exercise: Adding a 7-segment display to the HIPV SoC – Digital Design Lab</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/hw1.html" rel="next">
+<link href="../chapters/07-hipv-soc.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-467c603866d931062acf9dde62877a13.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-tools-intro.html">Lab Exercises</a></li><li class="breadcrumb-item"><a href="../chapters/08-hipv-7seg.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Eighth laboratory exercise: Adding a 7-segment display to the HIPV SoC</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Digital Design Lab</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Lab Exercises</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-tools-intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">First exercise: Tools and the Digital Design Cycle</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-alu.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Second exercise: Introduction to (System)Verilog</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-sequential.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Third exercise: Designing sequential circuits with SystemVerilog</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-structural-modeling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fourth exercise: Structural modeling and Simulation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-counter-sevenseg.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Fifth exercise: Counter and seven segment display</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-uart.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sixth exercise: UART transmitter</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-hipv-soc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Seventh laboratory exercise: HIPV SoC tutorial</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-hipv-7seg.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Eighth laboratory exercise: Adding a 7-segment display to the HIPV SoC</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Homework</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/hw1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Homework 1: Extending the HIPV core</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendix</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/appendix-oscilloscope.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Appendix: Using the Oscilloscope and Signal Generator</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#the-display-peripheral" id="toc-the-display-peripheral" class="nav-link active" data-scroll-target="#the-display-peripheral"><span class="header-section-number">8.1</span> The display peripheral</a>
+  <ul class="collapse">
+  <li><a href="#register-map" id="toc-register-map" class="nav-link" data-scroll-target="#register-map"><span class="header-section-number">8.1.1</span> Register map</a></li>
+  <li><a href="#the-display-core" id="toc-the-display-core" class="nav-link" data-scroll-target="#the-display-core"><span class="header-section-number">8.1.2</span> The display core</a></li>
+  </ul></li>
+  <li><a href="#step-1-write-the-obi-slave" id="toc-step-1-write-the-obi-slave" class="nav-link" data-scroll-target="#step-1-write-the-obi-slave"><span class="header-section-number">8.2</span> Step 1: Write the OBI slave</a></li>
+  <li><a href="#step-2-connect-it-to-the-soc" id="toc-step-2-connect-it-to-the-soc" class="nav-link" data-scroll-target="#step-2-connect-it-to-the-soc"><span class="header-section-number">8.3</span> Step 2: Connect it to the SoC</a>
+  <ul class="collapse">
+  <li><a href="#address-map" id="toc-address-map" class="nav-link" data-scroll-target="#address-map"><span class="header-section-number">8.3.1</span> Address map</a></li>
+  <li><a href="#decoder" id="toc-decoder" class="nav-link" data-scroll-target="#decoder"><span class="header-section-number">8.3.2</span> Decoder</a></li>
+  <li><a href="#soc-top-level" id="toc-soc-top-level" class="nav-link" data-scroll-target="#soc-top-level"><span class="header-section-number">8.3.3</span> SoC top level</a></li>
+  <li><a href="#board-wrapper-and-pins" id="toc-board-wrapper-and-pins" class="nav-link" data-scroll-target="#board-wrapper-and-pins"><span class="header-section-number">8.3.4</span> Board wrapper and pins</a></li>
+  <li><a href="#build-flow" id="toc-build-flow" class="nav-link" data-scroll-target="#build-flow"><span class="header-section-number">8.3.5</span> Build flow</a></li>
+  <li><a href="#testbench-map" id="toc-testbench-map" class="nav-link" data-scroll-target="#testbench-map"><span class="header-section-number">8.3.6</span> Testbench map</a></li>
+  </ul></li>
+  <li><a href="#step-3-the-software" id="toc-step-3-the-software" class="nav-link" data-scroll-target="#step-3-the-software"><span class="header-section-number">8.4</span> Step 3: The software</a>
+  <ul class="collapse">
+  <li><a href="#check-that-the-address-is-reachable" id="toc-check-that-the-address-is-reachable" class="nav-link" data-scroll-target="#check-that-the-address-is-reachable"><span class="header-section-number">8.4.1</span> Check that the address is reachable</a></li>
+  <li><a href="#the-program" id="toc-the-program" class="nav-link" data-scroll-target="#the-program"><span class="header-section-number">8.4.2</span> The program</a></li>
+  </ul></li>
+  <li><a href="#step-4-build-and-test" id="toc-step-4-build-and-test" class="nav-link" data-scroll-target="#step-4-build-and-test"><span class="header-section-number">8.5</span> Step 4: Build and test</a></li>
+  <li><a href="#questions" id="toc-questions" class="nav-link" data-scroll-target="#questions"><span class="header-section-number">8.6</span> Questions</a></li>
+  <li><a href="#optional-extensions" id="toc-optional-extensions" class="nav-link" data-scroll-target="#optional-extensions"><span class="header-section-number">8.7</span> Optional extensions</a></li>
+  <li><a href="#starter-files" id="toc-starter-files" class="nav-link" data-scroll-target="#starter-files"><span class="header-section-number">8.8</span> Starter files</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-tools-intro.html">Lab Exercises</a></li><li class="breadcrumb-item"><a href="../chapters/08-hipv-7seg.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Eighth laboratory exercise: Adding a 7-segment display to the HIPV SoC</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Eighth laboratory exercise: Adding a 7-segment display to the HIPV SoC</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In the previous exercise you used the peripherals that the HIPV SoC already has. In this exercise you add a new one. You will turn the seven-segment display core from the fifth exercise into a <strong>bus peripheral</strong> with registers, connect it to the SoC, and write a C program that shows the seconds since start-up on the display.</p>
+<p>The exercise has a hardware part and a software part, just like a real SoC project:</p>
+<ol type="1">
+<li>Write the OBI slave that wraps the display core (<code>seg7.sv</code>).</li>
+<li>Register the new slave in the address map, the decoder, the SoC top level and the board wrapper.</li>
+<li>Write the C program that drives it.</li>
+</ol>
+<p>You work in the HIPV repository from the previous exercise. Instructions for macOS and WSL are the same as there: build in the Docker container, and program the board from the host.</p>
+<section id="the-display-peripheral" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="the-display-peripheral"><span class="header-section-number">8.1</span> The display peripheral</h2>
+<section id="register-map" class="level3" data-number="8.1.1">
+<h3 data-number="8.1.1" class="anchored" data-anchor-id="register-map"><span class="header-section-number">8.1.1</span> Register map</h3>
+<p>The peripheral is placed at base address <code>0x2000_3000</code>, the next free 4 KiB block after the GPIO. Its registers are word registers, one every 4 bytes:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 32%">
+<col style="width: 41%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Offset</th>
+<th>Register</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>0x00</code></td>
+<td><code>CONFIG</code></td>
+<td>Bit 0 enables the display. When it is 0, all digits are off.</td>
+</tr>
+<tr class="even">
+<td><code>0x04</code></td>
+<td><code>DIGIT0</code></td>
+<td>Bits 3:0: hex value of the rightmost digit</td>
+</tr>
+<tr class="odd">
+<td><code>0x08</code></td>
+<td><code>DIGIT1</code></td>
+<td>Bits 3:0: hex value of the second digit from the right</td>
+</tr>
+<tr class="even">
+<td><code>0x0C</code></td>
+<td><code>DIGIT2</code></td>
+<td>Bits 3:0: hex value of the third digit</td>
+</tr>
+<tr class="odd">
+<td><code>0x10</code></td>
+<td><code>DIGIT3</code></td>
+<td>Bits 3:0: hex value of the fourth digit</td>
+</tr>
+<tr class="even">
+<td><code>0x14</code></td>
+<td><code>DIGIT4</code></td>
+<td>Bits 3:0: hex value of the fifth digit</td>
+</tr>
+<tr class="odd">
+<td><code>0x18</code></td>
+<td><code>DIGIT5</code></td>
+<td>Bits 3:0: hex value of the sixth digit</td>
+</tr>
+<tr class="even">
+<td><code>0x1C</code></td>
+<td><code>DIGIT6</code></td>
+<td>Bits 3:0: hex value of the seventh digit</td>
+</tr>
+<tr class="odd">
+<td><code>0x20</code></td>
+<td><code>DIGIT7</code></td>
+<td>Bits 3:0: hex value of the leftmost digit</td>
+</tr>
+</tbody>
+</table>
+<p>All registers can be written and read back. The upper bits of every register are ignored on write and read as 0.</p>
+<p>The digit registers hold <strong>hex values</strong>, not segment patterns. The decoding from hex to segments stays inside the display core, as in the fifth exercise.</p>
+</section>
+<section id="the-display-core" class="level3" data-number="8.1.2">
+<h3 data-number="8.1.2" class="anchored" data-anchor-id="the-display-core"><span class="header-section-number">8.1.2</span> The display core</h3>
+<p>The display core is the one you built in the fifth exercise: <code>SevSegDisplay</code>, with the time multiplexing (<code>GP_counter</code>, <code>anode_assert</code>), <code>value_to_digit</code> and <code>digit_to_segments</code> inside. It is provided in <a href="../code/08_lab/sevseg_display.sv">sevseg_display.sv</a> so that you can concentrate on the bus side. Its ports are:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 42%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Port</th>
+<th>Direction</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>clock</code>, <code>reset</code></td>
+<td>in</td>
+<td>SoC clock and active-high synchronous reset</td>
+</tr>
+<tr class="even">
+<td><code>enable_7seg</code></td>
+<td>in</td>
+<td>Display on</td>
+</tr>
+<tr class="odd">
+<td><code>digit1</code> … <code>digit8</code></td>
+<td>in</td>
+<td>4-bit hex value of each digit. <code>digit1</code> is the rightmost one.</td>
+</tr>
+<tr class="even">
+<td><code>anode_select[7:0]</code></td>
+<td>out</td>
+<td>Active-low digit select, to the board</td>
+</tr>
+<tr class="odd">
+<td><code>segs[6:0]</code></td>
+<td>out</td>
+<td>Active-low segments <code>{G, F, E, D, C, B, A}</code>, to the board</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="step-1-write-the-obi-slave" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="step-1-write-the-obi-slave"><span class="header-section-number">8.2</span> Step 1: Write the OBI slave</h2>
+<p>Copy <a href="../code/08_lab/seg7.sv">seg7.sv</a> and <a href="../code/08_lab/sevseg_display.sv">sevseg_display.sv</a> into <code>rtl/periph/</code> of the HIPV repository. Open <code>seg7.sv</code>.</p>
+<p>The file has the module header, the register addresses and the OBI interface block already written. That block is the same short block that <code>gpio.sv</code> and <code>timer.sv</code> use, so open <code>rtl/periph/gpio.sv</code> next to it. It works as follows:</p>
+<ul>
+<li><code>ObiGnt</code> is always 1. Every access takes one cycle, so a request can always be accepted.</li>
+<li><code>Accept = ObiReq &amp; ObiGnt</code> is the <strong>address phase</strong>. In it the slave captures <code>ObiWe</code> and the register index <code>ObiAddr[6:2]</code> into <code>WeQ</code> and <code>AddrQ</code>.</li>
+<li><code>ObiRvalid</code> is <code>Accept</code> delayed by one cycle. There must be exactly <strong>one response for every accepted request, including writes</strong>. If a slave does not answer a write, the first <code>sw</code> to it hangs the processor.</li>
+</ul>
+<p>You write the three parts marked <code>TODO</code>:</p>
+<ol type="1">
+<li><strong>Write logic.</strong> In the address phase, write enables are decoded from the live address: <code>Accept &amp; ObiWe &amp; (ObiAddr[6:2] == index)</code>. Use one <code>flopenr</code> per register. <code>CONFIG</code> is 1 bit wide and takes <code>ObiWdata[0]</code>. A digit is 4 bits wide and takes <code>ObiWdata[3:0]</code>.</li>
+<li><strong>Read logic.</strong> Reads are selected in the <strong>response phase</strong>, from the <em>captured</em> index <code>AddrQ</code>, not from the live <code>ObiAddr</code>. The live address is only valid during the address phase. <code>ObiRdata</code> must be 0 whenever there is no read response.</li>
+<li><strong>The display core.</strong> Instantiate <code>SevSegDisplay</code> and connect the registers to it. Remember that <code>digit1</code> is the rightmost digit, so it takes <code>DIGIT0</code>.</li>
+</ol>
+</section>
+<section id="step-2-connect-it-to-the-soc" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="step-2-connect-it-to-the-soc"><span class="header-section-number">8.3</span> Step 2: Connect it to the SoC</h2>
+<p>Adding a slave touches several files. The crossbar itself does not change, because it follows <code>NUM_SLAVES</code> automatically. The general procedure is in <code>docs/ADDING_A_SLAVE.md</code> in the repository. Read it first, then make the following changes.</p>
+<section id="address-map" class="level3" data-number="8.3.1">
+<h3 data-number="8.3.1" class="anchored" data-anchor-id="address-map"><span class="header-section-number">8.3.1</span> Address map</h3>
+<p>In <code>config/hipv_soc_pkg.sv</code>, add a slave index and a region, and increase the slave count:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  <span class="kw">localparam</span> <span class="kw">int</span> <span class="kw">unsigned</span> NUM_SLAVES  = <span class="dv">6</span>;          <span class="co">// was 5</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  ...</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">localparam</span> <span class="kw">int</span> <span class="kw">unsigned</span> SLAVE_SEG7  = <span class="dv">5</span>;</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">localparam</span> <span class="kw">logic</span> [<span class="dv">31</span>:<span class="dv">0</span>] SEG7_BASE  = <span class="bn">32'h2000_3000</span>;</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">localparam</span> <span class="kw">logic</span> [<span class="dv">31</span>:<span class="dv">0</span>] SEG7_SIZE  = <span class="bn">32'h0000_1000</span>;  <span class="co">// 4 KiB</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A region must be a power-of-two size and aligned to its size, because the decoder matches an address by comparing only the bits above the region size.</p>
+</section>
+<section id="decoder" class="level3" data-number="8.3.2">
+<h3 data-number="8.3.2" class="anchored" data-anchor-id="decoder"><span class="header-section-number">8.3.2</span> Decoder</h3>
+<p>In <code>rtl/interconnect/obi_decoder.sv</code>, add one line next to the others:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>    SlaveSel[SLAVE_SEG7]  = in_region(Addr, SEG7_BASE, SEG7_SIZE);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If you forget this line, the package and the crossbar know about slave 5, but no address ever selects it. Every access to <code>0x2000_3000</code> is then answered as an unmapped address.</p>
+</section>
+<section id="soc-top-level" class="level3" data-number="8.3.3">
+<h3 data-number="8.3.3" class="anchored" data-anchor-id="soc-top-level"><span class="header-section-number">8.3.3</span> SoC top level</h3>
+<p>In <code>rtl/top/hipv_soc.sv</code>, add two output ports for the display pins:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>   <span class="co">// seven-segment display pins (active low)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>   <span class="kw">output</span> <span class="kw">logic</span> [<span class="dv">7</span>:<span class="dv">0</span>]             SegAnode,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>   <span class="kw">output</span> <span class="kw">logic</span> [<span class="dv">6</span>:<span class="dv">0</span>]             SegCathode);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Replace the closing <code>);</code> of the existing port list so that the new ports come last, and add a comma after <code>TimerOverflow</code>. Then instantiate the peripheral next to the other three, connected to slave 5 of the crossbar:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  seg7 seg7<span class="dt">(.clk</span>(clk),<span class="dt"> .reset</span>(reset),</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>            .ObiReq(SReq[SLAVE_SEG7]),<span class="dt"> .ObiGnt</span>(SGnt[SLAVE_SEG7]),</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>            .ObiAddr(SAddr[SLAVE_SEG7*<span class="dv">32</span> +: <span class="dv">32</span>]),<span class="dt"> .ObiWe</span>(SWe[SLAVE_SEG7]),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>            .ObiBe(SBe[SLAVE_SEG7*<span class="dv">4</span> +: <span class="dv">4</span>]),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>            .ObiWdata(SWdata[SLAVE_SEG7*<span class="dv">32</span> +: <span class="dv">32</span>]),</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>            .ObiRvalid(SRvalid[SLAVE_SEG7]),</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>            .ObiRdata(SRdata[SLAVE_SEG7*<span class="dv">32</span> +: <span class="dv">32</span>]),</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>            .SegAnode(SegAnode),<span class="dt"> .SegCathode</span>(SegCathode));</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Also update the module’s header comment, which lists the slaves.</p>
+</section>
+<section id="board-wrapper-and-pins" class="level3" data-number="8.3.4">
+<h3 data-number="8.3.4" class="anchored" data-anchor-id="board-wrapper-and-pins"><span class="header-section-number">8.3.4</span> Board wrapper and pins</h3>
+<p>In <code>fpga/anvil/top.sv</code>, add the two ports and pass them to the SoC:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>            <span class="kw">output</span> <span class="kw">logic</span> [<span class="dv">7</span>:<span class="dv">0</span>] an,           <span class="co">// display digit select, active low</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>            <span class="kw">output</span> <span class="kw">logic</span> [<span class="dv">6</span>:<span class="dv">0</span>] seg);         <span class="co">// display segments, active low</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  ...</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  hipv_soc #(...) soc(...,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        .TimerOverflow(led_timer),</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        .SegAnode(an),<span class="dt"> .SegCathode</span>(seg));</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In <code>fpga/anvil/Nexys-A7-100T-Master.xdc</code>, add the pin constraints. The segments are named CA to CG on the board and map to <code>seg[0]</code> to <code>seg[6]</code>, the anodes AN0 to AN7 map to <code>an[0]</code> to <code>an[7]</code>:</p>
+<pre><code>## Seven-segment display (active low)
+set_property PACKAGE_PIN T10 [get_ports {seg[0]}]   ;# CA
+set_property PACKAGE_PIN R10 [get_ports {seg[1]}]   ;# CB
+set_property PACKAGE_PIN K16 [get_ports {seg[2]}]   ;# CC
+set_property PACKAGE_PIN K13 [get_ports {seg[3]}]   ;# CD
+set_property PACKAGE_PIN P15 [get_ports {seg[4]}]   ;# CE
+set_property PACKAGE_PIN T11 [get_ports {seg[5]}]   ;# CF
+set_property PACKAGE_PIN L18 [get_ports {seg[6]}]   ;# CG
+set_property PACKAGE_PIN J17 [get_ports {an[0]}]
+set_property PACKAGE_PIN J18 [get_ports {an[1]}]
+set_property PACKAGE_PIN T9  [get_ports {an[2]}]
+set_property PACKAGE_PIN J14 [get_ports {an[3]}]
+set_property PACKAGE_PIN P14 [get_ports {an[4]}]
+set_property PACKAGE_PIN T14 [get_ports {an[5]}]
+set_property PACKAGE_PIN K2  [get_ports {an[6]}]
+set_property PACKAGE_PIN U13 [get_ports {an[7]}]</code></pre>
+<p>Add <code>set_property IOSTANDARD LVCMOS33</code> for each of these ports as well, the same way the existing pins in the file do it. If you also have the Nexys A7-50T, the same pins apply, and you can add them to its <code>.xdc</code> in the same way.</p>
+</section>
+<section id="build-flow" class="level3" data-number="8.3.5">
+<h3 data-number="8.3.5" class="anchored" data-anchor-id="build-flow"><span class="header-section-number">8.3.5</span> Build flow</h3>
+<p>The build script does not search for source files. It has a fixed list of them. In <code>scripts/anvil_flow.py</code>, add both new files to the <code>RTL</code> list, in the peripherals group before <code>rtl/top/hipv_soc.sv</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>    <span class="co">"rtl/periph/sevseg_display.sv"</span>,</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"rtl/periph/seg7.sv"</span>,</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If you forget this, the build fails with an unknown module error for <code>seg7</code>. The script also requires every file name to be unique across the project.</p>
+</section>
+<section id="testbench-map" class="level3" data-number="8.3.6">
+<h3 data-number="8.3.6" class="anchored" data-anchor-id="testbench-map"><span class="header-section-number">8.3.6</span> Testbench map</h3>
+<p><code>tb/common/socmap.py</code> mirrors the address map for the testbenches. Add the new slave there:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>SLAVE <span class="op">=</span> { ..., <span class="st">"GPIO"</span>: <span class="dv">4</span>, <span class="st">"SEG7"</span>: <span class="dv">5</span> }</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>REGIONS <span class="op">=</span> { ...,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"SEG7"</span>: (<span class="bn">0x2000_3000</span>, <span class="bn">0x0000_1000</span>),</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The unmapped-address test has a list of addresses that are supposed to be holes, and <code>0x2000_3000</code> is on it (“just past GPIO”). That address is now mapped, so move that hole to <code>0x2000_4000</code>. After this change, rerun the interconnect testbenches as described in <code>docs/ADDING_A_SLAVE.md</code>.</p>
+</section>
+</section>
+<section id="step-3-the-software" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="step-3-the-software"><span class="header-section-number">8.4</span> Step 3: The software</h2>
+<section id="check-that-the-address-is-reachable" class="level3" data-number="8.4.1">
+<h3 data-number="8.4.1" class="anchored" data-anchor-id="check-that-the-address-is-reachable"><span class="header-section-number">8.4.1</span> Check that the address is reachable</h3>
+<p>Before you build the full program, check the hardware side. The C starter <a href="../code/08_lab/main.c">main.c</a> needs a few register macros. The display registers are not in the BSP yet, so the starter defines them itself:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define SEG7_BASE     </span><span class="bn">0x20003000</span><span class="bu">u</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#define SEG7_CONFIG   </span>REG32<span class="op">(</span><span class="pp">SEG7_BASE </span><span class="op">+</span><span class="pp"> </span><span class="bn">0x00</span><span class="op">)</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#define SEG7_DIGIT</span><span class="op">(</span><span class="pp">i</span><span class="op">)</span><span class="pp"> </span>REG32<span class="op">(</span><span class="pp">SEG7_BASE </span><span class="op">+</span><span class="pp"> </span><span class="bn">0x04</span><span class="pp"> </span><span class="op">+</span><span class="pp"> </span><span class="dv">4</span><span class="bu">u</span><span class="pp"> </span><span class="op">*</span><span class="pp"> </span><span class="op">(</span><span class="pp">i</span><span class="op">))</span><span class="pp">   </span><span class="co">/* i = 0 ... 7 */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>REG32</code> is the same macro that <code>hipv.h</code> uses for all registers. As an optional cleanup, move these lines into <code>sw/bsp/hipv.h</code>, next to the GPIO registers, so that other programs can use them.</p>
+</section>
+<section id="the-program" class="level3" data-number="8.4.2">
+<h3 data-number="8.4.2" class="anchored" data-anchor-id="the-program"><span class="header-section-number">8.4.2</span> The program</h3>
+<p>Create <code>sw/examples/lab08/</code> and copy <a href="../code/08_lab/main.c">main.c</a> and <a href="../code/08_lab/Makefile">Makefile</a> into it, as you did in the previous exercise. Then complete the three <code>TODO</code> items:</p>
+<ol type="1">
+<li><strong>Enable the display</strong> by writing 1 to <code>SEG7_CONFIG</code>.</li>
+<li><strong>Show a number in decimal.</strong> <code>seg7_show_dec(value)</code> must write the eight decimal digits of <code>value</code> to <code>SEG7_DIGIT(0)</code> to <code>SEG7_DIGIT(7)</code>. Take the lowest digit with <code>value % 10</code>, then divide <code>value</code> by 10, and repeat. The leading digits are <code>0</code>. The registers hold hex values, and the digits 0 to 9 are the same in decimal and hex.</li>
+<li><strong>Count the seconds.</strong> First, wait one second with <code>delay_cycles(CPU_HZ)</code> and add 1 to <code>seconds</code>. Then replace it with a version that does not accumulate error: read the timer and compute <code>timer_get() / CPU_HZ</code>, and update the display only when the value changes.</li>
+</ol>
+<p>The processor has no divide instruction. <code>%</code> and <code>/</code> by 10, and the 64-bit division in the second version, are done by library functions from <code>libgcc</code> that the build links in. You can see them as calls in the disassembly (<code>build/lab08.lst</code>).</p>
+</section>
+</section>
+<section id="step-4-build-and-test" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="step-4-build-and-test"><span class="header-section-number">8.5</span> Step 4: Build and test</h2>
+<p>Build the software first, and check it in simulation:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> sw/examples/lab08</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> run</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The simulation does not show the display pins, but the UART output shows the program running. For a quick run, temporarily make the delay small, as in the previous exercise.</p>
+<p>Then build the firmware into the bitstream and program the board from the repository root:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> APP=lab08 all</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>On macOS and WSL, use the two-step flow from the previous exercise (<code>make docker-fpga APP=lab08</code>, then <code>make program-host</code>). Remember that this time the <strong>hardware changed as well</strong>, so the complete bitstream has to be rebuilt, not only the firmware.</p>
+<p>The result: the eight digits of the display show <code>00000000</code>, then <code>00000001</code>, and so on, one step per second. The same number is printed in the serial terminal.</p>
+</section>
+<section id="questions" class="level2" data-number="8.6">
+<h2 data-number="8.6" class="anchored" data-anchor-id="questions"><span class="header-section-number">8.6</span> Questions</h2>
+<ol type="1">
+<li>What would the processor do if the C program wrote to <code>0x2000_3000</code> <strong>before</strong> you added the slave to the decoder? Use <code>docs/INTERCONNECT.md</code> to find the answer. Why is this behavior better than a hang?</li>
+<li>The core needs one cycle for the address phase and one for the response. In your <code>seg7.sv</code>, why must the read mux use <code>AddrQ</code> and not <code>ObiAddr</code>?</li>
+<li>How often is each digit refreshed? The <code>GP_counter</code> in <code>SevSegDisplay</code> ticks every 40 000 clock cycles, and the SoC clock is 50 MHz. How long is one full pass over the eight digits, and what is the refresh rate? Would you see flicker?</li>
+<li>An earlier version of this exercise made the registers write-only and signalled an error when they were read. Why is it simpler here to make every register readable?</li>
+</ol>
+</section>
+<section id="optional-extensions" class="level2" data-number="8.7">
+<h2 data-number="8.7" class="anchored" data-anchor-id="optional-extensions"><span class="header-section-number">8.7</span> Optional extensions</h2>
+<ul>
+<li>Display the seconds as <code>HH.MM.SS</code> using only the digits you need, and leave the other digits at a value you choose.</li>
+<li>Add a <code>DOTS</code> register at offset <code>0x24</code> with one bit per decimal point (the display has a DP pin for each digit). This needs a change in the display core and one more pin in the <code>.xdc</code>.</li>
+<li>Make the display brightness adjustable with a duty-cycle register.</li>
+<li>Write a unit testbench for <code>seg7.sv</code> that checks that every register reads back what was written, and that every access, including writes, is followed by exactly one <code>ObiRvalid</code> pulse.</li>
+</ul>
+</section>
+<section id="starter-files" class="level2" data-number="8.8">
+<h2 data-number="8.8" class="anchored" data-anchor-id="starter-files"><span class="header-section-number">8.8</span> Starter files</h2>
+<ul>
+<li><a href="../code/08_lab/seg7.sv">seg7.sv</a></li>
+<li><a href="../code/08_lab/sevseg_display.sv">sevseg_display.sv</a></li>
+<li><a href="../code/08_lab/main.c">main.c</a></li>
+<li><a href="../code/08_lab/Makefile">Makefile</a></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/07-hipv-soc.html" class="pagination-link" aria-label="Seventh laboratory exercise: HIPV SoC tutorial">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Seventh laboratory exercise: HIPV SoC tutorial</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/hw1.html" class="pagination-link" aria-label="Homework 1: Extending the HIPV core">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Homework 1: Extending the HIPV core</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

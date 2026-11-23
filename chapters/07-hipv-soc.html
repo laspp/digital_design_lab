@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>7&nbsp; Seventh laboratory exercise: HIPV SoC tutorial – Digital Design Lab</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/hw1.html" rel="next">
+<link href="../chapters/06-uart.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-467c603866d931062acf9dde62877a13.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-tools-intro.html">Lab Exercises</a></li><li class="breadcrumb-item"><a href="../chapters/07-hipv-soc.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Seventh laboratory exercise: HIPV SoC tutorial</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Digital Design Lab</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Lab Exercises</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-tools-intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">First exercise: Tools and the Digital Design Cycle</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-alu.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Second exercise: Introduction to (System)Verilog</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-sequential.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Third exercise: Designing sequential circuits with SystemVerilog</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-structural-modeling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fourth exercise: Structural modeling and Simulation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-counter-sevenseg.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Fifth exercise: Counter and seven segment display</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-uart.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sixth exercise: UART transmitter</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-hipv-soc.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Seventh laboratory exercise: HIPV SoC tutorial</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Homework</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/hw1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Homework 1: Extending the HIPV core</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendix</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/appendix-oscilloscope.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Appendix: Using the Oscilloscope and Signal Generator</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#software-and-firmware" id="toc-software-and-firmware" class="nav-link active" data-scroll-target="#software-and-firmware"><span class="header-section-number">7.1</span> Software and firmware</a></li>
+  <li><a href="#the-hipv-soc" id="toc-the-hipv-soc" class="nav-link" data-scroll-target="#the-hipv-soc"><span class="header-section-number">7.2</span> The HIPV SoC</a></li>
+  <li><a href="#step-1-get-the-project-and-the-tools" id="toc-step-1-get-the-project-and-the-tools" class="nav-link" data-scroll-target="#step-1-get-the-project-and-the-tools"><span class="header-section-number">7.3</span> Step 1: Get the project and the tools</a>
+  <ul class="collapse">
+  <li><a href="#where-things-are" id="toc-where-things-are" class="nav-link" data-scroll-target="#where-things-are"><span class="header-section-number">7.3.1</span> Where things are</a></li>
+  </ul></li>
+  <li><a href="#step-2-memory-map-and-peripherals" id="toc-step-2-memory-map-and-peripherals" class="nav-link" data-scroll-target="#step-2-memory-map-and-peripherals"><span class="header-section-number">7.4</span> Step 2: Memory map and peripherals</a></li>
+  <li><a href="#step-3-the-software-side" id="toc-step-3-the-software-side" class="nav-link" data-scroll-target="#step-3-the-software-side"><span class="header-section-number">7.5</span> Step 3: The software side</a>
+  <ul class="collapse">
+  <li><a href="#the-example-program" id="toc-the-example-program" class="nav-link" data-scroll-target="#the-example-program"><span class="header-section-number">7.5.1</span> The example program</a></li>
+  <li><a href="#building" id="toc-building" class="nav-link" data-scroll-target="#building"><span class="header-section-number">7.5.2</span> Building</a></li>
+  <li><a href="#what-happens-before-main" id="toc-what-happens-before-main" class="nav-link" data-scroll-target="#what-happens-before-main"><span class="header-section-number">7.5.3</span> What happens before <code>main</code></a></li>
+  <li><a href="#reading-the-disassembly" id="toc-reading-the-disassembly" class="nav-link" data-scroll-target="#reading-the-disassembly"><span class="header-section-number">7.5.4</span> Reading the disassembly</a></li>
+  </ul></li>
+  <li><a href="#step-4-run-it-in-simulation-first" id="toc-step-4-run-it-in-simulation-first" class="nav-link" data-scroll-target="#step-4-run-it-in-simulation-first"><span class="header-section-number">7.6</span> Step 4: Run it in simulation first</a></li>
+  <li><a href="#step-5-from-firmware-to-the-fpga" id="toc-step-5-from-firmware-to-the-fpga" class="nav-link" data-scroll-target="#step-5-from-firmware-to-the-fpga"><span class="header-section-number">7.7</span> Step 5: From firmware to the FPGA</a>
+  <ul class="collapse">
+  <li><a href="#what-is-different-from-a-normal-program" id="toc-what-is-different-from-a-normal-program" class="nav-link" data-scroll-target="#what-is-different-from-a-normal-program"><span class="header-section-number">7.7.1</span> What is different from a normal program</a></li>
+  </ul></li>
+  <li><a href="#laboratory-exercise" id="toc-laboratory-exercise" class="nav-link" data-scroll-target="#laboratory-exercise"><span class="header-section-number">7.8</span> Laboratory exercise</a>
+  <ul class="collapse">
+  <li><a href="#steps" id="toc-steps" class="nav-link" data-scroll-target="#steps"><span class="header-section-number">7.8.1</span> Steps</a></li>
+  <li><a href="#questions" id="toc-questions" class="nav-link" data-scroll-target="#questions"><span class="header-section-number">7.8.2</span> Questions</a></li>
+  <li><a href="#optional-extensions" id="toc-optional-extensions" class="nav-link" data-scroll-target="#optional-extensions"><span class="header-section-number">7.8.3</span> Optional extensions</a></li>
+  </ul></li>
+  <li><a href="#starter-files" id="toc-starter-files" class="nav-link" data-scroll-target="#starter-files"><span class="header-section-number">7.9</span> Starter files</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-tools-intro.html">Lab Exercises</a></li><li class="breadcrumb-item"><a href="../chapters/07-hipv-soc.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Seventh laboratory exercise: HIPV SoC tutorial</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Seventh laboratory exercise: HIPV SoC tutorial</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In this exercise you meet the HIPV SoC: a small RISC-V computer that runs on your Nexys A7 board. You will find where its code lives, write a C program for it, build that program, run it first in simulation and then on the FPGA, and watch it blink the LEDs and talk over the UART.</p>
+<p>Until now every design in this course was hardware that you described in SystemVerilog. This time the hardware is already written. What you write is <strong>software</strong>: a C program that the processor executes.</p>
+<section id="software-and-firmware" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="software-and-firmware"><span class="header-section-number">7.1</span> Software and firmware</h2>
+<p>Two words are used throughout this chapter:</p>
+<ul>
+<li><strong>Software</strong> is the C code you write, together with the toolchain that compiles it. It lives in the <code>sw/</code> directory of the HIPV repository.</li>
+<li><strong>Firmware</strong> is the finished memory image (<code>firmware.hex</code>) that is built into the FPGA bitstream. After the build, the program is part of the hardware, much like the program of a router or a microcontroller.</li>
+</ul>
+<p>You write software, and the build turns it into firmware.</p>
+</section>
+<section id="the-hipv-soc" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="the-hipv-soc"><span class="header-section-number">7.2</span> The HIPV SoC</h2>
+<p>HIPV is a <em>system on chip</em> (SoC): a processor, memory and peripherals connected by a bus, all inside one FPGA. <a href="#fig-hipv-soc" class="quarto-xref">Figure&nbsp;<span>7.1</span></a> shows the parts.</p>
+<div id="fig-hipv-soc" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-hipv-soc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../img/hipv_soc_block.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-hipv-soc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.1: Block diagram of the HIPV SoC. Green blocks are inside the FPGA design, red blocks are board pins and connectors.
+</figcaption>
+</figure>
+</div>
+<ul>
+<li>The <strong>core</strong> executes the RV32I instruction set (32-bit RISC-V, integer instructions only) in a five-stage pipeline.</li>
+<li>The <strong>crossbar</strong> routes the core’s two bus ports, one for instructions and one for data, to the right peripheral, based on the address.</li>
+<li>The <strong>RAM</strong> holds both the program and its data. It is initialized with the firmware when the FPGA is configured.</li>
+<li>The <strong>UART</strong>, <strong>timer</strong> and <strong>GPIO</strong> are the peripherals. The program uses them by reading and writing addresses, which is called <em>memory-mapped I/O</em>.</li>
+</ul>
+<p>On the board, the GPIO connects to the 8 slide switches and the 8 LEDs, and the UART connects to the USB cable that you also use to program the board.</p>
+</section>
+<section id="step-1-get-the-project-and-the-tools" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="step-1-get-the-project-and-the-tools"><span class="header-section-number">7.3</span> Step 1: Get the project and the tools</h2>
+<p>Clone the HIPV repository:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/RatkoFri/HIPV-SoC.git</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> HIPV-SoC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You need the tools from the first exercise (Anvil, <code>sv2v</code>, <code>openFPGALoader</code>) and a RISC-V compiler (<code>riscv64-unknown-elf-gcc</code>). How you get them depends on your computer:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Your computer</th>
+<th>Recommended setup</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Ubuntu / Linux</strong></td>
+<td>Install the tools natively (<code>gcc-riscv64-unknown-elf</code> is the Debian and Ubuntu package name), or use the Docker image. Everything, including programming the board, works from the same terminal.</td>
+</tr>
+<tr class="even">
+<td><strong>macOS</strong> and <strong>Windows with WSL</strong></td>
+<td>Use the Docker image to build, and program the board from the host. See the box below.</td>
+</tr>
+</tbody>
+</table>
+<p>The repository provides a Docker image that contains all the tools. Every <code>make</code> target in this chapter can be run inside the container by prefixing it with <code>docker-</code>, for example <code>make docker-sw APP=blink</code>. Build the image once with <code>make docker-build</code>; it downloads several gigabytes. See <code>README.md</code> in the repository for details.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+macOS and WSL
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Docker on macOS and on Windows runs containers inside a virtual machine, and that machine cannot reach USB devices. The container can therefore build the firmware and the bitstream, but it cannot program the board. The workaround is to split the flow in two. The commands are the same on macOS and in a WSL terminal:</p>
+<ol type="1">
+<li><p>Build inside the container:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> docker-fpga APP=blink</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Program the board from the host with <code>openFPGALoader</code>, outside the container:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> install openfpgaloader     <span class="co"># macOS, once</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> program-host</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>On WSL, install <code>openFPGALoader</code> in your WSL distribution instead of using <code>brew</code>, and forward the board’s USB connection to WSL first (the <em>WSL only</em> steps in the first exercise). WSL does not see USB devices on its own.</p></li>
+</ol>
+<p>In the rest of this chapter, replace <code>make APP=blink all</code> with the two commands above, and likewise for your own program. Compiling (<code>make APP=blink sw</code>) and simulation (<code>make run</code>) need no USB, so they work unchanged in the container.</p>
+</div>
+</div>
+<section id="where-things-are" class="level3" data-number="7.3.1">
+<h3 data-number="7.3.1" class="anchored" data-anchor-id="where-things-are"><span class="header-section-number">7.3.1</span> Where things are</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Directory</th>
+<th>What is there</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>rtl/</code></td>
+<td>SystemVerilog source of the SoC: <code>core/</code>, <code>interconnect/</code>, <code>mem/</code>, <code>periph/</code>, <code>top/</code></td>
+</tr>
+<tr class="even">
+<td><code>config/</code></td>
+<td>Packages with parameters and the <strong>address map</strong> (<code>hipv_soc_pkg.sv</code>)</td>
+</tr>
+<tr class="odd">
+<td><code>sw/</code></td>
+<td>Software: the board support package (<code>bsp/</code>), the linker script (<code>link.ld</code>) and example programs (<code>examples/</code>)</td>
+</tr>
+<tr class="even">
+<td><code>fpga/anvil/</code></td>
+<td>The FPGA top level (<code>top.sv</code>), the clock block and the pin constraints (<code>.xdc</code>)</td>
+</tr>
+<tr class="odd">
+<td><code>scripts/</code></td>
+<td>The build flow (<code>anvil_flow.py</code>) and the tool that converts a binary into a memory image (<code>mkmem.py</code>)</td>
+</tr>
+<tr class="even">
+<td><code>tb/</code></td>
+<td>Testbenches and the simulation of whole programs</td>
+</tr>
+<tr class="odd">
+<td><code>docs/</code></td>
+<td>Documentation of the core, the bus, the memory and the FPGA flow</td>
+</tr>
+</tbody>
+</table>
+<p>This exercise touches only <code>sw/</code>. The other directories are there to read.</p>
+</section>
+</section>
+<section id="step-2-memory-map-and-peripherals" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="step-2-memory-map-and-peripherals"><span class="header-section-number">7.4</span> Step 2: Memory map and peripherals</h2>
+<p>The processor sees everything as addresses. <a href="#tbl-memmap" class="quarto-xref">Table&nbsp;<span>7.1</span></a> lists the address map from <code>config/hipv_soc_pkg.sv</code>.</p>
+<div id="tbl-memmap" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-memmap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;7.1: HIPV address map.
+</figcaption>
+<div aria-describedby="tbl-memmap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Block</th>
+<th>Base address</th>
+<th>Size</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Code window (RAM)</td>
+<td><code>0x0000_0000</code></td>
+<td>64 KiB</td>
+</tr>
+<tr class="even">
+<td>Data window (RAM)</td>
+<td><code>0x1000_0000</code></td>
+<td>64 KiB</td>
+</tr>
+<tr class="odd">
+<td>UART</td>
+<td><code>0x2000_0000</code></td>
+<td>4 KiB</td>
+</tr>
+<tr class="even">
+<td>Timer</td>
+<td><code>0x2000_1000</code></td>
+<td>4 KiB</td>
+</tr>
+<tr class="odd">
+<td>GPIO</td>
+<td><code>0x2000_2000</code></td>
+<td>4 KiB</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The code window and the data window are two views of the same physical RAM. The core fetches instructions through the first and accesses data through the second. The linker script keeps code and data in different parts of it.</p>
+<p>The registers that the exercise uses are listed in <a href="#tbl-regs" class="quarto-xref">Table&nbsp;<span>7.2</span></a>. The complete list is in <code>sw/bsp/hipv.h</code>.</p>
+<div id="tbl-regs" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-regs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;7.2: The registers used in this exercise.
+</figcaption>
+<div aria-describedby="tbl-regs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Register</th>
+<th>Address</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>GPIO_OUT</code></td>
+<td><code>0x2000_2000</code></td>
+<td>Drives the LEDs. Can be read back.</td>
+</tr>
+<tr class="even">
+<td><code>GPIO_IN</code></td>
+<td><code>0x2000_2004</code></td>
+<td>The state of the switches.</td>
+</tr>
+<tr class="odd">
+<td><code>UART_TX</code></td>
+<td><code>0x2000_0008</code></td>
+<td>Writing a byte starts sending it.</td>
+</tr>
+<tr class="even">
+<td><code>UART_STATUS</code></td>
+<td><code>0x2000_0010</code></td>
+<td>Bit 0 is set when the transmitter is idle.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>In C, a register is a <code>volatile</code> pointer dereference. In <code>sw/bsp/hipv.h</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define REG32</span><span class="op">(</span><span class="pp">addr</span><span class="op">)</span><span class="pp"> </span><span class="op">(*(</span><span class="dt">volatile</span><span class="pp"> </span><span class="dt">uint32_t</span><span class="pp"> </span><span class="op">*)(</span><span class="pp">addr</span><span class="op">))</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#define GPIO_OUT    </span>REG32<span class="op">(</span><span class="pp">GPIO_BASE </span><span class="op">+</span><span class="pp"> </span><span class="bn">0x00</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>So the C statement <code>GPIO_OUT = 0xFF;</code> is nothing more than a store word instruction to address <code>0x2000_2000</code>. That store goes through the crossbar to the GPIO, which turns on the LEDs.</p>
+<p>You will rarely use the registers directly. The <strong>board support package</strong> (BSP, <code>sw/bsp/bsp.h</code>) wraps them in small functions:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>uart_init(baud)</code></td>
+<td>Sets the UART speed</td>
+</tr>
+<tr class="even">
+<td><code>uart_putc(c)</code>, <code>uart_puts(s)</code></td>
+<td>Send a character, send a string</td>
+</tr>
+<tr class="odd">
+<td><code>print_hex8(v)</code></td>
+<td>Send a byte as two hexadecimal digits</td>
+</tr>
+<tr class="even">
+<td><code>print_udec(v)</code></td>
+<td>Send an unsigned number in decimal</td>
+</tr>
+<tr class="odd">
+<td><code>gpio_write(v)</code></td>
+<td>Write the LEDs</td>
+</tr>
+<tr class="even">
+<td><code>gpio_read_in()</code></td>
+<td>Read the switches</td>
+</tr>
+<tr class="odd">
+<td><code>timer_start()</code></td>
+<td>Start the free-running 64-bit timer</td>
+</tr>
+<tr class="even">
+<td><code>delay_cycles(n)</code></td>
+<td>Wait for <code>n</code> clock cycles</td>
+</tr>
+</tbody>
+</table>
+<p>There is no C library. You cannot call <code>printf</code>, <code>malloc</code> or <code>strlen</code>, and the BSP is all the support there is.</p>
+</section>
+<section id="step-3-the-software-side" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="step-3-the-software-side"><span class="header-section-number">7.5</span> Step 3: The software side</h2>
+<section id="the-example-program" class="level3" data-number="7.5.1">
+<h3 data-number="7.5.1" class="anchored" data-anchor-id="the-example-program"><span class="header-section-number">7.5.1</span> The example program</h3>
+<p>Open <code>sw/examples/blink/main.c</code>. After the comments it is only a few lines:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    uart_init<span class="op">(</span>BAUD<span class="op">);</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    timer_start<span class="op">();</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        uart_puts<span class="op">(</span><span class="st">"blink</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> step <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> step <span class="op">&lt;</span> STEPS<span class="op">;</span> step<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>            <span class="dt">uint32_t</span> pattern <span class="op">=</span> <span class="dv">1</span><span class="bu">u</span> <span class="op">&lt;&lt;</span> step<span class="op">;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>            gpio_write<span class="op">(</span>pattern<span class="op">);</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>            print_hex8<span class="op">((</span><span class="dt">uint8_t</span><span class="op">)</span>pattern<span class="op">);</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>            uart_putc<span class="op">(</span><span class="ch">'</span><span class="sc">\n</span><span class="ch">'</span><span class="op">);</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>            delay_cycles<span class="op">(</span>DELAY_CYCLES<span class="op">);</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>It moves one lit LED across the board and prints the pattern for each step. The directory <code>sw/examples/blink/</code> contains only three files: <code>main.c</code>, a two-line <code>Makefile</code> that names the program and includes the shared rules in <code>sw/rules.mk</code>, and <code>expected.txt</code>, the output that simulation checks.</p>
+</section>
+<section id="building" class="level3" data-number="7.5.2">
+<h3 data-number="7.5.2" class="anchored" data-anchor-id="building"><span class="header-section-number">7.5.2</span> Building</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> sw/examples/blink</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The build leaves its products in <code>build/</code>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>File</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>blink.elf</code></td>
+<td>The linked program with symbols</td>
+</tr>
+<tr class="even">
+<td><code>blink.bin</code></td>
+<td>The raw machine code and data</td>
+</tr>
+<tr class="odd">
+<td><code>blink.hex</code></td>
+<td>The same, as a memory image: one 32-bit word per line, as hexadecimal text</td>
+</tr>
+<tr class="even">
+<td><code>blink.lst</code></td>
+<td>The disassembly, with the C source interleaved</td>
+</tr>
+<tr class="odd">
+<td><code>blink.map</code></td>
+<td>Where the linker placed everything</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>.hex</code> file is the firmware. The RAM in the SoC is initialized from it, as you will see in Step 5.</p>
+</section>
+<section id="what-happens-before-main" class="level3" data-number="7.5.3">
+<h3 data-number="7.5.3" class="anchored" data-anchor-id="what-happens-before-main"><span class="header-section-number">7.5.3</span> What happens before <code>main</code></h3>
+<p>Look at <code>sw/link.ld</code> and <code>sw/bsp/crt0.S</code>. The linker script places the code (<code>.text</code>) at address <code>0x0000_0000</code>, because the core starts executing at address 0 after reset. The data and the stack go into the data window. The start-up code <code>crt0.S</code> runs first. It sets the stack pointer, clears the uninitialized variables (<code>.bss</code>), and calls <code>main</code>.</p>
+<p>Unlike on a PC, nothing loads the program. It is already in the RAM when the FPGA starts, so no copying of initialized variables is needed.</p>
+</section>
+<section id="reading-the-disassembly" class="level3" data-number="7.5.4">
+<h3 data-number="7.5.4" class="anchored" data-anchor-id="reading-the-disassembly"><span class="header-section-number">7.5.4</span> Reading the disassembly</h3>
+<p>Open <code>build/blink.lst</code> and find the call to <code>gpio_write</code>. You will see something like:</p>
+<pre><code>lui   a5,0x20002      # a5 = 0x2000_2000, the GPIO base
+sw    a0,0(a5)        # store the pattern into GPIO_OUT</code></pre>
+<p>That is the whole connection between the C program and the LEDs: a store to a particular address. The exact instructions depend on the compiler.</p>
+</section>
+</section>
+<section id="step-4-run-it-in-simulation-first" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="step-4-run-it-in-simulation-first"><span class="header-section-number">7.6</span> Step 4: Run it in simulation first</h2>
+<p>Synthesizing for the FPGA takes minutes, so it is a slow way to find a bug. The repository can also run a program in a simulation of the whole SoC. From the example directory:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> run</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The simulator boots the SoC with <code>build/blink.hex</code> as the RAM contents, watches the UART output pin, decodes the serial frames into characters and compares them to <code>expected.txt</code>. The run is long because every character takes thousands of clock cycles.</p>
+<p>Use simulation for logic errors, such as wrong output text, and the board for what only the board can show, such as the real timing and the switches.</p>
+</section>
+<section id="step-5-from-firmware-to-the-fpga" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="step-5-from-firmware-to-the-fpga"><span class="header-section-number">7.7</span> Step 5: From firmware to the FPGA</h2>
+<p>On the board, the build flow takes the firmware, builds the SoC with it and programs the FPGA. From the root of the repository:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> APP=blink all</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>(On macOS and WSL, use the two-step flow from the box in Step 1 instead.)</p>
+<p><code>APP</code> is the name of a directory in <code>sw/examples/</code>. The <code>all</code> target runs three stages, which you can also run one by one:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>make APP=blink sw</code></td>
+<td>Compiles the software into <code>blink.hex</code></td>
+</tr>
+<tr class="even">
+<td><code>make APP=blink fpga</code></td>
+<td>Builds the bitstream with <code>blink.hex</code> as the RAM contents</td>
+</tr>
+<tr class="odd">
+<td><code>make APP=blink program</code></td>
+<td>Programs the board with the existing bitstream</td>
+</tr>
+</tbody>
+</table>
+<p>The default board is the Nexys A7-100T. If you have the Nexys A7-50T, add <code>BOARD=nexys-50t</code>.</p>
+<p>Open a serial terminal on the board’s USB serial port with <strong>19200 baud, 8 data bits, no parity, 1 stop bit</strong>. The name of the port depends on your system. Check which new device appears when you plug the board in:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>System</th>
+<th>Port</th>
+<th>Terminal program</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Linux</td>
+<td><code>/dev/ttyUSB1</code> or similar</td>
+<td><code>picocom -b 19200 /dev/ttyUSB1</code></td>
+</tr>
+<tr class="even">
+<td>macOS</td>
+<td><code>/dev/cu.usbserial-...</code></td>
+<td><code>screen /dev/cu.usbserial-XXXX 19200</code> (leave <code>screen</code> with <code>Ctrl-A</code>, then <code>K</code>)</td>
+</tr>
+<tr class="odd">
+<td>Windows (also when you build in WSL)</td>
+<td><code>COM3</code> or similar, see Device Manager</td>
+<td>PuTTY, with connection type <em>Serial</em></td>
+</tr>
+</tbody>
+</table>
+<p>On Windows the serial port belongs to Windows, not to WSL, so open the terminal there even if you built the firmware in WSL.</p>
+<p>You should see <code>blink</code> followed by the changing patterns, and the LEDs should chase one another at one step per second.</p>
+<section id="what-is-different-from-a-normal-program" class="level3" data-number="7.7.1">
+<h3 data-number="7.7.1" class="anchored" data-anchor-id="what-is-different-from-a-normal-program"><span class="header-section-number">7.7.1</span> What is different from a normal program</h3>
+<p>Compare this to a PC, or to the Microblaze flow of earlier years, where a program was downloaded to the running system:</p>
+<ul>
+<li><strong>The firmware is part of the bitstream.</strong> The RAM is initialized with <code>blink.hex</code> while the FPGA is configured (the <code>INIT_FILE</code> parameter of the RAM). There is no separate program download.</li>
+<li><strong>Every change to the C program means a new bitstream</strong>, and so another synthesis run. This is why simulation first is worth the time.</li>
+<li><strong>The clock must match.</strong> The software knows the clock frequency from <code>CPU_HZ</code> (50 MHz by default, which is what the SoC runs at) and uses it to compute the UART speed and the delays. If you change the clock in the hardware, you have to give the same <code>CPU_HZ</code> to the software build. A mismatch does not stop the build. It shows up as garbled text in the terminal and wrong delays.</li>
+</ul>
+</section>
+</section>
+<section id="laboratory-exercise" class="level2" data-number="7.8">
+<h2 data-number="7.8" class="anchored" data-anchor-id="laboratory-exercise"><span class="header-section-number">7.8</span> Laboratory exercise</h2>
+<p>Write a program that runs forever, and once per second:</p>
+<ol type="1">
+<li><strong>toggles all eight LEDs</strong> (all on, then all off, and so on), and</li>
+<li><strong>reads the eight switches</strong> and prints the state of both on one line over the UART.</li>
+</ol>
+<p>A line of the output looks like this:</p>
+<pre><code>LED=FF SW=A5
+LED=00 SW=A5
+LED=FF SW=A1</code></pre>
+<section id="steps" class="level3" data-number="7.8.1">
+<h3 data-number="7.8.1" class="anchored" data-anchor-id="steps"><span class="header-section-number">7.8.1</span> Steps</h3>
+<ol type="1">
+<li><p>Create a directory for your program inside <code>sw/examples/</code>, and copy the starter files <a href="../code/07_lab/main.c">main.c</a> and <a href="../code/07_lab/Makefile">Makefile</a> into it:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> sw/examples/lab07</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> main.c Makefile sw/examples/lab07/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>Makefile</code> expects to be one level below <code>sw/examples/</code>, like the other examples.</p></li>
+<li><p>Complete the three <code>TODO</code> items in <code>main.c</code>. The functions you need are in the table in Step 2.</p>
+<ul>
+<li>For the toggle, remember that the GPIO output register should always be written a full word at a time.</li>
+<li><code>print_hex8</code> takes a <code>uint8_t</code>, so cast the 32-bit values.</li>
+</ul></li>
+<li><p>Build and try it in the simulator. In <code>main.c</code>, temporarily set <code>DELAY_CYCLES</code> to a small value such as <code>1000</code> (a full second is too long to simulate), then run <code>make run</code> in <code>sw/examples/lab07</code>. There is no <code>expected.txt</code> for this program, so the run only prints what the program sent over the UART. In simulation the switches are not pressed, so expect <code>SW=00</code>. Set <code>DELAY_CYCLES</code> back to <code>CPU_HZ</code> before going on.</p></li>
+<li><p>Run it on the board from the repository root: <code>make APP=lab07 all</code>. Open the serial terminal, move the switches, and check that the printed <code>SW=</code> value follows them within a second.</p></li>
+</ol>
+</section>
+<section id="questions" class="level3" data-number="7.8.2">
+<h3 data-number="7.8.2" class="anchored" data-anchor-id="questions"><span class="header-section-number">7.8.2</span> Questions</h3>
+<ol type="1">
+<li>What is the address of the register that <code>gpio_write</code> writes to? Find the matching store instruction in <code>build/lab07.lst</code> and write down the instructions the compiler generated for it.</li>
+<li>How many instructions does your main loop contain? Look at the listing. The core needs about three clock cycles per instruction. How long does one pass take apart from the <code>delay_cycles</code> call? Is it significant compared to the one-second delay?</li>
+<li>What would happen if you changed <code>CPU_HZ</code> in the <code>Makefile</code> to <code>100000000</code> but did not change the hardware? Why does the build not report an error?</li>
+<li>After you change one constant in <code>main.c</code>, which steps of the flow have to be repeated for the change to show up on the board?</li>
+</ol>
+</section>
+<section id="optional-extensions" class="level3" data-number="7.8.3">
+<h3 data-number="7.8.3" class="anchored" data-anchor-id="optional-extensions"><span class="header-section-number">7.8.3</span> Optional extensions</h3>
+<ul>
+<li>Print the switches in binary instead of hexadecimal (eight <code>0</code> and <code>1</code> characters).</li>
+<li>Let the switches choose the behavior: for example, <code>SW[0]</code> stops the toggling, and <code>SW[2:1]</code> selects the period (0.25, 0.5, 1 or 2 seconds).</li>
+<li>Use <code>timer_get()</code> to print the time since start-up in each line.</li>
+<li>Read <code>docs/ADDING_A_SLAVE.md</code> in the repository and sketch how you would add a new peripheral, such as a seven-segment display, to the SoC.</li>
+</ul>
+</section>
+</section>
+<section id="starter-files" class="level2" data-number="7.9">
+<h2 data-number="7.9" class="anchored" data-anchor-id="starter-files"><span class="header-section-number">7.9</span> Starter files</h2>
+<ul>
+<li><a href="../code/07_lab/main.c">main.c</a></li>
+<li><a href="../code/07_lab/Makefile">Makefile</a></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/06-uart.html" class="pagination-link" aria-label="Sixth exercise: UART transmitter">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sixth exercise: UART transmitter</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/hw1.html" class="pagination-link" aria-label="Homework 1: Extending the HIPV core">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Homework 1: Extending the HIPV core</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
