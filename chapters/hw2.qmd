@@ -3,7 +3,7 @@
 In the first homework you extended the **core** with new instructions. In this homework you extend the **SoC around it**. You add two things that every real microcontroller has:
 
 - **Task 1** gives the **UART** hardware FIFOs. At the moment the UART holds one byte in each direction, so a program that is busy for a few milliseconds loses incoming characters, and every outgoing character blocks the program until it has been sent.
-- **Task 2** adds a new peripheral, an **SPI master**, and connects it to the accelerometer on the Nexys A7 board. You also write the C driver for it.
+- **Task 2** adds a new peripheral, an **SPI master**, and uses it to talk to the accelerometer on the Nexys A7 board. It has two parts: the SPI master (Part A), and the driver and program that read the sensor (Part B). Part B is the final assignment of the homework.
 
 The two tasks are independent, and you can do them in either order. Task 2 repeats the procedure of the previous lab exercise (adding a slave to the SoC), but with a peripheral that is much more than a bank of registers.
 
@@ -58,7 +58,8 @@ cd tb/fpga && make
 | `tb/common/spi_slave.py` | The SPI slave model, so that you can reuse it in your own tests |
 | `sw/hw2/uart_check/` | Self-checking C program for Task 1, run on the SoC |
 | `sw/hw2/spi_check/` | Self-checking C program for Task 2, run on the SoC with MOSI connected to MISO |
-| `sw/hw2/accel/` | Skeleton of the accelerometer program for the real board (not graded) |
+| `sw/hw2/accel/` | Skeleton of the accelerometer program (Part B). It runs on the SoC in simulation, against a model of the sensor, and on the real board. |
+| `tb/common/adxl362_model.py` | Python model of the ADXL362, used by the testbench of `sw/hw2/accel` |
 | `fpga/anvil/Nexys-A7-100T-Master.xdc` | Already contains the accelerometer pin names, which you enable in Task 2 |
 
 ### Where to change the code
@@ -167,9 +168,13 @@ cd sw/hw2/uart_check && make run        # SoC level: the C check
 
 ---
 
-## Task 2: SPI master
+## Task 2: SPI master and the accelerometer
 
-### Background
+Task 2 has two parts. In **Part A** you build the SPI master. In **Part B** you use it to communicate with the accelerometer on the board. Part B depends on Part A, so do them in this order.
+
+### Part A: The SPI master
+
+#### Background
 
 **SPI** (Serial Peripheral Interface) is the standard interface between a processor and a sensor, a flash memory, or a display. A **master** (your peripheral) drives the clock, and one or more **slaves** answer. It uses four wires:
 
@@ -189,7 +194,7 @@ This homework uses **mode 0** (CPOL = 0, CPHA = 0), **8 bits per transfer, most 
 
 On the Nexys A7 board, the SPI master is connected to the ADXL362 accelerometer. The pins are `ACL_SCLK`, `ACL_MOSI`, `ACL_MISO` and `ACL_CSN` in the master constraints file.
 
-### Register map
+#### Register map
 
 The peripheral sits at base address **`0x2000_4000`** (slave index 6, 4 KiB). The address is fixed, so that the hidden tests find the peripheral. The branch already contains it in `config/hipv_soc_pkg.sv` and in the decoder, so you do **not** repeat that part of the previous exercise. You still have to connect the new slave in `hipv_soc.sv` and the board wrapper.
 
@@ -204,7 +209,7 @@ All registers return 0 in the bits that are not listed. Every access, including 
 
 `CS` is controlled by software and is not part of the transfer. A typical transaction with the accelerometer has several bytes, with `CSN` low for the whole time.
 
-### Timing of one transfer
+#### Timing of one transfer
 
 Let `T = DIV + 1` clock cycles. After the write to `DATA` is accepted:
 
@@ -215,7 +220,7 @@ Let `T = DIV + 1` clock cycles. After the write to `DATA` is accepted:
 
 So one transfer takes exactly `16 · T` cycles, from the first cycle with `BUSY` high to the last. `SCLK` stays low while idle.
 
-### Structure of the peripheral
+#### Structure of the peripheral
 
 @fig-spi-block shows what is inside `spi.sv`. It has the same three layers as the 7-segment peripheral from the previous exercise, plus a synchronizer on the input.
 
@@ -228,7 +233,7 @@ So one transfer takes exactly `16 · T` cycles, from the first cycle with `BUSY`
 
 The bus side and the engine only meet at the `Start`, `Busy`, `Done` and data signals. You can therefore test the engine without the bus, and the bus interface without the engine.
 
-### A suggested control unit
+#### A suggested control unit
 
 The timing above can be produced by a small state machine and two counters. The unit below is one straightforward way to do it. Other designs are fine as long as they keep the timing.
 
@@ -253,28 +258,16 @@ Count the cycles to check the diagram against the timing rules: the machine spen
 
 The three outputs of the state machine are the enable for the shift registers, the `SCLK` level, and the clear for the counters. `BUSY` is high in every state except `IDLE`, so it does not need a register of its own.
 
-### What to change
+#### What to change
 
 1. **The module.** Write `rtl/periph/spi.sv`. It has the OBI slave interface of the other peripherals, the register logic, and a shift register with a clock divider and a bit counter. Reuse `flopenr` and the `counter` from `rtl/generic/`. Use the same OBI slave interface block as in the previous exercise, and the same coding conventions as the other files in `rtl/periph/`.
 2. **The SoC.** Instantiate `spi` in `rtl/top/hipv_soc.sv` at slave index `SLAVE_SPI`, and add the four pin ports to the module.
 3. **The board.** Add the ports to `fpga/anvil/top.sv`, and enable the accelerometer pins in `fpga/anvil/Nexys-A7-100T-Master.xdc`. Take the pin locations from the comment lines for `ACL_*` in that file. Remember that `spi.sv` must be added to the file list of the build script.
-4. **The driver.** Write `spi_init`, `spi_cs`, and `spi_transfer(byte)` in the BSP (`sw/bsp/`). `spi_transfer` must wait for `BUSY` to go low and return the received byte. Then write a function `accel_read(reg)` that reads one register of the ADXL362 (see below).
+4. **The driver.** Write `spi_init`, `spi_cs` and `spi_transfer(byte)` in the BSP (`sw/bsp/`). `spi_transfer` must wait for `BUSY` to go low and return the received byte. The accelerometer driver in Part B is built on these functions.
 
 The input `MISO` comes from outside the FPGA and is not synchronous to the SoC clock. **Synchronize it** before it reaches your logic. Explain in the report where and why.
 
-### The accelerometer (hardware part, not graded)
-
-The ADXL362 uses SPI mode 0 and a very simple command format. With `CSN` low, the master sends:
-
-- the command byte `0x0B` (read) or `0x0A` (write),
-- the register address,
-- and then, for a read, one dummy byte for each register to read. The slave returns the register contents during the dummy bytes.
-
-Three read-only registers hold an identification. Registers `0x00`, `0x01` and `0x02` read as `0xAD`, `0x1D` and `0xF2`. Writing `0x02` to register `0x2D` (`POWER_CTL`) puts the sensor in measurement mode, and then the acceleration is available from register `0x08` (the X axis, 8 bits) onwards.
-
-`sw/hw2/accel` shows the skeleton of a program that prints the identification bytes and then the three axes twice a second. It is not graded, because it can only be tested on the board, but if your device-ID line shows `AD 1D F2`, your SPI master works with a real sensor. Tilt the board and watch the numbers change.
-
-### Testing Task 2
+#### Testing Part A
 
 ```sh
 cd tb/unit/spi && make                  # unit level: the SPI master with a slave model
@@ -295,6 +288,105 @@ cd sw/hw2/spi_check && make run         # SoC level: loopback test from C
 | `test_async_miso` | `MISO` changes asynchronously in the test; the received byte must still be a valid sample |
 | `sw/hw2/spi_check` | the testbench connects `MOSI` to `MISO`. The program sends every byte value and checks that it receives the same value. |
 
+### Part B: Communication with the accelerometer
+
+The Nexys A7 has an **ADXL362** three-axis accelerometer, wired to the SPI pins that you connected in Part A. In this part you write the driver for it and a program that reads the acceleration. This is the final assignment of the homework: it shows that your SPI master works with a real device, and not only with the testbench.
+
+#### The ADXL362 protocol
+
+The sensor uses SPI mode 0, as your master does. Every transaction starts with `CSN` going low and ends with `CSN` going high. In between, the master sends:
+
+| Byte | Meaning |
+|---|---|
+| 1 | command: `0x0B` read, `0x0A` write |
+| 2 | register address |
+| 3, 4, ... | **write:** the values to write. **read:** dummy bytes (send `0x00`). The sensor returns one register for each dummy byte, and the address increases by one automatically. |
+
+The bytes the sensor returns during the first two transfers (the command and the address) carry no information and must be ignored.
+
+For example, reading the three axes in one transaction:
+
+| Transfer | `MOSI` | `MISO` (received) |
+|---|---|---|
+| 1 | `0x0B` | ignore |
+| 2 | `0x08` | ignore |
+| 3 | `0x00` | X axis |
+| 4 | `0x00` | Y axis |
+| 5 | `0x00` | Z axis |
+
+`CSN` stays low for **all five transfers**. If it goes high between two bytes, the sensor ends the transaction and starts waiting for a new command.
+
+@fig-spi-sensor-read shows the whole transaction on the pins, for a board that reads X = 1, Y = −2 and Z = 64:
+
+![Burst read of the three axes from the ADXL362. `CSN` stays low for all five bytes. The small gaps between the bytes are the time that the program needs to see `BUSY` fall and to write the next byte to `DATA`. `MOSI` carries the command, the address and three dummy bytes. `MISO` carries nothing useful during the first two bytes, and then the three axes, most significant bit first.](../img/spi_sensor_read.png){#fig-spi-sensor-read width=100%}
+
+Look at the timing of one byte in detail in @fig-spi-sensor-zoom. It is the third byte of the transaction, in which the master sends the dummy byte `0x00` and the sensor answers with the X axis (`0x01`):
+
+![The third byte of the burst read. The sensor changes `MISO` after each falling edge of `SCLK`, and the master samples it on the rising edge, in the middle of the bit. `T` is `DIV + 1` clock cycles, so the bit period is `2T`.](../img/spi_sensor_zoom.png){#fig-spi-sensor-zoom width=100%}
+
+Notice that `MISO` is **not** synchronous to the SoC clock. This is why the master synchronizes it and then samples it only at the rising edge of `SCLK`, when the value is stable.
+
+The registers that you need:
+
+| Address | Name | Description |
+|---|---|---|
+| `0x00` | `DEVID_AD` | reads `0xAD` |
+| `0x01` | `DEVID_MST` | reads `0x1D` |
+| `0x02` | `PARTID` | reads `0xF2` |
+| `0x08` | `XDATA` | X acceleration, signed 8-bit |
+| `0x09` | `YDATA` | Y acceleration, signed 8-bit |
+| `0x0A` | `ZDATA` | Z acceleration, signed 8-bit |
+| `0x1F` | `SOFT_RESET` | writing `0x52` resets the sensor |
+| `0x2D` | `POWER_CTL` | bits 1:0 = `10` select measurement mode. After reset the sensor is in standby and the data registers read 0. |
+
+In the default range of ±2 g, one unit is about 16 mg, so a board lying flat reads about 64 on the Z axis.
+
+#### What to write
+
+1. **The driver**, in `sw/bsp/accel.c` and `sw/bsp/accel.h`, on top of `spi_cs` and `spi_transfer` from Part A:
+
+   | Function | What it does |
+   |---|---|
+   | `uint8_t accel_read_reg(uint8_t reg)` | reads one register |
+   | `void accel_write_reg(uint8_t reg, uint8_t value)` | writes one register |
+   | `void accel_read_burst(uint8_t reg, uint8_t *buf, uint32_t n)` | reads `n` consecutive registers in **one** transaction |
+   | `int accel_init(void)` | soft-resets the sensor and waits at least 1 ms. Then checks the three identification registers. If they are not `AD`, `1D`, `F2`, it returns −1. Otherwise it switches the sensor to measurement mode, waits 100 ms for the first valid sample, and returns 0. |
+   | `void accel_read_xyz(int8_t *x, int8_t *y, int8_t *z)` | reads the three axes with one `accel_read_burst` |
+
+   Use `delay_cycles` for the waits. The data are signed, so cast the received bytes to `int8_t`.
+
+2. **The program**, in `sw/hw2/accel/main.c`. It initializes the UART, the SPI master and the sensor, and then:
+
+   - prints the identification line, for example `ADXL362 ID: AD 1D F2`. If `accel_init` fails, it prints `ADXL362 ID: ERROR` and stops;
+   - twice a second prints one line with the three axes in signed decimal, in exactly this format: `X=1 Y=-2 Z=64`.
+
+   Use `print_hex8` and `print_dec` from the BSP.
+
+3. **Demonstrate it on the board.** Flash the program and open the serial terminal. Tilt the board and check that the numbers follow. You show the working demonstration to the instructor (see "Grading of Part B" below), and you also put a screenshot or a photo of the terminal in the report.
+
+#### Testing Part B in simulation (not graded)
+
+The part is graded on the real board, but you do not have to debug on the board. The testbench of `sw/hw2/accel` connects the SPI pins of the SoC to `adxl362_model.py` instead of to the real sensor. The model implements the protocol above: the read and write commands, the automatic address increase, the three identification registers, `SOFT_RESET` and `POWER_CTL`. The acceleration registers return the values of a script that the test defines, but only after measurement mode has been selected. Before that they return 0.
+
+```sh
+cd sw/hw2/accel && make run             # simulation: program and sensor model
+```
+
+The simulation checks the identification line, the error line when the model answers with wrong identification bytes, that measurement mode was selected, the printed sample lines (including negative values and the order of the axes), and that `CSN` stayed low for the whole of every transaction. Run it before you flash the board: a failure here is much easier to find than on the board.
+
+For a quick simulation run, you can temporarily make the delays in `accel_init` and in the program small. Set them back before you flash the board.
+
+#### Grading of Part B
+
+Part B is worth 7 points and is graded on the **real board**. You show the program running to the instructor, using your own board and your own build. The points are given for:
+
+| What is checked | Points |
+|---|---|
+| the identification line shows `AD 1D F2` | 2 |
+| the axes follow the board when you tilt it: the right axis, the right sign, the values change smoothly | 3 |
+| the output format is exactly as specified, and the values are updated about twice a second | 1 |
+| the driver is built as specified (`CSN` stays low during a burst read, one transaction for the three axes) | 1 |
+
 ---
 
 ## Rules
@@ -303,15 +395,16 @@ cd sw/hw2/spi_check && make run         # SoC level: loopback test from C
 - The testbenches run Verilator with `-Wall`, and every warning is an error. Do not switch warnings off globally.
 - Do not change the interfaces that the provided testbenches use: the ports of `fifo`, the register map, and the pin names.
 - The provided tests are a start, not the whole story. Your design is also graded with **additional hidden tests of the same kind and at the same levels**: more operand values, other `DIV` values, other timing of the bus accesses. Write **your own tests** for the corner cases that you can think of, such as a new testbench for a part that has none. Copies of the provided tests do not count.
-- At the end, run every testbench once more: `tb/unit/fifo`, `tb/unit/uart`, `tb/unit/spi`, `tb/soc` and `tb/fpga`.
-- The design must still go through the FPGA flow (`make APP=hw2/uart_check fpga`) and meet the timing at the default 50 MHz.
+- At the end, run every testbench once more: `tb/unit/fifo`, `tb/unit/uart`, `tb/unit/spi`, `sw/hw2/uart_check`, `sw/hw2/spi_check`, `sw/hw2/accel`, `tb/soc` and `tb/fpga`.
+- The design must still go through the FPGA flow (`make APP=hw2/uart_check fpga`, and also for `hw2/accel`) and meet the timing at the default 50 MHz.
 
 ## Report
 
 Submit a PDF of at most **2 pages**. Describe your design choices and the results of your tests. It must contain:
 
 - the answers to the three questions in Task 1,
-- the explanation of the synchronizer for `MISO` in Task 2,
+- the explanation of the synchronizer for `MISO` in Part A,
+- the explanation of why `CSN` must stay low between the bytes of a transaction in Part B, and the terminal screenshot or photo from the board,
 - a short description of your own tests and the cases they cover,
 - the output of the benchmark of `uart_puts` for the old and the new UART, as a small table.
 
@@ -321,8 +414,9 @@ The homework is worth **30 points**.
 
 | Part | Points |
 |---|---|
-| Task 1: provided and hidden tests | 11 |
-| Task 2: provided and hidden tests | 11 |
+| Task 1 (UART with FIFOs): provided and hidden tests | 7 |
+| Task 2, Part A (SPI master): provided and hidden tests | 8 |
+| Task 2, Part B (accelerometer): working demonstration on the board | 7 |
 | Your own tests (new cases, not copies) | 2 |
 | Report | 4 |
 | Code quality | 2 |

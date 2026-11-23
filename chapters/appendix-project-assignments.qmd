@@ -16,17 +16,7 @@ Common requirements for all assignments:
 - The peripheral must be your own RTL. Xilinx IP cores and third-party HDL are not allowed.
 - Groups have up to 2 students.
 
-## Assignment 1: SPI master controller
 
-Implement an SPI master peripheral and integrate it into the HIPV SoC. The peripheral should have the following functionality:
-
-- A configurable clock divider, so the SCLK frequency is set from software.
-- All four SPI modes (CPOL/CPHA), selectable via MMIO.
-- A configurable transfer width (8 and 16 bits at minimum).
-- At least two independent chip-select lines.
-- Transmit and receive shift registers exposed as MMIO, with a busy/done status bit.
-- A unit testbench that includes a behavioural SPI slave model and verifies all four modes against it.
-- A driver for the core and an application that reads the onboard ADXL362 accelerometer. The application reads the device ID, then streams X/Y/Z acceleration over the UART.
 
 ## Assignment 2: I²C master controller
 
@@ -40,7 +30,7 @@ Implement an I²C master peripheral and integrate it into the HIPV SoC. The peri
 - A unit testbench that includes a behavioural I²C slave model and covers a NACK case and a clock-stretch case.
 - A driver for the core and an application that reads the onboard ADT7420 temperature sensor and prints degrees Celsius over the UART.
 
-## Assignment 3: Keyboard controller
+##  (TAKEN) Assignment 3: Keyboard controller
 
 Implement a keyboard controller and integrate it into the HIPV SoC. The peripheral should have the following functionality:
 
@@ -135,11 +125,10 @@ Propose your own peripheral or extension for the HIPV SoC. The instructor must a
 
 Ideas that would be accepted:
 
-- An upgraded UART with transmit and receive FIFOs, a configurable frame format (data bits, parity, stop bits), RTS/CTS flow control, and a break/error detector. This is a good choice if you want to work with existing code rather than a blank file.
 - An Ethernet MAC for the onboard PHY, with a loopback demo.
 - A stepper-motor or BLDC commutation controller on a Pmod.
 - A quadrature-encoder interface with velocity estimation.
 - An XADC interface that reads the internal temperature and voltage sensors.
-- A true random number generator based on ring-oscillator jitter, with a statistical test suite as the verification.
 - A fixed-point vector/dot-product accelerator, with a benchmark against C.
 - An interrupt controller. This is a natural fit, but the core has no trap support yet, so it becomes a core assignment as well as a peripheral one. Discuss it with the instructor first.
+- Wireless interface through a Pmod, such as Bluetooth or LoRa. The demo can be a simple chat application between two boards.
