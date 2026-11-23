@@ -1,136 +1,242 @@
-# Eight exercise: Adding a 7-segment display core to the FPROv2 system
-  
-## 7-segment display core
+# Eighth laboratory exercise: Adding a 7-segment display to the HIPV SoC
 
-In this exercise we will add a 7-segment display core to the FPRO system. Start from the FPRO system that we have developed on the lectures. 
+In the previous exercise you used the peripherals that the HIPV SoC already has. In this exercise you add a new one. You will turn the seven-segment display core from the fifth exercise into a **bus peripheral** with registers, connect it to the SoC, and write a C program that shows the seconds since start-up on the display.
 
-### Register map 
+The exercise has a hardware part and a software part, just like a real SoC project:
 
-The 7-segment display core has the following register map:
-| Address Offset | Register Name       | Description                          |
-|----------------|---------------------|--------------------------------------|
-| 0x00           | Config_reg        | Bit 0: Enables/disables the display         |
-| 0x04          | Digit0        | Bits 0-7: Hex value of the first digit        |
-| 0x08          | Digit1        | Bits 0-7: Hex value of the second digit       |
-| 0x0C          | Digit2        | Bits 0-7: Hex value of the third digit        |
-| 0x10          | Digit3        | Bits 0-7: Hex value of the fourth digit       |
-| 0x14          | Digit4        | Bits 0-7: Hex value of the fifth digit        |
-| 0x18          | Digit5        | Bits 0-7: Hex value of the sixth digit        |
-| 0x1C          | Digit6        | Bits 0-7: Hex value of the seventh digit      |
-| 0x20          | Digit7        | Bits 0-7: Hex value of the eighth digit       |
+1. Write the OBI slave that wraps the display core (`seg7.sv`).
+2. Register the new slave in the address map, the decoder, the SoC top level and the board wrapper.
+3. Write the C program that drives it.
 
+You work in the HIPV repository from the previous exercise. Instructions for macOS and WSL are the same as there: build in the Docker container, and program the board from the host.
 
-## Tasks
+## The display peripheral
 
-### Add a wrapper for the 7-segment display core to the FPRO system
+### Register map
 
-1. Modify module `APB_seg7_display.sv` that implements the APB slave interface for the 7-segment display core.
-2. Instantiate the 7-segment display core inside the `APB_seg7_display.sv` module.
-```verilog
-    logic [7:0] digit0, digit1, digit2, digit3, digit4, digit5, digit6, digit7;
-    logic enable_7seg;
+The peripheral is placed at base address `0x2000_3000`, the next free 4 KiB block after the GPIO. Its registers are word registers, one every 4 bytes:
 
-    SevSegDisplay SevSegDisplay_inst (
-        .clock(clock),
-        .reset(reset),
-        .enable_7seg(enable_7seg),
-        .digit1(digit0),
-        .digit2(digit1),
-        .digit3(digit2),
-        .digit4(digit3),
-        .digit5(digit4),
-        .digit6(digit5),
-        .digit7(digit6),
-        .digit8(digit7),
-        .anode_select(anode_select),
-        .segs(segs)
-    );
+| Offset | Register | Description |
+|--------|----------|-------------|
+| `0x00` | `CONFIG` | Bit 0 enables the display. When it is 0, all digits are off. |
+| `0x04` | `DIGIT0` | Bits 3:0: hex value of the rightmost digit |
+| `0x08` | `DIGIT1` | Bits 3:0: hex value of the second digit from the right |
+| `0x0C` | `DIGIT2` | Bits 3:0: hex value of the third digit |
+| `0x10` | `DIGIT3` | Bits 3:0: hex value of the fourth digit |
+| `0x14` | `DIGIT4` | Bits 3:0: hex value of the fifth digit |
+| `0x18` | `DIGIT5` | Bits 3:0: hex value of the sixth digit |
+| `0x1C` | `DIGIT6` | Bits 3:0: hex value of the seventh digit |
+| `0x20` | `DIGIT7` | Bits 3:0: hex value of the leftmost digit |
+
+All registers can be written and read back. The upper bits of every register are ignored on write and read as 0.
+
+The digit registers hold **hex values**, not segment patterns. The decoding from hex to segments stays inside the display core, as in the fifth exercise.
+
+### The display core
+
+The display core is the one you built in the fifth exercise: `SevSegDisplay`, with the time multiplexing (`GP_counter`, `anode_assert`), `value_to_digit` and `digit_to_segments` inside. It is provided in [sevseg_display.sv](../code/08_lab/sevseg_display.sv) so that you can concentrate on the bus side. Its ports are:
+
+| Port | Direction | Meaning |
+|------|-----------|---------|
+| `clock`, `reset` | in | SoC clock and active-high synchronous reset |
+| `enable_7seg` | in | Display on |
+| `digit1` ... `digit8` | in | 4-bit hex value of each digit. `digit1` is the rightmost one. |
+| `anode_select[7:0]` | out | Active-low digit select, to the board |
+| `segs[6:0]` | out | Active-low segments `{G, F, E, D, C, B, A}`, to the board |
+
+## Step 1: Write the OBI slave
+
+Copy [seg7.sv](../code/08_lab/seg7.sv) and [sevseg_display.sv](../code/08_lab/sevseg_display.sv) into `rtl/periph/` of the HIPV repository. Open `seg7.sv`.
+
+The file has the module header, the register addresses and the OBI interface block already written. That block is the same short block that `gpio.sv` and `timer.sv` use, so open `rtl/periph/gpio.sv` next to it. It works as follows:
+
+- `ObiGnt` is always 1. Every access takes one cycle, so a request can always be accepted.
+- `Accept = ObiReq & ObiGnt` is the **address phase**. In it the slave captures `ObiWe` and the register index `ObiAddr[6:2]` into `WeQ` and `AddrQ`.
+- `ObiRvalid` is `Accept` delayed by one cycle. There must be exactly **one response for every accepted request, including writes**. If a slave does not answer a write, the first `sw` to it hangs the processor.
+
+You write the three parts marked `TODO`:
+
+1. **Write logic.** In the address phase, write enables are decoded from the live address: `Accept & ObiWe & (ObiAddr[6:2] == index)`. Use one `flopenr` per register. `CONFIG` is 1 bit wide and takes `ObiWdata[0]`. A digit is 4 bits wide and takes `ObiWdata[3:0]`.
+2. **Read logic.** Reads are selected in the **response phase**, from the *captured* index `AddrQ`, not from the live `ObiAddr`. The live address is only valid during the address phase. `ObiRdata` must be 0 whenever there is no read response.
+3. **The display core.** Instantiate `SevSegDisplay` and connect the registers to it. Remember that `digit1` is the rightmost digit, so it takes `DIGIT0`.
+
+## Step 2: Connect it to the SoC
+
+Adding a slave touches several files. The crossbar itself does not change, because it follows `NUM_SLAVES` automatically. The general procedure is in `docs/ADDING_A_SLAVE.md` in the repository. Read it first, then make the following changes.
+
+### Address map
+
+In `config/hipv_soc_pkg.sv`, add a slave index and a region, and increase the slave count:
+
+```systemverilog
+  localparam int unsigned NUM_SLAVES  = 6;          // was 5
+  ...
+  localparam int unsigned SLAVE_SEG7  = 5;
+
+  localparam logic [31:0] SEG7_BASE  = 32'h2000_3000;
+  localparam logic [31:0] SEG7_SIZE  = 32'h0000_1000;  // 4 KiB
 ```
 
+A region must be a power-of-two size and aligned to its size, because the decoder matches an address by comparing only the bits above the region size.
 
+### Decoder
 
-3. Write interface logic to connect the APB signals to the 7-segment display core registers.
-    
+In `rtl/interconnect/obi_decoder.sv`, add one line next to the others:
 
-```verilog
-    logic [63:0] count_reg;
- // define register for config device to enable/clear timer
-    logic wr_en;
-    // decoding logic 
-    assign wr_en = pSEL & pWRITE & pREADY & pENABLE ; 
-                               
-    // write data into config register when selected 
-    always_ff @( posedge pCLK ) begin : write_logic
-        if (!pRESETn) begin
-            config_reg <= 0;
-        end else begin
-            if (wr_en) begin
-                case (pADDR)
-                    
-                endcase
-            end
-        end
-    end
-```
-- The 7-segment display core will be always ready, so set the `pREADY` signal to 1'b1.
-- The `pSLVERR` signal should be set to 1'b1, when someone tries to read registers.
-1. Register the 7-segment display core in the FPRO system.
-   - To do this, instantiate the `APB_seg7_display.sv` module in the FPROv2 top-level module and connect the APB signals accordingly.
-```verilog
-
-APB_seg7_display #(
-    .DW(DW),   // Data width
-    .AW(AW)    // Address width
-) u_apb_timer (
-    .pCLK    (clock),
-    .pRESETn (resetn),
-    .pADDR   (SpADDR[2]),
-    .pSEL    (SpSEL[2]),
-    .pENABLE (SpENABLE[2]),
-    .pWRITE  (SpWRITE[2]),
-    .pWDATA  (SpWDATA[2]),
-    .pRDATA  (SpRDATA[2]),
-    .pREADY  (SpREADY[2]),
-    .pSLVERR (SpSLVERR[2])
-    // Connections to 7-segment display core signals
-        // external signals -> Catode and Anode
-    output logic [7:0] anode_select,
-    output logic [6:0] segs
-);
-
-// Do not forget to update the NUM_PERIPHERALS parameter to 3 in the FPROv2 top-level module.
-
-genvar i;
-for (i = 3; i < NUM_PERIPHERALS; i++) begin : gen_addr
-    assign SpSLVERR[i] = 1; // generate an error signal when addressing unknown peripherals peripheral
-    assign SpREADY[i] = 0;
-    assign SpRDATA[i] = 32'hFFFFFFFF;
-end
-    
+```systemverilog
+    SlaveSel[SLAVE_SEG7]  = in_region(Addr, SEG7_BASE, SEG7_SIZE);
 ```
 
-5. Write a application that displays the seconds of the system clock on the 7-segment display core.
-   1. How to determine the base address of the 7-segment display core in the FPRO system.
-      - The base address can be determined by:
-      - `(0xC0 << 24) + (Peripheral Index * 0x80) `, where Peripheral Index is 2 for the 7-segment display core.
-      - To access specific registers, add the register offset to the base address.
-    2. Read the timer value from the timer peripheral, and when the value changes, update the 7-segment display core registers accordingly. 
-      - You can use the following code snippet to write to the 7-segment display core registers:
+If you forget this line, the package and the crossbar know about slave 5, but no address ever selects it. Every access to `0x2000_3000` is then answered as an unmapped address.
+
+### SoC top level
+
+In `rtl/top/hipv_soc.sv`, add two output ports for the display pins:
+
+```systemverilog
+   // seven-segment display pins (active low)
+   output logic [7:0]             SegAnode,
+   output logic [6:0]             SegCathode);
+```
+
+Replace the closing `);` of the existing port list so that the new ports come last, and add a comma after `TimerOverflow`. Then instantiate the peripheral next to the other three, connected to slave 5 of the crossbar:
+
+```systemverilog
+  seg7 seg7(.clk(clk), .reset(reset),
+            .ObiReq(SReq[SLAVE_SEG7]), .ObiGnt(SGnt[SLAVE_SEG7]),
+            .ObiAddr(SAddr[SLAVE_SEG7*32 +: 32]), .ObiWe(SWe[SLAVE_SEG7]),
+            .ObiBe(SBe[SLAVE_SEG7*4 +: 4]),
+            .ObiWdata(SWdata[SLAVE_SEG7*32 +: 32]),
+            .ObiRvalid(SRvalid[SLAVE_SEG7]),
+            .ObiRdata(SRdata[SLAVE_SEG7*32 +: 32]),
+            .SegAnode(SegAnode), .SegCathode(SegCathode));
+```
+
+Also update the module's header comment, which lists the slaves.
+
+### Board wrapper and pins
+
+In `fpga/anvil/top.sv`, add the two ports and pass them to the SoC:
+
+```systemverilog
+            output logic [7:0] an,           // display digit select, active low
+            output logic [6:0] seg);         // display segments, active low
+  ...
+  hipv_soc #(...) soc(...,
+        .TimerOverflow(led_timer),
+        .SegAnode(an), .SegCathode(seg));
+```
+
+In `fpga/anvil/Nexys-A7-100T-Master.xdc`, add the pin constraints. The segments are named CA to CG on the board and map to `seg[0]` to `seg[6]`, the anodes AN0 to AN7 map to `an[0]` to `an[7]`:
+
+```
+## Seven-segment display (active low)
+set_property PACKAGE_PIN T10 [get_ports {seg[0]}]   ;# CA
+set_property PACKAGE_PIN R10 [get_ports {seg[1]}]   ;# CB
+set_property PACKAGE_PIN K16 [get_ports {seg[2]}]   ;# CC
+set_property PACKAGE_PIN K13 [get_ports {seg[3]}]   ;# CD
+set_property PACKAGE_PIN P15 [get_ports {seg[4]}]   ;# CE
+set_property PACKAGE_PIN T11 [get_ports {seg[5]}]   ;# CF
+set_property PACKAGE_PIN L18 [get_ports {seg[6]}]   ;# CG
+set_property PACKAGE_PIN J17 [get_ports {an[0]}]
+set_property PACKAGE_PIN J18 [get_ports {an[1]}]
+set_property PACKAGE_PIN T9  [get_ports {an[2]}]
+set_property PACKAGE_PIN J14 [get_ports {an[3]}]
+set_property PACKAGE_PIN P14 [get_ports {an[4]}]
+set_property PACKAGE_PIN T14 [get_ports {an[5]}]
+set_property PACKAGE_PIN K2  [get_ports {an[6]}]
+set_property PACKAGE_PIN U13 [get_ports {an[7]}]
+```
+
+Add `set_property IOSTANDARD LVCMOS33` for each of these ports as well, the same way the existing pins in the file do it. If you also have the Nexys A7-50T, the same pins apply, and you can add them to its `.xdc` in the same way.
+
+### Build flow
+
+The build script does not search for source files. It has a fixed list of them. In `scripts/anvil_flow.py`, add both new files to the `RTL` list, in the peripherals group before `rtl/top/hipv_soc.sv`:
+
+```python
+    "rtl/periph/sevseg_display.sv",
+    "rtl/periph/seg7.sv",
+```
+
+If you forget this, the build fails with an unknown module error for `seg7`. The script also requires every file name to be unique across the project.
+
+### Testbench map
+
+`tb/common/socmap.py` mirrors the address map for the testbenches. Add the new slave there:
+
+```python
+SLAVE = { ..., "GPIO": 4, "SEG7": 5 }
+REGIONS = { ...,
+    "SEG7": (0x2000_3000, 0x0000_1000),
+}
+```
+
+The unmapped-address test has a list of addresses that are supposed to be holes, and `0x2000_3000` is on it ("just past GPIO"). That address is now mapped, so move that hole to `0x2000_4000`. After this change, rerun the interconnect testbenches as described in `docs/ADDING_A_SLAVE.md`.
+
+## Step 3: The software
+
+### Check that the address is reachable
+
+Before you build the full program, check the hardware side. The C starter [main.c](../code/08_lab/main.c) needs a few register macros. The display registers are not in the BSP yet, so the starter defines them itself:
+
 ```c
-    volatile uint32_t* seg7_base_addr = (volatile uint32_t*)(0xC0 + (2 * 0x80)); // Base address of the 7-segment display core
-    // Write to the digit registers
-    *(seg7_base_addr + 1) = digit0_value; // Digit0 register
-    *(seg7_base_addr + 2) = digit1_value; // Digit1 register
-    // ... and so on for other digits
+#define SEG7_BASE     0x20003000u
+#define SEG7_CONFIG   REG32(SEG7_BASE + 0x00)
+#define SEG7_DIGIT(i) REG32(SEG7_BASE + 0x04 + 4u * (i))   /* i = 0 ... 7 */
 ```
+
+`REG32` is the same macro that `hipv.h` uses for all registers. As an optional cleanup, move these lines into `sw/bsp/hipv.h`, next to the GPIO registers, so that other programs can use them.
+
+### The program
+
+Create `sw/examples/lab08/` and copy [main.c](../code/08_lab/main.c) and [Makefile](../code/08_lab/Makefile) into it, as you did in the previous exercise. Then complete the three `TODO` items:
+
+1. **Enable the display** by writing 1 to `SEG7_CONFIG`.
+2. **Show a number in decimal.** `seg7_show_dec(value)` must write the eight decimal digits of `value` to `SEG7_DIGIT(0)` to `SEG7_DIGIT(7)`. Take the lowest digit with `value % 10`, then divide `value` by 10, and repeat. The leading digits are `0`. The registers hold hex values, and the digits 0 to 9 are the same in decimal and hex.
+3. **Count the seconds.** First, wait one second with `delay_cycles(CPU_HZ)` and add 1 to `seconds`. Then replace it with a version that does not accumulate error: read the timer and compute `timer_get() / CPU_HZ`, and update the display only when the value changes.
+
+The processor has no divide instruction. `%` and `/` by 10, and the 64-bit division in the second version, are done by library functions from `libgcc` that the build links in. You can see them as calls in the disassembly (`build/lab08.lst`).
+
+## Step 4: Build and test
+
+Build the software first, and check it in simulation:
+
+```bash
+cd sw/examples/lab08
+make
+make run
+```
+
+The simulation does not show the display pins, but the UART output shows the program running. For a quick run, temporarily make the delay small, as in the previous exercise.
+
+Then build the firmware into the bitstream and program the board from the repository root:
+
+```bash
+make APP=lab08 all
+```
+
+On macOS and WSL, use the two-step flow from the previous exercise (`make docker-fpga APP=lab08`, then `make program-host`). Remember that this time the **hardware changed as well**, so the complete bitstream has to be rebuilt, not only the firmware.
+
+The result: the eight digits of the display show `00000000`, then `00000001`, and so on, one step per second. The same number is printed in the serial terminal.
+
+## Questions
+
+1. What would the processor do if the C program wrote to `0x2000_3000` **before** you added the slave to the decoder? Use `docs/INTERCONNECT.md` to find the answer. Why is this behavior better than a hang?
+2. The core needs one cycle for the address phase and one for the response. In your `seg7.sv`, why must the read mux use `AddrQ` and not `ObiAddr`?
+3. How often is each digit refreshed? The `GP_counter` in `SevSegDisplay` ticks every 40 000 clock cycles, and the SoC clock is 50 MHz. How long is one full pass over the eight digits, and what is the refresh rate? Would you see flicker?
+4. An earlier version of this exercise made the registers write-only and signalled an error when they were read. Why is it simpler here to make every register readable?
+
+## Optional extensions
+
+- Display the seconds as `HH.MM.SS` using only the digits you need, and leave the other digits at a value you choose.
+- Add a `DOTS` register at offset `0x24` with one bit per decimal point (the display has a DP pin for each digit). This needs a change in the display core and one more pin in the `.xdc`.
+- Make the display brightness adjustable with a duty-cycle register.
+- Write a unit testbench for `seg7.sv` that checks that every register reads back what was written, and that every access, including writes, is followed by exactly one `ObiRvalid` pulse.
 
 ## Starter files
 
-- [APB_7seg_display.sv](../code/08_lab/APB_7seg_display.sv)
-- [APB_bridge.sv](../code/08_lab/APB_bridge.sv)
-- [APB_gpio.sv](../code/08_lab/APB_gpio.sv)
-- [APB_interconnect.sv](../code/08_lab/APB_interconnect.sv)
-- [APB_master.sv](../code/08_lab/APB_master.sv)
-- [APB_timer.sv](../code/08_lab/APB_timer.sv)
-- [Nexys-A7-100T-Master.xdc](../code/08_lab/Nexys-A7-100T-Master.xdc)
-- [top.sv](../code/08_lab/top.sv)
+- [seg7.sv](../code/08_lab/seg7.sv)
+- [sevseg_display.sv](../code/08_lab/sevseg_display.sv)
+- [main.c](../code/08_lab/main.c)
+- [Makefile](../code/08_lab/Makefile)

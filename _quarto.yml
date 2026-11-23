@@ -16,8 +16,8 @@ book:
         - chapters/04-structural-modeling.qmd
         - chapters/05-counter-sevenseg.qmd
         - chapters/06-uart.qmd
-      #  - chapters/07-mcs.qmd
-      #  - chapters/08-fpro-7seg.qmd
+        - chapters/07-hipv-soc.qmd
+      #  - chapters/08-hipv-7seg.qmd
       #  - chapters/09-soc-verification.qmd
     - part: "Homework"
       chapters:
